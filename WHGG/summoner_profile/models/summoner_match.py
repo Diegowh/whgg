@@ -16,3 +16,5 @@ class SummonerMatch(models.Model):
     summoner = models.ForeignKey('Summoner', on_delete=models.CASCADE, related_name='summoner_matches')
 
     item_purchase = models.ManyToManyField('Item', related_name='summoner_matches')
+    
+    summoner_spells = models.ManyToManyField('SummonerSpell', related_name='summoner_matches')
