@@ -8,3 +8,6 @@ class RankedStats(models.Model):
     wins = models.IntegerField()
     losses = models.IntegerField()
     winrate = models.IntegerField() # Lo quiero redondeado a un entero
+    
+    # Foreign Keys
+    summoner = models.ForeignKey('Summoner', on_delete=models.CASCADE, related_name='ranked_stats')
