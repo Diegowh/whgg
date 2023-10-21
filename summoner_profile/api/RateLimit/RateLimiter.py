@@ -32,3 +32,6 @@ class RateLimiter:
         
         # Debug mode
         self.debug = debug
+        
+    def locked(self):
+        return self.lock.locked()
