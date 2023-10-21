@@ -18,5 +18,6 @@ class ApiClient:
             if response.status_code == 429:
                 retry_after = int(response.headers.get('Retry-After', 1))
                 print(f'API rate limit exceeded. Retrying in {retry_after} seconds.')
+                print("Are you sure ApiThrottler is working?")
                 time.sleep(retry_after)
                 
