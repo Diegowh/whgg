@@ -34,7 +34,6 @@ class RateLimiter:
         self.debug = debug
     
     
-    # Getters
     def locked(self):
         return self.lock.locked()
     
@@ -47,6 +46,5 @@ class RateLimiter:
         return self.limit
     
     
-    # Setters
     def update_limit(self, limit: int):
         self.limit = limit
