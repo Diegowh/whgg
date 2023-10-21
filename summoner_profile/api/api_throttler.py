@@ -1,6 +1,6 @@
 import time
 
-class ApiThrottler():
+class ApiThrottler:
     def __init__(self) -> None:
         self.BURST_LIMIT = 20 # requests
         self.BURST_TIME = 1 # seconds
