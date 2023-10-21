@@ -32,6 +32,21 @@ class RateLimiter:
         
         # Debug mode
         self.debug = debug
-        
+    
+    
+    # Getters
     def locked(self):
         return self.lock.locked()
+    
+    
+    def get_duration(self):
+        return self.duration
+    
+    
+    def get_limit(self):
+        return self.limit
+    
+    
+    # Setters
+    def update_limit(self, limit: int):
+        self.limit = limit
