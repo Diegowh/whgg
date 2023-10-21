@@ -12,5 +12,5 @@ class ApiThrottler():
     def throttle(self) -> None:
         time_since_last_request = time.time() - self.last_request
         if time_since_last_request < self.BURST_TIME:
-            time.sleep((self.BURST_TIME - time_since_last_request) + 0.1)
+            time.sleep(self.BURST_TIME - time_since_last_request)
         self.last_request = time.time()
