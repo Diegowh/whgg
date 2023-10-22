@@ -28,7 +28,7 @@ class RateLimiter:
         
         # Init outgoing requests counters
         self.currently_pending = 0
-        self.previous_pending = 0
+        self.previously_pending = 0
         
         # Synchronicity state with server time window
         self.synced = False
@@ -65,7 +65,7 @@ class RateLimiter:
         self.count = 0
         
         # Manage the count of pending requests
-        self.previous_pending += self.currently_pending
+        self.previously_pending += self.currently_pending
         self.currently_pending = 0
         
         
@@ -74,3 +74,15 @@ class RateLimiter:
         
         # The window is not synced with the server anymore
         self.synced = False
+        
+    
+    async def get_back(self, num: int, timestamp: int, limit=None):
+        async with self.back_lock:
+            
+            # If the current time window is up to date
+            if self.time + self.duration > timestamp:
+                
+                if self.num == num:
+                    self.currently_pending -= 1
+                else:
+                    self.previously_pending -= 1
