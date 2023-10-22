@@ -1,5 +1,8 @@
 import asyncio
 import time
+import datetime
+
+
 
 class RateLimiter:
     
@@ -48,3 +51,26 @@ class RateLimiter:
     
     def update_limit(self, limit: int):
         self.limit = limit
+        
+    
+    async def _reset(self):
+        
+        # Checks if the time window is over
+        while self.time + self.duration >= int(time.mktime(datetime.datetime.utcnow().timetuple())):
+            await asyncio.sleep(1)
+        
+        
+        # Reset time and count
+        self.time = int(time.mktime(datetime.datetime.utcnow().timetuple()))
+        self.count = 0
+        
+        # Manage the count of pending requests
+        self.previous_pending += self.currently_pending
+        self.currently_pending = 0
+        
+        
+        # Increase the num for the time window
+        self.num += 1
+        
+        # The window is not synced with the server anymore
+        self.synced = False
