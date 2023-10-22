@@ -115,4 +115,4 @@ class RateLimiter:
                 
                 # Wait until it's safe to request and open a new time window
                 while self.previously_pending >= self.limit:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(0.5)
