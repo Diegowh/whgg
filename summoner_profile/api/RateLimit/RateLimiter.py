@@ -123,3 +123,9 @@ class RateLimiter:
                 # Wait until it's safe to request or time window is over
                 while (self.previously_pending + self.count) >= self.limit and self.time + self.duration > time.mktime(datetime.datetime.utcnow().timetuple()):
                     await asyncio.sleep(0.5)
+            
+            # If count limit reached, await for the end of the time window
+            else:
+                if self.debug:
+                    print(self.name+" limit reached, sleeping for "+str( int((self.time + self.duration) - time.mktime(datetime.datetime.utcnow().timetuple())) + 1)+" seconds")
+                    print("Limit : "+str(self.limit)+" per "+str(self.duration)+" / Count : "+ str(self.count))
