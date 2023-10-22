@@ -132,3 +132,18 @@ class RateLimiter:
                 
                 # Await for the next time window
                 await asyncio.sleep(int((self.time + self.duration) - time.mktime(datetime.datetime.utcnow().timetuple())) + 1)
+                
+            
+            async with self.back_lock:
+                
+                # Double check if a reset has not occured in the meantime
+                timestamp = time.mktime(datetime.datetime.utcnow().timetuple())
+                if self.time + self.duration < timestamp:
+                    await self._reset()
+                    
+                
+                # Increase count
+                self.count += 1
+                self.currently_pending += 1
+                
+                return self.num
