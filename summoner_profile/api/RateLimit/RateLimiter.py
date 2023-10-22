@@ -116,3 +116,10 @@ class RateLimiter:
                 # Wait until it's safe to request and open a new time window
                 while self.previously_pending >= self.limit:
                     await asyncio.sleep(0.5)
+                    
+            # If in time window, check count
+            elif self.count < self.limit:
+                
+                # Wait until it's safe to request or time window is over
+                while (self.previously_pending + self.count) >= self.limit and self.time + self.duration > time.mktime(datetime.datetime.utcnow().timetuple()):
+                    await asyncio.sleep(0.5)
