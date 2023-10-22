@@ -105,4 +105,14 @@ class RateLimiter:
                 self.count += 1
                 self.synced = True
                 self.time = timestamp
+    
+    async def get_token(self):
+        
+        async with self.lock:
+            
+            # Check if outside the time window
+            if self.time + self.duration < time.mktime(datetime.datetime.utcnow().timetuple()):
                 
+                # Wait until it's safe to request and open a new time window
+                while self.previously_pending >= self.limit:
+                    await asyncio.sleep(1)
