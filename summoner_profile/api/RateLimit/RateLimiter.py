@@ -86,3 +86,4 @@ class RateLimiter:
                     self.currently_pending -= 1
                 else:
                     self.previously_pending -= 1
+                    self.count += 1
