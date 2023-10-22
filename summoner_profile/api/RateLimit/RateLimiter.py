@@ -40,6 +40,7 @@ class RateLimiter:
         return self.name+" : "+str(self.count)+" / "+str(self.limit)+" per "+str(self.duration)+" seconds"
     
     
+    # Verify if the rate limiter is locked
     def locked(self):
         return self.lock.locked()
     
