@@ -35,6 +35,9 @@ class RateLimiter:
         
         # Debug mode
         self.debug = debug
+        
+    def __str__(self) -> str:
+        return self.name+" : "+str(self.count)+" / "+str(self.limit)+" per "+str(self.duration)+" seconds"
     
     
     def locked(self):
