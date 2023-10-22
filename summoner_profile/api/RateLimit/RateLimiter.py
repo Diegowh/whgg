@@ -76,6 +76,7 @@ class RateLimiter:
         self.synced = False
         
     
+    # Fired when a request is back
     async def get_back(self, num: int, timestamp: int, limit=None):
         async with self.back_lock:
             
@@ -87,3 +88,21 @@ class RateLimiter:
                 else:
                     self.previously_pending -= 1
                     self.count += 1
+                    
+            # Syncronize the beginning of the time window with server and update the limit
+            if not self.synced:
+                if not limit is None:
+                    self.update_limit(limit)
+                self.synced = True
+                self.time = timestamp
+                
+            # If the time window is out of date
+            else:
+                await self._reset()
+                if not limit is None:
+                    self.update_limit(limit)
+                self.previously_pending -= 1
+                self.count += 1
+                self.synced = True
+                self.time = timestamp
+                
