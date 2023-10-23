@@ -6,7 +6,7 @@ import datetime
 
 class RateLimiter:
     
-    def __init__(self, debug: bool = False, limits: (int, int)=(10, 10), name: str = "") -> None:
+    def __init__(self, debug: bool, limits: (int, int)=(10, 10), name: str = "") -> None:
         
         # Initialize Async lock for the rate limiter
         self.lock = asyncio.Lock()
