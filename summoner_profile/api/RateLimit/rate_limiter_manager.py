@@ -62,3 +62,12 @@ class RateLimiterServer:
         "get_valorant_recent_matches":[(60,60)],
         "get_valorant_leaderboard":[(10,10)]
     }
+    
+    
+    def __init__(self, debug) -> None:
+        
+        self.debug = debug
+        
+        self.application = []
+        for app_limit in self.default_application_limits:
+            self.application.append(RateLimiter(self.debug, app_limit, "App"))
