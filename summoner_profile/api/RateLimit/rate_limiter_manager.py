@@ -69,5 +69,16 @@ class RateLimiterServer:
         self.debug = debug
         
         self.application = []
+        
         for app_limit in self.default_application_limits:
             self.application.append(RateLimiter(self.debug, app_limit, "App"))
+            
+        self.methods = {}
+        
+        for method in self.default_methods_limits:
+            
+            self.methods[method] = []
+            
+            for method_limit in self.default_methods_limits[method]:
+                self.methods[method].append(RateLimiter(self.debug, method_limit, method))
+                
