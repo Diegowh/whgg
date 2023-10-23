@@ -82,3 +82,16 @@ class RateLimiterServer:
             for method_limit in self.default_methods_limits[method]:
                 self.methods[method].append(RateLimiter(self.debug, method_limit, method))
                 
+                
+    def __str__(self):
+        
+        result = "Rate limits: \n"
+        
+        for app_limit in self.application:
+            result += "\t" + str(app_limit) + "\n"
+            
+        for method in self.methods:
+            for method_limit in self.methods[method]:
+                result += "\t" + str(method_limit) + "\n"
+                
+        return result
