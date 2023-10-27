@@ -138,3 +138,34 @@ class RateLimiterServer:
             if duration == method_limit.get_duration():
                 self.methods[method].remove(method_limit)
                 return
+            
+    async def get_back(self, method: str, token, timestamp: int, limits):
+        if limits is None:
+            for i, app_limit in enumerate(self.application):
+                await app_limit.get_back(token[0][i], timestamp)
+            
+            for i, method_limit in enumerate(self.methods[method]):
+                await method_limit.get_back(token[1][i])
+        
+        else:
+            app_limits_to_delete = []
+            methods_limis_to_delete = []
+            
+            for i, app_limit in enumerate(self.application):
+                
+                if app_limit.get_duration() in limits[0]:
+                    await app_limit.get_back(token[0][i], timestamp, limits[0][app_limit.get_duration()])
+                    del(limits[0][app_limit.get_duration()])
+                
+                else:
+                    # If the limit is not in the returned header, its considered out of date, so queue to delete it
+                    app_limits_to_delete.append(app_limit.get_duration())
+                    
+            # Delete the out of date limits
+            for i in app_limits_to_delete:
+                self.delete_application_limit(i)
+                
+            for duration in limits[0]:
+                # If the limit exists in the returned header but not in the manager, create it
+                self.update_application_limit(duration, limits[0][duration])
+                
