@@ -118,3 +118,17 @@ class RateLimiterServer:
     def display_application_limit(self):
         for app_limit in self.application:
             print(str(app_limit.get_limit()) + " : " + str(app_limit.get_duration()))
+
+    def update_methods_limit(self, method: str, duration: int, limit: int):
+        
+        if method in self.methods:
+            for method_limit in self.methods[method]:
+                if duration == method_limit.get_duration():
+                    method_limit.update_limit(limit)
+                    return
+
+            self.methods[method].append(RateLimiter(self.debug, (limit, duration), method))
+            
+        else:
+            self.methods[method] = []
+            self.methods[method].append(RateLimiter(self.debug, (limit, duration), method))
