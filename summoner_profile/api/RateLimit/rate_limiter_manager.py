@@ -132,3 +132,9 @@ class RateLimiterServer:
         else:
             self.methods[method] = []
             self.methods[method].append(RateLimiter(self.debug, (limit, duration), method))
+
+    def delete_methods_limit(self, method: str, duration:int):
+        for method_limit in self.methods[method]:
+            if duration == method_limit.get_duration():
+                self.methods[method].remove(method_limit)
+                return
