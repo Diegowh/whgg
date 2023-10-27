@@ -177,3 +177,8 @@ class RateLimiterServer:
                 else:
                     # If the limit is not in the returned header, its considered out of date, so queue to delete it
                     method_limis_to_delete.append(method_limit.get_duration())
+            
+            
+            # Delete the out of date limits
+            for i in method_limis_to_delete:
+                self.delete_methods_limit(method, i)
