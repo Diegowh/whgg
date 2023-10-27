@@ -23,7 +23,13 @@ class ApiClient:
         self.api_key = api_key
         self._rl = RateLimiterManager(debug)
         
-        
+    def __str__(self):
+        return str(self._rl.on(self._platform))
+    
+    def set_platform(self, platform):
+        if platform in self.PLATFORMS:
+            self._platform = platform
+            self._region = self.PLATFORMS_TO_REGIONS[platform]
         
     # def request(self, url, params):
     #     self.api_throttler.throttle()
