@@ -2,6 +2,7 @@ import os
 import time
 import requests
 from api_throttler import ApiThrottler
+from functools import wraps
 
 from .utils import utils as utils
 from .utils import exceptions as exc
