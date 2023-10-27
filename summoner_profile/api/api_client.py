@@ -30,6 +30,13 @@ class ApiClient:
         if platform in self.PLATFORMS:
             self._platform = platform
             self._region = self.PLATFORMS_TO_REGIONS[platform]
+            
+    def set_region(self, region):
+        if region in self.REGIONS:
+            self._platform = None
+            self._region = region
+        else:
+            raise Exception
         
     # def request(self, url, params):
     #     self.api_throttler.throttle()
