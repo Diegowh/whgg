@@ -98,3 +98,12 @@ class RateLimiterServer:
     
     def locked(self) -> bool:
         return any([app_limit.locked() for app_limit in self.application] + [method_limit.locked() for method in self.methods for method_limit in self.methods[method]])
+    
+    
+    def update_application_limit(self, duration: int, limit: int):
+        for app_limit in self.application:
+            if duration == app_limit.get_duration():
+                app_limit.update_limit(limit)
+                return
+    
+        self.application.append(RateLimiter(self.debug, (limit, duration), "App"))
