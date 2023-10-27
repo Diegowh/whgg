@@ -115,6 +115,6 @@ class RateLimiterServer:
                 self.application.remove(app_limit)
                 return
             
-    def display_application_limiters(self):
+    def display_application_limit(self):
         for app_limit in self.application:
             print(str(app_limit.get_limit()) + " : " + str(app_limit.get_duration()))
