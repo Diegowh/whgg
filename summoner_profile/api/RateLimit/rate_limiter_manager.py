@@ -2,6 +2,22 @@ from .rate_limiter import RateLimiter
 from ..utils.utils import Singleton
 
 
+class RateLimiterManager(metaclass=Singleton):
+    
+    def __init__(self, debug) -> None:
+        
+        PLATFORMS = ["br1","eun1","euw1","jp1","kr","la1", "la2","na1","oc1","tr1","ru"]
+        REGIONS = ["americas","asia","europe","esports","ap","br","eu","kr","latam","na"]
+        
+        self.debug = debug
+        
+        self._rls = {server: RateLimiterServer(self.debug) for server in PLATFORMS + REGIONS}
+        
+    
+    def on(self, server):
+        return self._rls[server]
+
+
 class RateLimiterServer:
     
     # Default application rate limit
