@@ -3,6 +3,9 @@ import time
 import requests
 from api_throttler import ApiThrottler
 
+from .utils import utils as utils
+from .utils import exceptions as exc
+
 from .RateLimit.rate_limiter_manager import RateLimiterManager
 
 class ApiClient:
@@ -30,13 +33,15 @@ class ApiClient:
         if platform in self.PLATFORMS:
             self._platform = platform
             self._region = self.PLATFORMS_TO_REGIONS[platform]
+        else:
+            raise exc.InvalidServer(platform, self.PLATFORMS)
             
     def set_region(self, region):
         if region in self.REGIONS:
             self._platform = None
             self._region = region
         else:
-            raise Exception
+            raise exc.InvalidServer(region, self.REGIONS)
         
     # def request(self, url, params):
     #     self.api_throttler.throttle()
