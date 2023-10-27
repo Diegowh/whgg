@@ -107,3 +107,10 @@ class RateLimiterServer:
                 return
     
         self.application.append(RateLimiter(self.debug, (limit, duration), "App"))
+        
+
+    def delete_application_limit(self, duration: int):
+        for app_limit in self.application:
+            if duration == app_limit.get_duration():
+                self.application.remove(app_limit)
+                return
