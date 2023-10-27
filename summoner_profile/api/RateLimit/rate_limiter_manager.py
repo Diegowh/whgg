@@ -125,7 +125,7 @@ class RateLimiterServer:
             for method_limit in self.methods[method]:
                 if duration == method_limit.get_duration():
                     method_limit.update_limit(limit)
-                    return
+                    return # To avoid unnecesary iterations
 
             self.methods[method].append(RateLimiter(self.debug, (limit, duration), method))
             
