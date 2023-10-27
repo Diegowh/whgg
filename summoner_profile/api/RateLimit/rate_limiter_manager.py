@@ -182,3 +182,12 @@ class RateLimiterServer:
             # Delete the out of date method limits
             for i in method_limis_to_delete:
                 self.delete_methods_limit(method, i)
+                
+            for duration in limits[1]:
+                # If the limit exists in the returned header but not in the manager, create it
+                self.update_methods_limit(method, duration, limits[1][duration])
+
+                for method_limit in self.methods[method]:
+                    if duration == method_limit.get_duration():
+                        method_limit.count += 1
+                        return
