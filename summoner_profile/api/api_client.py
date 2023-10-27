@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+import json
 import asyncio
 from api_throttler import ApiThrottler
 from functools import wraps
@@ -193,3 +194,47 @@ class ApiClient:
                     raise e
                 
         return _auto_retry
+    
+    def exceptions(func):
+        """
+        Translates status code into exceptions
+        """
+    
+        @wraps(func)
+        async def _exceptions(*args, **params):
+            
+            response = await func(*args, **params)
+            
+            if response is None:
+                raise exc.Timeout
+            
+            elif response.status == 200:
+                return json.loads(await response.text())
+            
+            elif response.status == 404:
+                raise exc.NotFound
+                
+            elif response.status in [500,502,503,504]:
+                raise exc.ServerError
+                
+            elif response.status == 429:
+                raise exc.RateLimit(response.headers)
+                
+            elif response.status == 403:
+                raise exc.Forbidden
+                
+            elif response.status == 401:
+                raise exc.Unauthorized
+                
+            elif response.status == 400:
+                raise exc.BadRequest
+                
+            elif response.status == 408:
+                raise exc.Timeout
+                
+            else:
+                raise Exception("Unidentified error code : "+str(response.status))
+        
+        return _exceptions
+    
+    
