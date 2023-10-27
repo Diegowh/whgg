@@ -95,3 +95,6 @@ class RateLimiterServer:
                 result += "\t" + str(method_limit) + "\n"
                 
         return result
+    
+    def locked(self) -> bool:
+        return any([app_limit.locked() for app_limit in self.application] + [method_limit.locked() for method in self.methods for method_limit in self.methods[method]])
