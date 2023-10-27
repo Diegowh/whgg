@@ -22,7 +22,6 @@ class ApiClient:
     def __init__(self, server, api_key, debug=False) -> None:
         self.api_key = api_key
         self._rl = RateLimiterManager(debug)
-        self.api_throttler = ApiThrottler()
         
     def request(self, url, params):
         self.api_throttler.throttle()
