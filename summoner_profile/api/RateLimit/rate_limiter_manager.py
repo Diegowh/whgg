@@ -191,3 +191,28 @@ class RateLimiterServer:
                     if duration == method_limit.get_duration():
                         method_limit.count += 1
                         return
+    
+    def display_method_limits(self):
+        for method in self.methods:
+            print(method)
+            
+            for method_limit in self.methods[method]:
+                print(str(method_limit.get_limit()) + " : " + str(method_limit.get_duration()))    
+        print()
+
+    async def get_token(self, method: str):
+        
+        app_token = []
+        method_token = []
+        
+        for app_limit in self.application:
+            app_token.append(await app_limit.get_token())
+        
+        if not method in self.methods:
+            self.update_methods_limit(method, 10, 20000)
+        
+        for method_limit in self.methods[method]:
+            method_token.append(await method_limit.get_token())
+        
+        return (app_token, method_token)
+        
