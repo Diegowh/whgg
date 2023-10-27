@@ -53,6 +53,10 @@ class ApiClient:
         else:
             raise exc.InvalidServer(region, self.REGIONS)
         
+    def locked(self, server) -> bool:
+        # Checks if at least one limiter is locked
+        return self._rl.on(server).locked()
+        
     # def request(self, url, params):
     #     self.api_throttler.throttle()
         
