@@ -57,7 +57,28 @@ class ApiClient:
     def locked(self, server) -> bool:
         # Checks if at least one limiter is locked
         return self._rl.on(server).locked()
+    
         
+    def ratelimit_platform(func):
+        """
+        Decorator for rate limiting at platform level.
+        It will handle the operations needed by the RateLimiterManager to ensure the rate limiting and change of limits considering the returned header
+        """
+        
+        @wraps(func)
+        async def wait_limit(*args, **params):
+            rate_limit = args[0]._rl.on(args[0]._platform)
+            token = await rate_limit.get_token(func.__name__)
+            
+            response = await func(*args, **params)
+            
+            try:
+                limits = utils.get_limits(response.headers)
+                timestamp = utils.get_timestamp(response.headers)
+            except:
+                limits = None
+                timestamp = utils.get_timestamp(None)
+                
     # def request(self, url, params):
     #     self.api_throttler.throttle()
         
