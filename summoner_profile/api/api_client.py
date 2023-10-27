@@ -29,6 +29,16 @@ class ApiClient:
     def __str__(self):
         return str(self._rl.on(self._platform))
     
+    
+    def set_server(self, server):
+        if server in self.PLATFORMS:
+            self.set_platform(server)
+        elif server in self.REGIONS:
+            self.set_region(server)
+        else:
+            raise exc.InvalidServer(server, self.PLATFORMS + self.REGIONS)
+        
+    
     def set_platform(self, platform):
         if platform in self.PLATFORMS:
             self._platform = platform
