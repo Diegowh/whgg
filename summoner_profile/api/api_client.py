@@ -84,6 +84,56 @@ class ApiClient:
             return response
         
         return wait_limit
+    
+    def ratelimit_region(func):
+        """
+        Decorator for rate limiting at region level.
+        It will handle the operations needed by the RateLimiterManager to ensure the rate limiting and the change of limits considering the returned header.
+        """
+        @wraps(func)
+        async def wait_limit(*args, **params):
+            rate_limit = args[0]._rl.on(args[0]._region)
+            token = await rate_limit.get_token(func.__name__)
+            
+            response = await func(*args, **params)
+            
+            try:
+                limits = utils.get_limits(response.headers)
+                timestamp = utils.get_timestamp(response.headers)
+            except:
+                limits = None
+                timestamp = utils.get_timestamp(None)
+            
+            await rate_limit.get_back(func.__name__, token, timestamp, limits)
+            
+            return response
+            
+        return wait_limit
+
+    def ratelimit_tournament(func):
+        """
+        Decorator for rate limiting for tournaments.
+        It will handle the operations needed by the RateLimiterManager to ensure the rate limiting and the change of limits considering the returned header.
+        """
+        @wraps(func)
+        async def wait_limit(*args, **params):
+            rl = args[0]._rl.on(args[0].TOURNAMENT_REGION)
+            token = await rl.get_token(func.__name__)
+            
+            response = await func(*args, **params)
+            
+            try:
+                limits = utils.get_limits(response.headers)
+                timestamp = utils.get_timestamp(response.headers)
+            except:
+                limits = None
+                timestamp = utils.get_timestamp(None)
+            
+            await rl.get_back(func.__name__, token, timestamp, limits)
+            
+            return response
+            
+        return wait_limit
                 
     # def request(self, url, params):
     #     self.api_throttler.throttle()
