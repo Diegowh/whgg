@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+import asyncio
 from api_throttler import ApiThrottler
 from functools import wraps
 
@@ -134,7 +135,65 @@ class ApiClient:
             return response
             
         return wait_limit
+    
+    
+    def auto_retry(func):
+        """
+        Decorator for handling some errors and retrying if needed.
+        """
+        @wraps(func)
+        async def _auto_retry(*args, **params):
+            """
+            Error handling function for decorator
+            """
+            if not args[0]._auto_retry:
+                return await func(*args, **params)
+            else:
+                try:
+                    return await func(*args, **params)
+                #Errors that should be retried
+                except exc.RateLimit as e:
+                    if args[0]._debug:
+                        print(e)
+                        print("Retrying")
+                    i = e.waitFor()
+                    while i < 6:
+                        await asyncio.sleep(i)
+                        try:
+                            return await func(*args, **params)
+                        except Exception as e2:
+                            if args[0]._debug:
+                                print(e2)
+                        i += 2
+                    raise e
+                except (exc.ServerError, exc.Timeout) as e:
+                    if args[0]._debug:
+                        print(e)
+                        print("Retrying")
+                    i = 1
+                    while i < 6:
+                        await asyncio.sleep(i)
+                        try:
+                            return await func(*args, **params)
+                        except (exc.Timeout, exc.ServerError) as e2:
+                    
+                            pass
+                        i += 2
+                        if args[0]._debug:
+                            print(e2)
+                            print("Retrying")
+                    print("there is no bug")
+                    raise e
+                except (exc.NotFound, exc.BadRequest) as e:
+                    raise e
+                except (exc.Forbidden, exc.Unauthorized,) as e:
+                    print(e)
+                    raise SystemExit(0)
+                except Exception as e:
+                    raise e
                 
+        return _auto_retry
+    
     # def request(self, url, params):
     #     self.api_throttler.throttle()
         
