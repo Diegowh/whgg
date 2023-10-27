@@ -79,6 +79,12 @@ class ApiClient:
                 limits = None
                 timestamp = utils.get_timestamp(None)
                 
+            await rate_limit.get_back(func.__name__, token, timestamp, limits)
+            
+            return response
+        
+        return wait_limit
+                
     # def request(self, url, params):
     #     self.api_throttler.throttle()
         
