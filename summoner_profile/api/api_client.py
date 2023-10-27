@@ -3,6 +3,8 @@ import time
 import requests
 from api_throttler import ApiThrottler
 
+from .RateLimit.rate_limiter_manager import RateLimiterManager
+
 class ApiClient:
     
     BASE_URL = "https://{server}.api.riotgames.com/"
