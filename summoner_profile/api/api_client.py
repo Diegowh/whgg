@@ -19,8 +19,9 @@ class ApiClient:
     PLATFORMS_TO_REGIONS = {"br1":"americas","eun1":"europe","euw1":"europe","jp1":"asia","kr":"asia","la1":"americas","la2":"americas","na1":"americas","oc1":"americas","tr1":"europe","ru":"europe"}
     TOURNAMENT_REGIONS = "americas"
     
-    def __init__(self) -> None:
-        self.api_key = os.environ['RIOT_API_KEY']
+    def __init__(self, server, api_key, debug=False) -> None:
+        self.api_key = api_key
+        self._rl = RateLimiterManager(debug)
         self.api_throttler = ApiThrottler()
         
     def request(self, url, params):
