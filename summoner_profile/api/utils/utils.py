@@ -1,3 +1,6 @@
+import time
+import datetime
+
 class Singleton(type):
     
     _instances = {}
@@ -22,3 +25,14 @@ def getLimits(headers):
 
         return (appLimits,methodLimits)
     return None
+
+def date_to_timestamp(date):
+    return int(time.mktime(datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S GMT').timetuple()))
+
+
+def getTimestamp(headers):
+    try:
+        timestamp = date_to_timestamp(headers['Date'])
+    except Exception as e:
+        timestamp = int(time.time())
+    return timestamp
