@@ -149,7 +149,7 @@ class RateLimiterServer:
         
         else:
             app_limits_to_delete = []
-            methods_limis_to_delete = []
+            method_limis_to_delete = []
             
             for i, app_limit in enumerate(self.application):
                 
@@ -169,3 +169,11 @@ class RateLimiterServer:
                 # If the limit exists in the returned header but not in the manager, create it
                 self.update_application_limit(duration, limits[0][duration])
                 
+            for i, method_limit in enumerate(self.methods[method]):
+                if method_limit.get_duration() in limits[1]:
+                    await method_limit.get_back(token[1][i], timestamp, limits[1][method_limit.get_duration()])
+                    del(limits[1][method_limit.get_duration()])
+                
+                else:
+                    # If the limit is not in the returned header, its considered out of date, so queue to delete it
+                    method_limis_to_delete.append(method_limit.get_duration())
