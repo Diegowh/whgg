@@ -654,3 +654,15 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByPuuid
         """
         return await self.fetch((self.BASE_URL_RIOT + "account/v1/accounts/by-puuid/{puuid}").format(server=self._region, puuid=puuid))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_account_by_riot_id(self, game_name, tag_line):
+        """
+        :param string game_name: name of the player
+        :param string tag_line: tag of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByRiotId
+        """
+        return await self.fetch((self.BASE_URL_RIOT + "account/v1/accounts/by-riot-id/{game_name}/{tag_line}").format(server=self._region, game_name=game_name, tag_line=tag_line))
