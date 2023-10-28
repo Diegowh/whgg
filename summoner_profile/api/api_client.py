@@ -666,3 +666,16 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByRiotId
         """
         return await self.fetch((self.BASE_URL_RIOT + "account/v1/accounts/by-riot-id/{game_name}/{tag_line}").format(server=self._region, game_name=game_name, tag_line=tag_line))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_active_shards(self, puuid, game):
+        """
+        :param string puuid: puuid of the player
+        :param string game: targeted game ("val" or "lor")
+        
+        Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getActiveShard
+        """
+        return await self.fetch((self.BASE_URL_RIOT + "account/v1/active-shards/by-game/{game}/by-puuid/{puuid}").format(server=self._region, game=game, puuid=puuid))
+    
