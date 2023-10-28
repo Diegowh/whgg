@@ -274,3 +274,16 @@ class ApiClient:
             
             await response.text()
             return response
+    
+    # Champion Mastery
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_champion_masteries(self, summoner_id: str):
+        """
+        :param string summoner_id: Summoner ID of the player
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getAllChampionMasteries
+        """
+        return await self.fetch((self.BASE_URL_LOL + "champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
+    
