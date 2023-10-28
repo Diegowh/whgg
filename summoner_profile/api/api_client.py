@@ -36,7 +36,9 @@ class ApiClient:
         
         self.set_server(server)
         
+        self._auto_retry = auto_retry
         self._requests_logging_function = requests_logging_function
+        self._debug = debug
         
     def __str__(self):
         return str(self._rl.on(self._platform))
@@ -678,4 +680,61 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getActiveShard
         """
         return await self.fetch((self.BASE_URL_RIOT + "account/v1/active-shards/by-game/{game}/by-puuid/{puuid}").format(server=self._region, game=game, puuid=puuid))
+
+    # Valorant
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_valorant_content(self, locale=None):
+        """
+        :param string locale: language return. Default to None
+        
+        Returns the result of https://developer.riotgames.com/apis#val-content-v1/GET_getContent
+        """
+        return await self.fetch((self.BASE_URL_VAL + "content/v1/contents{locale}").format(server=self._region, locale="?locale="+locale if locale is not None else ""))
     
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_valorant_match(self, match_id):
+        """
+        :param string match_id: id of the match
+        
+        Returns the result of https://developer.riotgames.com/apis#val-match-v1/GET_getMatch
+        """
+        return await self.fetch((self.BASE_URL_VAL + "match/v1/matches/{match_id}").format(server=self._region, match_id=match_id))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_valorant_matchlist(self, puuid):
+        """
+        :param string puuid: puuid of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#val-match-v1/GET_getMatchlist
+        """
+        return await self.fetch((self.BASE_URL_VAL + "match/v1/matchlists/by-puuid/{puuid}").format(server=self._region, puuid=puuid))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_valorant_recent_matches(self, queue):
+        """
+        :param string queue: queue of the matches
+        
+        Returns the result of https://developer.riotgames.com/apis#val-match-v1/GET_getRecent
+        """
+        return await self.fetch((self.BASE_URL_VAL + "match/v1/recent-matches/by-queue/{queue}").format(server=self._region, queue=queue))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_valorant_leaderboard(self, act_id, size=200, start_index=0):
+        """
+        :param string act_id: id of the act for the leaderboards
+        :param int size: size of the leaderboard list
+        :param int start_index: index to start the leaderboard list
+        
+        Returns the result of https://developer.riotgames.com/apis#val-ranked-v1/GET_getLeaderboard
+        """
+        return await self.fetch((self.BASE_URL_VAL + "ranked/v1/leaderboards/by-act/{act_id}?size={}size&startIndex={start_index}").format(server=self._region, act_id=act_id, size=size, start_index=start_index))
