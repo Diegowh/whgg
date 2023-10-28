@@ -3,7 +3,6 @@ import certifi
 import json
 import asyncio
 import aiohttp
-from api_throttler import ApiThrottler
 from functools import wraps
 
 from .utils import utils as utils

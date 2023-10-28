@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from summoner_profile.views import test_api_client
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('test-api-client/', test_api_client, name='test_api_client')
 ]
