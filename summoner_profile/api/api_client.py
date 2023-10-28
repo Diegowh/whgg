@@ -30,9 +30,13 @@ class ApiClient:
     
     SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
     
-    def __init__(self, server, api_key, debug=False) -> None:
+    def __init__(self, server, api_key, auto_retry = False, requests_logging_function = None, debug=False) -> None:
         self._key = api_key
         self._rl = RateLimiterManager(debug)
+        
+        self.set_server(server)
+        
+        self._requests_logging_function = requests_logging_function
         
     def __str__(self):
         return str(self._rl.on(self._platform))
