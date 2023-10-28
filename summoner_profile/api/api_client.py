@@ -501,3 +501,144 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#summoner-v4/GET_getByPUUID
         """
         return await self.fetch((self.BASE_URL_LOL + "summoner/v4/summoners/by-puuid/{puuid}").format(server=self._platform, puuid=puuid))
+    
+    # TFT
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_league_by_id(self, league_id):
+        """
+        :param string league_id: id of the league
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getLeagueById
+        """
+        return await self.fetch((self.BASE_URL_TFT + "league/v1/leagues/{league_id}").format(server=self._platform, league_id=league_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_league_pages(self,  tier="DIAMOND", division="I", page=1):
+        """
+        :param string tier: tier to get the page of
+        :param string division: division to get the page of
+        :param int page: page to get
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getLeagueEntries
+        """
+        return await self.fetch((self.BASE_URL_TFT + "league/v1/entries/{tier}/{division}?page={page}").format(server=self._platform, tier=tier, division=division, page=page))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_league_position(self, summoner_id):
+        """
+        :param string summoner_id: summoner_id of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getLeagueEntriesForSummoner
+        """
+        return await self.fetch((self.BASE_URL_TFT + "league/v1/entries/by-summoner/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_challenger_league(self):
+        """
+        Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getChallengerLeague
+        """
+        return await self.fetch((self.BASE_URL_TFT + "league/v1/challenger").format(server=self._platform))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_grandmaster_league(self):
+        """
+        Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getGrandmasterLeague
+        """
+        return await self.fetch((self.BASE_URL_TFT + "league/v1/grandmaster").format(server=self._platform))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_master_league(self):
+        """
+        Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getMasterLeague
+        """
+        return await self.fetch((self.BASE_URL_TFT + "league/v1/master").format(server=self._platform))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_tft_match(self, match_id):
+        """
+        :param string match_id: match_id of the match, also known as game_id
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#match-v4/GET_getMatch
+        """
+        return await self.fetch((self.BASE_URL_TFT + "match/v1/matches/{match_id}").format(server=self._region, match_id=match_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_tft_matchlist(self, puuid, params=None):
+        """
+        :param string puuid: puuid of the player
+        :param object params: all key:value params to add to the request
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-match-v1/GET_getMatchIdsByPUUID
+        """
+        return await self.fetch((self.BASE_URL_TFT + "match/v1/matches/by-puuid/{puuid}/ids{params}").format(server=self._region, puuid=puuid, params = utils.urlParams(params)))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_summoner(self, summoner_id):
+        """
+        :param string summoner_id: summoner_id of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getBySummonerId
+        """
+        return await self.fetch((self.BASE_URL_TFT + "summoner/v1/summoners/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_summoner_by_account_id(self, account_id):
+        """
+        :param string account_id: account_id of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getByAccountId
+        """
+        return await self.fetch((self.BASE_URL_TFT + "summoner/v1/summoners/by-account/{account_id}").format(server=self._platform, account_id=account_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_summoner_by_puuid(self, puuid):
+        """
+        :param string puuid: puuid of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getByPUUID
+        """
+        return await self.fetch((self.BASE_URL_TFT + "summoner/v1/summoners/by-puuid/{puuid}").format(server=self._platform, puuid=puuid))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_tft_summoner_by_name(self, summoner_name):
+        """
+        :param string summoner_name: name of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getBySummonerName
+        """
+        return await self.fetch((self.BASE_URL_TFT + "summoner/v1/summoners/by-name/{summoner_name}").format(server=self._platform, summoner_name=summoner_name))
