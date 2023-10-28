@@ -429,7 +429,7 @@ class ApiClient:
         
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
         """
-        return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/by-puuid/{puuid}/ids{params}").format(server=self._region, puuid=puuid, params = utils.urlParams(params)))
+        return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/by-puuid/{puuid}/ids{params}").format(server=self._region, puuid=puuid, params = utils.url_params(params)))
     
     # Spectator
     @auto_retry
@@ -591,7 +591,7 @@ class ApiClient:
         
         Returns the result of https://developer.riotgames.com/apis#tft-match-v1/GET_getMatchIdsByPUUID
         """
-        return await self.fetch((self.BASE_URL_TFT + "match/v1/matches/by-puuid/{puuid}/ids{params}").format(server=self._region, puuid=puuid, params = utils.urlParams(params)))
+        return await self.fetch((self.BASE_URL_TFT + "match/v1/matches/by-puuid/{puuid}/ids{params}").format(server=self._region, puuid=puuid, params = utils.url_params(params)))
     
     
     @auto_retry

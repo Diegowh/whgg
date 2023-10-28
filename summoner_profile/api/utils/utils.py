@@ -29,7 +29,7 @@ def get_limits(headers):
 def date_to_timestamp(date):
     return int(time.mktime(datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S GMT').timetuple()))
 
-def urlParams(params):
+def url_params(params):
     if params is None:
         return ""
     else:
