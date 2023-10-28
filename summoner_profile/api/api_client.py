@@ -359,3 +359,17 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getChallengerLeague
         """
         return await self.fetch((self.BASE_URL_LOL + "league/v4/challengerleagues/by-queue/{queue}").format(server=self._platform, queue=queue))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_grandmaster_league(self, queue="RANKED_SOLO_5x5"):
+        """
+        :param string queue: queue to get the master league of
+            Values accepted : 
+             * RANKED_SOLO_5x5 *(default)*
+             * RANKED_FLEX_SR
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getGrandmasterLeague
+        """
+        return await self.fetch((self.BASE_URL_LOL + "league/v4/grandmasterleagues/by-queue/{queue}").format(server=self._platform, queue=queue))
