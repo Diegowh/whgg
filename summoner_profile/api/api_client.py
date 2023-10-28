@@ -1,6 +1,8 @@
 import os
 import time
 import requests
+import ssl
+import certifi
 import json
 import asyncio
 import aiohttp
@@ -25,6 +27,8 @@ class ApiClient:
     REGIONS = ["americas","asia","europe", "esports","ap","br","eu","kr","latam","na"]
     PLATFORMS_TO_REGIONS = {"br1":"americas","eun1":"europe","euw1":"europe","jp1":"asia","kr":"asia","la1":"americas","la2":"americas","na1":"americas","oc1":"americas","tr1":"europe","ru":"europe"}
     TOURNAMENT_REGIONS = "americas"
+    
+    SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
     
     def __init__(self, server, api_key, debug=False) -> None:
         self._key = api_key
