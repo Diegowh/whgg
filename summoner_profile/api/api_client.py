@@ -3,6 +3,7 @@ import time
 import requests
 import json
 import asyncio
+import aiohttp
 from api_throttler import ApiThrottler
 from functools import wraps
 
@@ -237,4 +238,9 @@ class ApiClient:
         
         return _exceptions
     
-    
+    async def fetch(self, url, method="GET", data=None):
+        """
+        Attaches the api_key to the header and returns a request response of the given url.
+        """
+        
+        async with aiohttp.ClientSession() as session
