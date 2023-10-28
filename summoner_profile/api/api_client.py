@@ -267,3 +267,10 @@ class ApiClient:
             except Exception as e:
                 print(e)
                 return None
+            
+            # If a logging function is passed, send it url status code and headers
+            if self._requests_logging_function:
+                self._requests_logging_function(url, response.status, response.headers)
+            
+            await response.text()
+            return response
