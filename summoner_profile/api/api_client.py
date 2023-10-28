@@ -281,7 +281,7 @@ class ApiClient:
     @ratelimit_platform
     async def get_champion_masteries(self, summoner_id: str):
         """
-        :param string summoner_id: Summoner ID of the player
+        :param string summoner_id: summoner_id of the player
         
         Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getAllChampionMasteries
         """
@@ -292,7 +292,7 @@ class ApiClient:
     @ratelimit_platform
     async def get_champion_masteries_by_champion_id(self, summoner_id, champion_id):
         """
-        :param string summonerId: summonerId of the player
+        :param string summoner_id: summoner_id of the player
         :param int championId: id of the champion
 
         Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getChampionMastery
@@ -304,7 +304,7 @@ class ApiClient:
     @ratelimit_platform
     async def get_champion_masteries_score(self, summoner_id):
         """
-        :param string summonerId: summonerId of the player
+        :param string summoner_id: summoner_id of the player
         
         Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getChampionMasteryScore
         """
@@ -325,4 +325,9 @@ class ApiClient:
     @exceptions
     @ratelimit_platform
     async def get_league_by_id(self, league_id):
+        """
+        :param string league_id: id of the league
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getLeagueById
+        """
         return await self.fetch((self.BASE_URL_LOL + "league/v4/leagues/{league_id}").format(server=self._platform, league_id=league_id))
