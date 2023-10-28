@@ -387,3 +387,13 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getMasterLeague
         """
         return await self.fetch((self.BASE_URL_LOL + "league/v4/masterleagues/by-queue/{queue}").format(server=self._platform, queue=queue))
+    
+    # Status
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_status(self):
+        """
+        Returns the result of https://developer.riotgames.com/apis#lol-status-v4/GET_getPlatformData
+        """
+        return await self.fetch((self.BASE_URL_LOL + "status/v4/platform-data").format(server=self._platform))
