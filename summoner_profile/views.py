@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .api.api_client import ApiClient
 from dotenv import dotenv_values
 
-def test_api_client(request):
+async def test_api_client(request):
     try:
         env_vars = dotenv_values('.env')
         api_key = env_vars.get('RIOT_API_KEY')
@@ -16,6 +16,7 @@ def test_api_client(request):
     server = "euw1"
 
     api_client = ApiClient(server=server, api_key=api_key)
-    status = api_client.get_status()
+    status = await api_client.get_league_pages()
 
-    return HttpResponse(f"Status: {status}")
+
+    return render(request, 'api-client-test.html', {'status': status})
