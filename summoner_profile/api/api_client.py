@@ -444,3 +444,12 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/api-methods/#spectator-v4/GET_getCurrentGameInfoBySummoner
         """
         return await self.fetch((self.BASE_URL_LOL + "spectator/v4/active-games/by-summoner/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_featured_games(self):
+        """
+        Returns the result of https://developer.riotgames.com/api-methods/#spectator-v3/GET_getFeaturedGames
+        """
+        return await self.fetch((self.BASE_URL_LOL + "spectator/v4/featured-games").format(server=self._platform))
