@@ -251,3 +251,14 @@ class ApiClient:
             headers = {
                 "X-Riot-Token": self._key
             }
+            
+                
+            try:
+                if method == "GET":
+                    response = await session.request("GET", url, headers=headers, ssl=self.SSL_CONTEXT)
+                else:
+                    response = await session.request(method, url, headers=headers, data=json.dumps(data), ssl=self.SSL_CONTEXT)
+            
+            except Exception as e:
+                print(e)
+                return None
