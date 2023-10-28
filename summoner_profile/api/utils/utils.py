@@ -13,7 +13,7 @@ class Singleton(type):
         return cls._instances[cls]
     
     
-def getLimits(headers):
+def get_limits(headers):
     if 'X-Method-Rate-Limit' in headers and 'X-App-Rate-Limit' in headers:
         appLimits = {}
         for appLimit in headers['X-App-Rate-Limit'].split(","):
@@ -43,7 +43,7 @@ def urlParams(params):
         return strParams[:-1]
 
 
-def getTimestamp(headers):
+def get_timestamp(headers):
     try:
         timestamp = date_to_timestamp(headers['Date'])
     except Exception as e:
