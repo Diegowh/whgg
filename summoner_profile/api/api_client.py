@@ -259,6 +259,7 @@ class ApiClient:
                 else:
                     response = await session.request(method, url, headers=headers, data=json.dumps(data), ssl=self.SSL_CONTEXT)
             
+            # In case of timeout
             except Exception as e:
                 print(e)
                 return None
