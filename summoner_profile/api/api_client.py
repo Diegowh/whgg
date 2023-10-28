@@ -642,3 +642,15 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getBySummonerName
         """
         return await self.fetch((self.BASE_URL_TFT + "summoner/v1/summoners/by-name/{summoner_name}").format(server=self._platform, summoner_name=summoner_name))
+    
+    # Riot endpoints
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_account_by_puuid(self, puuid):
+        """
+        :param string puuid: puuid of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByPuuid
+        """
+        return await self.fetch((self.BASE_URL_RIOT + "account/v1/accounts/by-puuid/{puuid}").format(server=self._region, puuid=puuid))
