@@ -424,14 +424,14 @@ class ApiClient:
     @auto_retry
     @exceptions
     @ratelimit_region
-    async def get_matchlist(self, puuId, params=None):
+    async def get_matchlist(self, puuid, params=None):
         """
-        :param string puuId: puuId of the player
+        :param string puuid: puuid of the player
         :param object params: all key:value params to add to the request
         
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
         """
-        return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/by-puuid/{puuId}/ids{params}").format(server=self._region, puuId=puuId, params = utils.urlParams(params)))
+        return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/by-puuid/{puuid}/ids{params}").format(server=self._region, puuid=puuid, params = utils.urlParams(params)))
     
     # Spectator
     @auto_retry
@@ -453,3 +453,51 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/api-methods/#spectator-v3/GET_getFeaturedGames
         """
         return await self.fetch((self.BASE_URL_LOL + "spectator/v4/featured-games").format(server=self._platform))
+    
+    # Summoner
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_summoner(self, summoner_id):
+        """
+        :param string summoner_id: summoner_id of the player
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#summoner-v4/GET_getBySummonerId
+        """
+        return await self.fetch((self.BASE_URL_LOL + "summoner/v4/summoners/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_summoner_by_account_id(self, account_id):
+        """
+        :param string account_id: account_id of the player
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#summoner-v4/GET_getByAccountId
+        """
+        return await self.fetch((self.BASE_URL_LOL + "summoner/v4/summoners/by-account/{account_id}").format(server=self._platform, account_id=account_id))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_summoner_by_name(self, summoner_name):
+        """
+        :param string summoner_name: name of the player
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#summoner-v4/GET_getBySummonerName
+        """
+        return await self.fetch((self.BASE_URL_LOL + "summoner/v4/summoners/by-name/{summoner_name}").format(server=self._platform, summoner_name=summoner_name))
+    
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_summoner_by_puuid(self, puuid):
+        """
+        :param string puuid: puuid of the player
+        
+        Returns the result of https://developer.riotgames.com/apis#summoner-v4/GET_getByPUUID
+        """
+        return await self.fetch((self.BASE_URL_LOL + "summoner/v4/summoners/by-puuid/{puuid}").format(server=self._platform, puuid=puuid))
