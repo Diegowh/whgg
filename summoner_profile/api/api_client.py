@@ -432,3 +432,15 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
         """
         return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/by-puuid/{puuId}/ids{params}").format(server=self._region, puuId=puuId, params = utils.urlParams(params)))
+    
+    # Spectator
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_current_game(self, summoner_id):
+        """
+        :param string summoner_id: summoner_id of the player
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#spectator-v4/GET_getCurrentGameInfoBySummoner
+        """
+        return await self.fetch((self.BASE_URL_LOL + "spectator/v4/active-games/by-summoner/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
