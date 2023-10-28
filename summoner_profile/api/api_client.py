@@ -397,3 +397,15 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#lol-status-v4/GET_getPlatformData
         """
         return await self.fetch((self.BASE_URL_LOL + "status/v4/platform-data").format(server=self._platform))
+    
+    # Match
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_match(self, match_id):
+        """
+        :param int match_id: match_id of the match, also known as gameId
+        
+        Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatch
+        """
+        return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/{match_id}").format(server=self._region, match_id=match_id))
