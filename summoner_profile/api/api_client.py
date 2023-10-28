@@ -319,3 +319,10 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/api-methods/#champion-v3/GET_getChampionInfo
         """
         return await self.fetch((self.BASE_URL_LOL + "platform/v3/champion-rotations").format(server=self._platform))
+    
+    # League
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_league_by_id(self, league_id):
+        return await self.fetch((self.BASE_URL_LOL + "league/v4/leagues/{league_id}").format(server=self._platform, league_id=league_id))
