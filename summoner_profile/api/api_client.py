@@ -27,7 +27,7 @@ class ApiClient:
     TOURNAMENT_REGIONS = "americas"
     
     def __init__(self, server, api_key, debug=False) -> None:
-        self.api_key = api_key
+        self._key = api_key
         self._rl = RateLimiterManager(debug)
         
     def __str__(self):
@@ -243,4 +243,7 @@ class ApiClient:
         Attaches the api_key to the header and returns a request response of the given url.
         """
         
-        async with aiohttp.ClientSession() as session
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "X-Riot-Token": self._key
+            }
