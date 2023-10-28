@@ -409,3 +409,14 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatch
         """
         return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/{match_id}").format(server=self._region, match_id=match_id))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_region
+    async def get_timeline(self, match_id):
+        """
+        :param int match_id: match_id of the match, also known as gameId
+        
+        Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getTimeline
+        """
+        return await self.fetch((self.BASE_URL_LOL + "match/v5/matches/{match_id}/timeline").format(server=self._region, match_id=match_id))
