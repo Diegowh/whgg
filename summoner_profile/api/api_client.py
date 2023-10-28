@@ -1,6 +1,3 @@
-import os
-import time
-import requests
 import ssl
 import certifi
 import json
