@@ -331,3 +331,17 @@ class ApiClient:
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getLeagueById
         """
         return await self.fetch((self.BASE_URL_LOL + "league/v4/leagues/{league_id}").format(server=self._platform, league_id=league_id))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
+    async def get_league_pages(self, queue="RANKED_SOLO_5X5", tier="DIAMOND", division="I", page=1):
+        """
+        :param string queue: queue to get the page of
+        :param string tier: tier to get the page of
+        :param string division: division to get the page of
+        :param int page: page to get
+        
+        Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getLeagueEntriesForSummoner
+        """
+        return await self.fetch((self.BASE_URL_LOL + "league/v4/entries/{queue}/{tier}/{division}?page={page}").format(server=self._platform, queue=queue, tier=tier, division=division, page=page))
