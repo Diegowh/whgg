@@ -18,7 +18,7 @@ class RateLimit(Exception):
             self.timeToWait = 1
         Exception.__init__(self,"Rate limit exceeded" + messageToAdd)
         
-    def waitFor(self):
+    def wait_for(self):
         return int(self.timeToWait)
 
 

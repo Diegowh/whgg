@@ -164,7 +164,7 @@ class ApiClient:
                     if args[0]._debug:
                         print(e)
                         print("Retrying")
-                    i = e.waitFor()
+                    i = e.wait_for()
                     while i < 6:
                         await asyncio.sleep(i)
                         try:
