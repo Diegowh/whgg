@@ -10,10 +10,10 @@ def requests_log(url, status, headers):
     print(status)
     print(headers)
 
-async def get_summoner_id(api_client, name):
+async def get_summoner_puuid(api_client, name) -> str:
     try:
         data = await api_client.get_summoner_by_name(name)
-        return (data['id'], data['accountId'])
+        return data['puuid']
     except Exception as e:
         print(e)
 
@@ -31,7 +31,13 @@ def test_api_client(request):
 
     api_client = ApiClient(server, api_key, requests_logging_function=requests_log, debug=True)
 
-    sync_get_summoner_id = async_to_sync(get_summoner_id)
-    status = sync_get_summoner_id(api_client, "wallhack")
+    sync_get_summoner_puuid = async_to_sync(get_summoner_puuid)
+    summoner_name = "wallhack"
+    summoner_puuid: str = sync_get_summoner_puuid(api_client, "wallhack")
+    match_1: str = ""
+    match_2: str = ""
+    match_3: str = ""
+    match_4: str = ""
+    match_5: str = ""
 
-    return render(request, 'api-client-test.html', {'status': status})
+    return render(request, 'api-client-test.html', {'summoner_name': summoner_name, 'summoner_puuid': summoner_puuid, 'match_1': match_1, 'match_2': match_2, 'match_3': match_3, 'match_4': match_4, 'match_5': match_5})
