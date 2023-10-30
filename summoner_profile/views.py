@@ -16,6 +16,14 @@ async def get_summoner_puuid(api_client, name) -> str:
         return data['puuid']
     except Exception as e:
         print(e)
+        
+
+async def get_last_5_match_ids(api_client, puuid, params) -> list[str]:
+    try:
+        match_ids: list[str] = await api_client.get_matchlist(puuid, params)
+        return match_ids
+    except Exception as e:
+        print(e)
 
 def test_api_client(request):
     try:
@@ -31,13 +39,23 @@ def test_api_client(request):
 
     api_client = ApiClient(server, api_key, requests_logging_function=requests_log, debug=True)
 
+    # Async to Sync functions
     sync_get_summoner_puuid = async_to_sync(get_summoner_puuid)
+    sync_get_last_5_match_ids = async_to_sync(get_last_5_match_ids)
+    
+    # Match ID params
+    params = {
+        'start': 0,
+        'count': 5,
+    }
+    
     summoner_name = "wallhack"
     summoner_puuid: str = sync_get_summoner_puuid(api_client, "wallhack")
-    match_1: str = ""
-    match_2: str = ""
-    match_3: str = ""
-    match_4: str = ""
-    match_5: str = ""
+    last_5_match_ids = sync_get_last_5_match_ids(api_client, summoner_puuid, params)
+    match_1: str = last_5_match_ids[0]
+    match_2: str = last_5_match_ids[1]
+    match_3: str = last_5_match_ids[2]
+    match_4: str = last_5_match_ids[3]
+    match_5: str = last_5_match_ids[4]
 
     return render(request, 'api-client-test.html', {'summoner_name': summoner_name, 'summoner_puuid': summoner_puuid, 'match_1': match_1, 'match_2': match_2, 'match_3': match_3, 'match_4': match_4, 'match_5': match_5})
