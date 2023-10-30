@@ -156,7 +156,6 @@ class RateLimiterServer:
                 return
             
     async def get_back(self, method: str, token, timestamp: int, limits):
-        #TODO Refactor this method to follow single responsibility principle
         if limits is None:
             for i, app_limit in enumerate(self.application):
                 await app_limit.get_back(token[0][i], timestamp)
