@@ -8,6 +8,7 @@ import requests
 class ItemsManager:
     
     VERSIONS_URL = "https://ddragon.leagueoflegends.com/api/versions.json" # This url provides an updated json file with all versions
+    ITEMS_URL = "http://ddragon.leagueoflegends.com/cdn/13.21.1/data/en_US/item.json"
     
     
     def __init__(self) -> None:
@@ -35,4 +36,16 @@ class ItemsManager:
         self.get_latest_version()
         
         if not (previous_version == self.latest_version):
-            pass
+            
+            response = requests.get(self.ITEMS_URL)
+            if response.status_code == 200:
+                items_json = response.json()
+                
+            
+            if isinstance(items_json, dict) and len(items_json) > 0:
+                #TODO: Create fetch method 
+                pass
+        
+        # If the version is the same
+        else:
+            self.is_updated = True
