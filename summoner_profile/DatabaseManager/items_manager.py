@@ -32,6 +32,9 @@ class ItemsManager:
             
             self.latest_version = versions_json[0]
 
+        else:
+            print("An error ocurred trying to validate versions_json type or length")
+            return None
             
     def update(self):
         
