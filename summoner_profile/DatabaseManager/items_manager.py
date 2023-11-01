@@ -27,7 +27,7 @@ class ItemsManager:
         if isinstance(versions_json, list) and len(versions_json) > 0:
             
             self.latest_version = versions_json[0]
-            
+
             
     def update(self):
         
@@ -49,3 +49,26 @@ class ItemsManager:
         # If the version is the same
         else:
             self.is_updated = True
+            
+    
+    def fetch(self, json: dict) -> list:
+        '''
+        Collects the desired data from the given json to return it as a list
+        '''
+        item_data = []
+        
+        if 'data' in json:
+            items = json['data']
+            
+            for item_id, item_info in items.items():
+                
+                item = {
+                    'id': item_id,
+                    'name': item_info['name'],
+                    'plaintext': item_info['plaintext'],
+                    'descriptioin': item_info['description'],
+                    'gold_base': item_info['gold']['base'],
+                    'gold_total': item_info['gold']['total'],
+                }
+
+                item_data.append(item)
