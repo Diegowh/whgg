@@ -16,6 +16,8 @@ class ItemsManager:
         self.latest_version = None
         self.is_updated = False
         
+        self.item_data = []
+        
         
     def _update_latest_version(self):
         
@@ -86,3 +88,5 @@ class ItemsManager:
                 }
 
                 item_data.append(item)
+        
+            self.item_data = item_data
