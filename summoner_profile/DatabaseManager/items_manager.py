@@ -80,7 +80,7 @@ class ItemsManager:
                     'id': item_id,
                     'name': item_info['name'],
                     'plaintext': item_info['plaintext'],
-                    'descriptioin': item_info['description'],
+                    'description': item_info['description'],
                     'gold_base': item_info['gold']['base'],
                     'gold_total': item_info['gold']['total'],
                 }
