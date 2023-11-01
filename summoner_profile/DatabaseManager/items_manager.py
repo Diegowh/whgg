@@ -17,7 +17,7 @@ class ItemsManager:
         self.is_updated = False
         
         
-    def update_latest_version(self):
+    def _update_latest_version(self):
         
         try:
             response = requests.get(self.VERSIONS_URL)
@@ -41,7 +41,7 @@ class ItemsManager:
         previous_version = self.latest_version
         
         # Try to find a latest version
-        self.update_latest_version()
+        self._update_latest_version()
         
         if previous_version != self.latest_version:
             
@@ -55,7 +55,7 @@ class ItemsManager:
                 return None
             
             if isinstance(items_json, dict) and len(items_json) > 0:
-                self.fetch(items_json)
+                self._fetch(items_json)
                 
             # Reset it for futures updates
             self.is_updated = False
@@ -65,7 +65,7 @@ class ItemsManager:
             self.is_updated = True
             
     
-    def fetch(self, json: dict) -> list:
+    def _fetch(self, json: dict) -> list:
         '''
         Collects the desired data from the given json to return it as a list
         '''
