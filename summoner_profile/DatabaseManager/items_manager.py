@@ -18,6 +18,11 @@ class ItemsManager:
         
         self._items = []
         
+    def items(self) -> list:
+        '''
+        Returns all item collected data
+        '''
+        return self._items
         
     def _update_latest_version(self):
         '''
