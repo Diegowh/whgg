@@ -40,6 +40,7 @@ class ItemsManager:
         
         previous_version = self.latest_version
         
+        # Try to find a latest version
         self.get_latest_version()
         
         if previous_version != self.latest_version:
@@ -55,6 +56,9 @@ class ItemsManager:
             
             if isinstance(items_json, dict) and len(items_json) > 0:
                 self.fetch(items_json)
+                
+            # Reset it for futures updates
+            self.is_updated = False
         
         # If the version is the same
         else:
