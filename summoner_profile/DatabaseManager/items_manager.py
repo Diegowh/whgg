@@ -42,7 +42,7 @@ class ItemsManager:
         
         self.get_latest_version()
         
-        if not (previous_version == self.latest_version):
+        if previous_version != self.latest_version:
             
             try:
                 response = requests.get(self.ITEMS_URL)
