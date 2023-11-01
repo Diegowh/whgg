@@ -20,7 +20,9 @@ class ItemsManager:
         
         
     def _update_latest_version(self):
-        
+        '''
+        Updates self.latest_version collecting the data from DataDragon.
+        '''
         try:
             response = requests.get(self.VERSIONS_URL)
             versions_json = response.json()
@@ -39,7 +41,9 @@ class ItemsManager:
             return None
             
     def update(self):
-        
+        '''
+        Updates self.item_data to the latest values collecting the data from DataDragon
+        '''
         previous_version = self.latest_version
         
         # Try to find a latest version
