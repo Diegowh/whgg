@@ -60,7 +60,7 @@ class ItemsManager:
             # Reset it for futures updates
             self.is_updated = False
         
-        # If the version is the same
+        # If there is not new version
         else:
             self.is_updated = True
             
