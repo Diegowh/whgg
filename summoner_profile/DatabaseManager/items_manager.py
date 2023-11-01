@@ -17,7 +17,7 @@ class ItemsManager:
         self.is_updated = False
         
         
-    def get_latest_version(self):
+    def update_latest_version(self):
         
         try:
             response = requests.get(self.VERSIONS_URL)
@@ -41,7 +41,7 @@ class ItemsManager:
         previous_version = self.latest_version
         
         # Try to find a latest version
-        self.get_latest_version()
+        self.update_latest_version()
         
         if previous_version != self.latest_version:
             
