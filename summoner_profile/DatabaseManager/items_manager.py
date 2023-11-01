@@ -16,7 +16,7 @@ class ItemsManager:
         self.latest_version = None
         self.is_updated = False
         
-        self.item_data = []
+        self._items = []
         
         
     def _update_latest_version(self):
@@ -42,7 +42,7 @@ class ItemsManager:
             
     def update(self):
         '''
-        Updates self.item_data to the latest values collecting the data from DataDragon
+        Updates self._items to the latest values collecting the data from DataDragon
         '''
         previous_version = self.latest_version
         
@@ -75,7 +75,7 @@ class ItemsManager:
         '''
         Collects the desired data from the given json to return it as a list
         '''
-        item_data = []
+        items = []
         
         if 'data' in json:
             items = json['data']
@@ -91,6 +91,6 @@ class ItemsManager:
                     'gold_total': item_info['gold']['total'],
                 }
 
-                item_data.append(item)
+                items.append(item)
         
-            self.item_data = item_data
+            self._items = items
