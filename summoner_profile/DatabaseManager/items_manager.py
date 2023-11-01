@@ -19,10 +19,14 @@ class ItemsManager:
         
     def get_latest_version(self):
         
-        response = requests.get(self.VERSIONS_URL)
-        if response.status_code == 200:
+        try:
+            response = requests.get(self.VERSIONS_URL)
             versions_json = response.json()
             
+            
+        except Exception as e:
+            print(e)
+            return None
             
         if isinstance(versions_json, list) and len(versions_json) > 0:
             
@@ -37,14 +41,17 @@ class ItemsManager:
         
         if not (previous_version == self.latest_version):
             
-            response = requests.get(self.ITEMS_URL)
-            if response.status_code == 200:
+            try:
+                response = requests.get(self.ITEMS_URL)
                 items_json = response.json()
                 
+                
+            except Exception as e:
+                print(e)
+                return None
             
             if isinstance(items_json, dict) and len(items_json) > 0:
-                #TODO: Create fetch method 
-                pass
+                self.fetch(items_json)
         
         # If the version is the same
         else:
