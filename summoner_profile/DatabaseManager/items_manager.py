@@ -21,26 +21,6 @@ class ItemsManager:
         '''
         return self._items
         
-    def _update_latest_version(self):
-        '''
-        Updates self.latest_version collecting the data from DataDragon.
-        '''
-        try:
-            response = requests.get(self.VERSIONS_URL)
-            versions_json = response.json()
-            
-            
-        except Exception as e:
-            print(e)
-            return None
-            
-        if isinstance(versions_json, list) and len(versions_json) > 0:
-            
-            self.latest_version = versions_json[0]
-
-        else:
-            print("An error ocurred trying to validate versions_json type or length")
-            return None
             
     def update(self):
         '''
