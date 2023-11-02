@@ -13,9 +13,6 @@ class ItemsManager:
     
     def __init__(self) -> None:
         
-        self.latest_version = None
-        self.is_updated = False
-        
         self._items = []
         
     def items(self) -> list:
