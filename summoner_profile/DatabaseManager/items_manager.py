@@ -3,7 +3,7 @@ Items manager periodically updates and collect all items data from League of Leg
 '''
 
 import requests
-from ..Updates.updater import VersionUpdates
+
 
 class ItemsManager:
     
