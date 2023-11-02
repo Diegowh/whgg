@@ -1,5 +1,9 @@
 import requests
+
+
 from ..DatabaseManager.items_manager import ItemsManager
+from ..models.version import Version
+
 
 class Updater:
     '''
@@ -16,6 +20,12 @@ class Updater:
         self.latest_version = None
         self.previous_version = None
         
+        # Checks if there is a previous version on the database
+        version_query = Version.objects.first()
+        if version_query:
+            self.previous_version = version_query.version
+            self.latest_version = self.previous_version
+            
         # All manager imports
         self.items_manager = ItemsManager()
         
@@ -32,10 +42,11 @@ class Updater:
             
         if isinstance(versions_json, list) and len(versions_json) > 0:
             
-            self.previous_version = self.latest_version
-            
             self.latest_version = versions_json[0]
-
+            
+            # Saves it on the database
+            self._save_latest_version()
+            
         else:
             print("An error ocurred trying to validate versions_json type or length")
             return None
@@ -49,5 +60,12 @@ class Updater:
         else:
             return False
         
-    def update_items(self):
-        
+    def _save_latest_version(self):
+        '''
+        Saves self.latest_version into the database.
+        '''
+        Version.objects.update_or_create(
+            defaults= {
+                'version': self.latest_version,
+            }
+        )
