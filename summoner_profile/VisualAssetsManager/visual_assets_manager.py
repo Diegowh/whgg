@@ -1,0 +1,3 @@
+
+class VisualAssetsManager:
+    pass
