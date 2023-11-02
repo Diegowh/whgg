@@ -1,7 +1,7 @@
 import requests
+from ..DatabaseManager.items_manager import ItemsManager
 
-
-class Updater:
+class VersionUpdates:
     
     # Json data urls
     SEASONS_URL = "https://static.developer.riotgames.com/docs/lol/seasons.json"
