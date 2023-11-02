@@ -1,7 +1,7 @@
 import requests
 
 
-class UpdateTracker:
+class Updater:
     
     # Json data urls
     SEASONS_URL = "https://static.developer.riotgames.com/docs/lol/seasons.json"
