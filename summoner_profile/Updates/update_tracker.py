@@ -12,7 +12,7 @@ class UpdateTracker:
         self.latest_version = None
         self.previous_version = None
         
-    def check_for_update(self):
+    def check_for_updates(self):
         
         try:
             response = requests.get(self.VERSIONS_URL)
