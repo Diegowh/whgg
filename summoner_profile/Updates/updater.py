@@ -16,6 +16,9 @@ class Updater:
         self.latest_version = None
         self.previous_version = None
         
+        # All manager imports
+        self.items_manager = ItemsManager()
+        
     def check_for_updates(self):
         
         try:
@@ -45,3 +48,6 @@ class Updater:
         
         else:
             return False
+        
+    def update_items(self):
+        
