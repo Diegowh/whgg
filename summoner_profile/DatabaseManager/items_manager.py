@@ -3,7 +3,7 @@ Items manager periodically updates and collect all items data from League of Leg
 '''
 
 import requests
-
+from ..Updates.updater import VersionUpdates
 
 class ItemsManager:
     
@@ -26,31 +26,20 @@ class ItemsManager:
         '''
         Updates self._items to the latest values collecting the data from DataDragon
         '''
-        previous_version = self.latest_version
-        
         # Try to find a latest version
-        self._update_latest_version()
         
-        if previous_version != self.latest_version:
-            
-            try:
-                response = requests.get(self.ITEMS_URL)
-                items_json = response.json()
-                
-                
-            except Exception as e:
-                print(e)
-                return None
-            
-            if isinstance(items_json, dict) and len(items_json) > 0:
-                self._fetch(items_json)
-                
-            # Reset it for futures updates
-            self.is_updated = False
         
-        # If there is not new version
-        else:
-            self.is_updated = True
+        try:
+            response = requests.get(self.ITEMS_URL)
+            items_json = response.json()
+                
+                
+        except Exception as e:
+            print(e)
+            return None
+            
+        if isinstance(items_json, dict) and len(items_json) > 0:
+            self._fetch(items_json)
             
     
     def _fetch(self, json: dict) -> list:

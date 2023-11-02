@@ -1,7 +1,11 @@
 import requests
 from ..DatabaseManager.items_manager import ItemsManager
 
-class VersionUpdates:
+class Updater:
+    '''
+    Manages the updates on the json files based on the new versions of league of legends.
+    '''
+    
     
     # Json data urls
     SEASONS_URL = "https://static.developer.riotgames.com/docs/lol/seasons.json"
@@ -33,7 +37,7 @@ class VersionUpdates:
             print("An error ocurred trying to validate versions_json type or length")
             return None
         
-    def is_updated(self):
+    def is_updated(self) ->bool:
         
         if self.latest_version and self.previous_version:
             
