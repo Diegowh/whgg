@@ -52,13 +52,11 @@ class Updater:
             return None
         
     def is_updated(self) ->bool:
-        
-        if self.latest_version and self.previous_version:
-            
-            return self.latest_version != self.previous_version
-        
-        else:
-            return False
+        '''
+        Returns True if the latest version is different to the previous one.
+        '''
+        return self.latest_version != self.previous_version if self.latest_version and self.previous_version else False
+    
         
     def _save_latest_version(self):
         '''
