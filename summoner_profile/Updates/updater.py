@@ -25,9 +25,7 @@ class Updater:
         if version_query:
             self.previous_version = version_query.version
             self.latest_version = self.previous_version
-            
-        # All manager imports
-        self.items_manager = ItemsManager()
+        
         
     def check_for_updates(self):
         
@@ -67,3 +65,7 @@ class Updater:
                 'version': self.latest_version,
             }
         )
+        
+    def update_items(self):
+        
+        items_manager = ItemsManager()
