@@ -27,8 +27,6 @@ class ItemsManager:
         Updates self._items to the latest values collecting the data from DataDragon
         '''
         # Try to find a latest version
-        
-        
         try:
             response = requests.get(self.ITEMS_URL)
             items_json = response.json()

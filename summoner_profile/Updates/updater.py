@@ -69,3 +69,4 @@ class Updater:
     def update_items(self):
         
         items_manager = ItemsManager()
+        
