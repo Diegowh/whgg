@@ -1,7 +1,7 @@
 import requests
 
 
-from ..DatabaseManager.items_manager import ItemsManager
+from ..DataManager.items_manager import ItemsManager
 from ..models.version import Version
 
 
