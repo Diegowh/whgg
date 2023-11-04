@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'summoner_profile',
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [
