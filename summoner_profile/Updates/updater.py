@@ -12,7 +12,6 @@ class Updater:
     
     
     # Json data urls
-    SEASONS_URL = "https://static.developer.riotgames.com/docs/lol/seasons.json"
     VERSIONS_URL = "https://ddragon.leagueoflegends.com/api/versions.json"
     
     def __init__(self) -> None:
