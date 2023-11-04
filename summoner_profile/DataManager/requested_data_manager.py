@@ -2,7 +2,6 @@ from datetime import datetime
 import dotenv
 import os
 
-from django.core.cache import cache
 from asgiref.sync import async_to_sync
 
 from .dataclasses import (
@@ -74,12 +73,7 @@ class RequestedDataManager:
         
         self.api_client = ApiClient(server=self.server, api_key=api_key, debug=True)
         
-        # Cache the summoner puuid to avoid making multiple requests to the API
-        self._puuid = cache.get(f'summoner_puuid_{summoner_name}')
-        if self._puuid is None:
-            self._puuid = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name)
-        
-    def summoner_puuid(self):
+        self._puuid = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name)
         
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
