@@ -4,6 +4,9 @@ Items manager periodically updates and collect all items data from League of Leg
 
 import requests
 
+from ..models.item import Item
+
+
 
 class ItemsManager:
     
