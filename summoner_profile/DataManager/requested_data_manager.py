@@ -1,4 +1,6 @@
 from datetime import datetime
+import dotenv
+import os
 
 from .dataclasses import (
     
@@ -12,10 +14,14 @@ from .dataclasses import (
 
 from ..api.api_client import ApiClient
 
+from ..api.utils.exceptions import RiotApiKeyNotFound
+
+
 class RequestedDataManager:
     
-    def __init__(self, summoner_name: str, region: str) -> None:
+    def __init__(self, summoner_name: str, server: str) -> None:
         
+        # Set default structure for self.data
         self.data = {
             
             "summoner_info": {
@@ -46,9 +52,28 @@ class RequestedDataManager:
             "champion_stats": [],
         }
         
+        # Summoner requested attributes
         self.summoner_name = summoner_name
-        self.region = region
-        self._puuid = 
+        self.server = server
+        
+        # Get ApiKey from .env 
+        try:
+            dotenv.load_dotenv()
+            
+            api_key = os.getenv("RIOT_API_KEY")
+            
+            if api_key is None:
+                raise RiotApiKeyNotFound()
+        
+        except EnvironmentError:
+            raise RiotApiKeyNotFound()
+        
+        
+        api_client = ApiClient(server=self.server, api_key=api_key, debug=True)
+        self._puuid = self.summoner_puuid()
+        
+    def summoner_puuid(self):
+        
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
         """Add SummonerInfo data into self.data."""
