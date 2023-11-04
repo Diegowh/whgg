@@ -43,18 +43,7 @@ class RequestedDataManager:
                     },
             },
             
-            "champion_stats": [
-                {
-                    "name": None,
-                    "games": None,
-                    "winrate": None,
-                    "kda": None,
-                    "kills": None,
-                    "deaths": None,
-                    "assists": None,
-                    
-                },
-            ]
+            "champion_stats": [],
         }
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
