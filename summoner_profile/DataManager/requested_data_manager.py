@@ -130,8 +130,17 @@ class RequestedDataManager:
     
     def get_data_from_database(self):
         
+        # If the summoner puuid is already in the database
         if self.is_puuid_in_database():
             
+            # Check how much time has been since last update
             now = int(time.time())
-            
             last_update = self.get_last_update()
+            
+            if (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE:
+                # Update the database
+                pass
+            
+            else:
+                # Return summoners data from the database without an update
+                pass
