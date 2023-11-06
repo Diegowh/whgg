@@ -117,3 +117,10 @@ class RequestedDataManager:
             bool: True if PUUID exists in the database, False otherwise.
         '''
         return Summoner.objects.filter(puuid=self.puuid).exists()
+    
+    
+    def get_last_update(self):
+        '''
+        Returns last_update for self.puuid from Summoner model
+        '''
+        return Summoner.objects.get(puuid=self.puuid).last_update
