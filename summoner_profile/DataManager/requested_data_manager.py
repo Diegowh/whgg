@@ -80,7 +80,11 @@ class RequestedDataManager:
         
         self.api_client = ApiClient(server=self.server, api_key=api_key, debug=True)
         
-        self._puuid: str = async_to_sync(self.api_client.get_summoner_by_name)(self.summoner_name)
+        
+        # To avoid repetitive requests for the IDs
+        self.summoner_info = async_to_sync(self.fetch_summoner)()
+        self._puuid: str = self.summoner_info["puuid"]
+        self._id: str = self.summoner_info["id"]
         
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
@@ -153,7 +157,7 @@ class RequestedDataManager:
         response = await self.api_client.get_summoner_by_name()
         
         summoner = {
-            "puuid": self._puuid,
+            "puuid": response["puuid"],
             "id": response["id"],
             "name": response["name"],
             "server": self.server,
