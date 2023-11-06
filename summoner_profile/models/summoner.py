@@ -7,4 +7,4 @@ class Summoner(models.Model):
     region = models.CharField(max_length=200)
     icon_id = models.IntegerField()
     account_level = models.IntegerField()
-    last_update = models.DateTimeField()
+    last_update = models.IntegerField()

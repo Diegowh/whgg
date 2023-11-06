@@ -1,6 +1,7 @@
 from datetime import datetime
 import dotenv
 import os
+import time
 
 from asgiref.sync import async_to_sync
 
@@ -124,3 +125,11 @@ class RequestedDataManager:
         Returns last_update for self.puuid from Summoner model
         '''
         return Summoner.objects.get(puuid=self.puuid).last_update
+    
+    def get_data_from_database(self):
+        
+        if self.is_puuid_in_database():
+            
+            now = int(time.time())
+            
+            last_update = self.get_last_update()
