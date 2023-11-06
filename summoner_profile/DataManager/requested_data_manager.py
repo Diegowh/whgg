@@ -80,7 +80,7 @@ class RequestedDataManager:
         
         self.api_client = ApiClient(server=self.server, api_key=api_key, debug=True)
         
-        self._puuid = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name)
+        self._puuid = async_to_sync(self.api_client.get_summoner_by_name)(self.summoner_name)
         
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
