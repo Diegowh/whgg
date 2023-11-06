@@ -168,3 +168,10 @@ class RequestedDataManager:
         }
         
         return summoner
+    
+    async def fetch_ranked_stats(self):
+        '''
+        Returns structured data ready to send it to RankedStats model
+        '''
+        response = await self.api_client.get_league_by_summoner()
+        
