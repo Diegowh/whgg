@@ -16,13 +16,15 @@ from .dataclasses import (
 )
 
 from ..api.api_client import ApiClient
-
 from ..api.utils.exceptions import RiotApiKeyNotFound
-
 from ..models.summoner import Summoner
+from ..utils.utils import hours_to_seconds
 
 
 class RequestedDataManager:
+    
+    HOURS_BEFORE_UPDATING_DATABASE = 1.5
+    SECONDS_BEFORE_UPDATING_DATABASE = hours_to_seconds(hours=HOURS_BEFORE_UPDATING_DATABASE)
     
     def __init__(self, summoner_name: str, server: str) -> None:
         
