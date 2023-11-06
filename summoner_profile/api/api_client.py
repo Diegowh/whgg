@@ -322,6 +322,17 @@ class ApiClient:
     @auto_retry
     @exceptions
     @ratelimit_platform
+    async def get_league_by_summoner(self, summoner_id):
+        """
+        :param string summoner_id: id of the summoner
+        
+        Returns the result of https://developer.riotgames.com/apis#league-v4/GET_getLeagueEntriesForSummoner
+        """
+        return await self.fetch((self.BASE_URL_LOL + "league/v4/entries/by-summoner/{summoner_id}").format(server=self._platform, summoner_id=summoner_id))
+    
+    @auto_retry
+    @exceptions
+    @ratelimit_platform
     async def get_league_by_id(self, league_id):
         """
         :param string league_id: id of the league
