@@ -160,3 +160,5 @@ class RequestedDataManager:
             "last_update": response["revisionDate"]
             
         }
+        
+        return summoner
