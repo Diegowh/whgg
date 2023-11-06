@@ -108,3 +108,12 @@ class RequestedDataManager:
         
         all_champion_stats.append(champion_stats)
         
+        
+    def is_puuid_in_database(self) -> bool:
+        '''
+        Checks if the current instance's PUUID exists in the database.
+        
+        Returns:
+            bool: True if PUUID exists in the database, False otherwise.
+        '''
+        return Summoner.objects.filter(puuid=self.puuid).exists()
