@@ -18,6 +18,8 @@ from ..api.api_client import ApiClient
 
 from ..api.utils.exceptions import RiotApiKeyNotFound
 
+from ..models.summoner import Summoner
+
 
 class RequestedDataManager:
     
@@ -52,6 +54,8 @@ class RequestedDataManager:
             },
             
             "champion_stats": [],
+            
+            "last_20_matches":[],
         }
         
         # Summoner requested attributes
