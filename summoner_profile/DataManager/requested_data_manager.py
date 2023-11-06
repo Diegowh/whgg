@@ -144,3 +144,19 @@ class RequestedDataManager:
             else:
                 # Return summoners data from the database without an update
                 pass
+    
+    # Request data from Riot API
+    async def fetch_summoner(self):
+        
+        response = await self.api_client.get_summoner_by_name()
+        
+        summoner = {
+            "puuid": self._puuid,
+            "id": response["id"],
+            "name": response["name"],
+            "server": self.server,
+            "icon_id": response["profileIconId"],
+            "summoner_level": response["summonerLevel"],
+            "last_update": response["revisionDate"]
+            
+        }
