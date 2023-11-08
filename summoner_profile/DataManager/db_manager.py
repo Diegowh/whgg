@@ -5,7 +5,9 @@ from ..models.models import (
     RankedStats,
     SummonerMatch,
     Summoner,
-    Version
+    Version,
+    SummonerSpell,
+    
 )
 
 class DbManager:
