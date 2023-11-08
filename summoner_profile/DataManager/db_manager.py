@@ -47,4 +47,31 @@ class DbManager:
             "summoner": self.summoner_instance
         }
         
-        RankedStats.objects.update_or_create(queue_type=queue, summoner=summoner_instance, defaults=defaults)
+        RankedStats.objects.update_or_create(queue_type=queue, summoner=self.summoner_instance, defaults=defaults)
+
+    def _update_summoner_match(self, match_id: str, data: dict):
+        
+        item_purchase = [Item.objects.get(id=item_id) for item_id in data["item_ids"]]
+        
+        summoner_spells = [SummonerSpell.objects.get(id=spell_id) for spell_id in data["summoner_spells"]]
+        
+        defaults = {
+            "id": match_id,
+            "season_id": data["season_id"],
+            "queue_id": data["queue_id"],
+            "game_mode": data["game_mode"],
+            "game_type": data["game_type"],
+            "champion_name": data["champion_name"],
+            "win": data["win"],
+            "kills": data["kills"],
+            "deaths": data["deaths"],
+            "assists": data["assists"],
+            "kda": data["kda"],
+            "minion_kills": data["minion_kills"],
+            "vision_score": data["vision_score"],
+            "team_position": data["team_position"],
+            
+            "summoner": self.summoner_instance,
+            "item_purchase": item_purchase,
+            "summoner_spells": summoner_spells,
+        }
