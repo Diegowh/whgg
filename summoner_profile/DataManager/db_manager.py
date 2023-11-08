@@ -110,6 +110,9 @@ class DbManager:
                 "team_id": participant_data["team_id"],
             }
             
+            # Each participant represents a player in a summoner match and is unique and unchangeable for that specific match. 
+            # Even if the data (puuid, name, champion_name, and team_id) for two different participants is the same, 
+            # they will always refer to distinct instances in a summoner match.
             Participant.objects.get_or_create(id=participant_id, defaults=defaults)
             
             
