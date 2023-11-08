@@ -16,20 +16,24 @@ class DbManager:
         
         self.puuid = puuid
         self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
+        
+        self.data = {}
     
-    def update(self, puuid: str, data: dict):
-        # Here all update methods are called
-        pass
+    def update(self, data: dict):
+        
+        self.data = data
     
-    def _update_summoner(self, data: dict):
+    def _update_summoner(self):
+        
+        summoner_data = self.data["summoner"]
         
         defaults = {
-            "id": data["id"],
-            "name": data["name"],
-            "server": data["server"],
-            "icon_id": data["icon_id"],
-            "summoner_level": data["summoner_level"],
-            "last_update": data["last_update"]
+            "id": summoner_data["id"],
+            "name": summoner_data["name"],
+            "server": summoner_data["server"],
+            "icon_id": summoner_data["icon_id"],
+            "summoner_level": summoner_data["summoner_level"],
+            "last_update": summoner_data["last_update"]
         }
         
         Summoner.objects.update_or_create(puuid=self.puuid, defaults=defaults)
