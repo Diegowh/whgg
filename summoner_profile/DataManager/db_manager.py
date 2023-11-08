@@ -21,7 +21,7 @@ class DbManager:
         # Here all update methods are called
         pass
     
-    def _update_summoner(self, puuid:str, data: dict):
+    def _update_summoner(self, data: dict):
         
         defaults = {
             "id": data["id"],
@@ -32,12 +32,10 @@ class DbManager:
             "last_update": data["last_update"]
         }
         
-        Summoner.objects.update_or_create(puuid=puuid, defaults=defaults)
+        Summoner.objects.update_or_create(puuid=self.puuid, defaults=defaults)
 
 
-    def _update_ranked_stats(self, puuid: str, queue: str, data: dict):
-        
-        summoner_instance = Summoner.objects.get(puuid=puuid)
+    def _update_ranked_stats(self, queue: str, data: dict):
         
         defaults = {
             "queue_type": queue,
@@ -46,7 +44,7 @@ class DbManager:
             "wins": data["wins"],
             "losses": data["losses"],
             "winrate": int(round(data["winrate"])),
-            "summoner": summoner_instance
+            "summoner": self.summoner_instance
         }
         
         RankedStats.objects.update_or_create(queue_type=queue, summoner=summoner_instance, defaults=defaults)
