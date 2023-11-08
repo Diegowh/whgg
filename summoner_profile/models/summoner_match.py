@@ -1,7 +1,7 @@
 from django.db import models
 
 class SummonerMatch(models.Model):
-    id = models.IntegerField(max_length=200, primary_key=True, unique=True)
+    id = models.CharField(max_length=200, primary_key=True, unique=True)
     season_id = models.IntegerField() # https://static.developer.riotgames.com/docs/lol/seasons.json
     queue_id = models.IntegerField() # https://static.developer.riotgames.com/docs/lol/queues.json
     game_mode = models.CharField() # https://static.developer.riotgames.com/docs/lol/gameModes.json
