@@ -82,7 +82,7 @@ class RequestedDataManager:
         
         
         # To avoid repetitive requests for the IDs
-        self.summoner_info = async_to_sync(self.fetch_summoner)()
+        self.summoner_info = async_to_sync(self.fetch_summoner)() # Always request summoner info based on summoner name to Riot API
         self._puuid: str = self.summoner_info["puuid"]
         self._id: str = self.summoner_info["id"]
         
