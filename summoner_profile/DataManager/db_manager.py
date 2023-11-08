@@ -75,3 +75,5 @@ class DbManager:
             "item_purchase": item_purchase,
             "summoner_spells": summoner_spells,
         }
+        
+        SummonerMatch.objects.update_or_create(id=match_id, defaults=defaults)
