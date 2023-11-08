@@ -39,21 +39,21 @@ class DbManager:
         Summoner.objects.update_or_create(puuid=self.puuid, defaults=defaults)
 
 
-    def _update_ranked_stats(self, queue: str):
+    def _update_ranked_stats(self):
         
-        ranked_stats = self.data["ranked_stats"][queue]
-        
-        defaults = {
-            "queue_type": queue,
-            "rank": ranked_stats["rank"],
-            "league_points": ranked_stats["league_points"],
-            "wins": ranked_stats["wins"],
-            "losses": ranked_stats["losses"],
-            "winrate": int(round(ranked_stats["winrate"])),
-            "summoner": self.summoner_instance
-        }
-        
-        RankedStats.objects.update_or_create(queue_type=queue, summoner=self.summoner_instance, defaults=defaults)
+        for queue, ranked_stats in self.data["ranked_stats"].items():
+            
+            defaults = {
+                "queue_type": queue,
+                "rank": ranked_stats["rank"],
+                "league_points": ranked_stats["league_points"],
+                "wins": ranked_stats["wins"],
+                "losses": ranked_stats["losses"],
+                "winrate": int(round(ranked_stats["winrate"])),
+                "summoner": self.summoner_instance
+            }
+            
+            RankedStats.objects.update_or_create(queue_type=queue, summoner=self.summoner_instance, defaults=defaults)
 
     def _update_summoner_matches(self):
         
