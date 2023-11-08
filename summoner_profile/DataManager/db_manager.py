@@ -88,3 +88,29 @@ class DbManager:
             }
         
             SummonerMatch.objects.update_or_create(id=match_id, defaults=defaults)
+            
+            
+    def _update_champion_stats(self):
+        
+        all_champion_stats = self.data["champion_stats"]
+        
+        for champion_stats_entry in all_champion_stats:
+            
+            champion_stats_id = champion_stats_entry["id"]
+            
+            defaults = {
+                "id": champion_stats_id,
+                "name": champion_stats_entry["name"],
+                "games": champion_stats_entry["games"],
+                "wins": champion_stats_entry["wins"],
+                "losses": champion_stats_entry["losses"],
+                "winrate": champion_stats_entry["winrate"],
+                "kills": champion_stats_entry["kills"],
+                "deaths": champion_stats_entry["deaths"],
+                "assists": champion_stats_entry["assists"],
+                "kda": champion_stats_entry["kda"],
+                "minion_kills": champion_stats_entry["minion_kills"],
+                "summoner": self.summoner_instance
+            }
+            
+            ChampionStats.objects.update_or_create(id=champion_stats_id, defaults=defaults)
