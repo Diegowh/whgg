@@ -39,45 +39,52 @@ class DbManager:
         Summoner.objects.update_or_create(puuid=self.puuid, defaults=defaults)
 
 
-    def _update_ranked_stats(self, queue: str, data: dict):
+    def _update_ranked_stats(self, queue: str):
+        
+        ranked_stats = self.data["ranked_stats"][queue]
         
         defaults = {
             "queue_type": queue,
-            "rank": data["rank"],
-            "league_points": data["league_points"],
-            "wins": data["wins"],
-            "losses": data["losses"],
-            "winrate": int(round(data["winrate"])),
+            "rank": ranked_stats["rank"],
+            "league_points": ranked_stats["league_points"],
+            "wins": ranked_stats["wins"],
+            "losses": ranked_stats["losses"],
+            "winrate": int(round(ranked_stats["winrate"])),
             "summoner": self.summoner_instance
         }
         
         RankedStats.objects.update_or_create(queue_type=queue, summoner=self.summoner_instance, defaults=defaults)
 
-    def _update_summoner_match(self, match_id: str, data: dict):
+    def _update_summoner_matches(self):
         
-        item_purchase = [Item.objects.get(id=item_id) for item_id in data["item_ids"]]
+        matches_to_update = self.data["last_20_matches"]
         
-        summoner_spells = [SummonerSpell.objects.get(id=spell_id) for spell_id in data["summoner_spells"]]
-        
-        defaults = {
-            "id": match_id,
-            "season_id": data["season_id"],
-            "queue_id": data["queue_id"],
-            "game_mode": data["game_mode"],
-            "game_type": data["game_type"],
-            "champion_name": data["champion_name"],
-            "win": data["win"],
-            "kills": data["kills"],
-            "deaths": data["deaths"],
-            "assists": data["assists"],
-            "kda": data["kda"],
-            "minion_kills": data["minion_kills"],
-            "vision_score": data["vision_score"],
-            "team_position": data["team_position"],
+        for match_data in matches_to_update:
+            match_id = match_data["id"]
             
-            "summoner": self.summoner_instance,
-            "item_purchase": item_purchase,
-            "summoner_spells": summoner_spells,
-        }
+            
+            item_purchase = [Item.objects.get(id=item_id) for item_id in match_data["item_ids"]]
+            summoner_spells = [SummonerSpell.objects.get(id=spell_id) for spell_id in match_data["summoner_spells"]]
         
-        SummonerMatch.objects.update_or_create(id=match_id, defaults=defaults)
+            defaults = {
+                "id": match_id,
+                "season_id": match_data["season_id"],
+                "queue_id": match_data["queue_id"],
+                "game_mode": match_data["game_mode"],
+                "game_type": match_data["game_type"],
+                "champion_name": match_data["champion_name"],
+                "win": match_data["win"],
+                "kills": match_data["kills"],
+                "deaths": match_data["deaths"],
+                "assists": match_data["assists"],
+                "kda": match_data["kda"],
+                "minion_kills": match_data["minion_kills"],
+                "vision_score": match_data["vision_score"],
+                "team_position": match_data["team_position"],
+                
+                "summoner": self.summoner_instance,
+                "item_purchase": item_purchase,
+                "summoner_spells": summoner_spells,
+            }
+        
+            SummonerMatch.objects.update_or_create(id=match_id, defaults=defaults)
