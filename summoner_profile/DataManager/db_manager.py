@@ -90,6 +90,29 @@ class DbManager:
             SummonerMatch.objects.update_or_create(id=match_id, defaults=defaults)
             
             
+            # Obtain match participants
+            participants: list = match_data["participants"]
+            
+            self._update_participants(participants)
+            
+            
+            
+    def _update_participants(self, match_participants):
+        
+        for participant_data in match_participants:
+            
+            participant_id = participant_data["id"]
+            
+            defaults = {
+                "puuid": participant_data["puuid"],
+                "name": participant_data["name"],
+                "champion_name": participant_data["champion_name"],
+                "team_id": participant_data["team_id"],
+            }
+            
+            Participant.objects.get_or_create(id=participant_id, defaults=defaults)
+            
+            
     def _update_champion_stats(self):
         
         all_champion_stats = self.data["champion_stats"]
