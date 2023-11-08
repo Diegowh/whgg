@@ -11,3 +11,6 @@ class RankedStats(models.Model):
     
     # Foreign Keys
     summoner = models.ForeignKey('Summoner', on_delete=models.CASCADE, related_name='ranked_stats')
+    
+    class Meta:
+        unique_together = ("queue_type", "summoner")
