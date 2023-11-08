@@ -37,7 +37,7 @@ class RequestedDataManager:
                 "account_level": None,
             },
             
-            "ranked_info": {
+            "ranked_stats": {
                 
                 "soloq": {
                     "rank": None,
