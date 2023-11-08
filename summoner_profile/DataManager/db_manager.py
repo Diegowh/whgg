@@ -12,8 +12,10 @@ from ..models.models import (
 
 class DbManager:
     
-    def __init__(self) -> None:
-        pass
+    def __init__(self, puuid) -> None:
+        
+        self.puuid = puuid
+        self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
     
     def update(self, puuid: str, data: dict):
         # Here all update methods are called
