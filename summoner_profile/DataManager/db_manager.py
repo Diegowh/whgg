@@ -29,3 +29,20 @@ class DbManager:
         }
         
         Summoner.objects.update_or_create(puuid=puuid, defaults=defaults)
+
+
+    def _update_ranked_stats(self, puuid: str, queue: str, data: dict):
+        
+        summoner_instance = Summoner.objects.get(puuid=puuid)
+        
+        defaults = {
+            "queue_type": queue,
+            "rank": data["rank"],
+            "league_points": data["league_points"],
+            "wins": data["wins"],
+            "losses": data["losses"],
+            "winrate": int(round(data["winrate"])),
+            "summoner": summoner_instance
+        }
+        
+        RankedStats.objects.update_or_create(queue_type=queue, summoner=summoner_instance, defaults=defaults)
