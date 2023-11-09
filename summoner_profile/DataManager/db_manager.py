@@ -22,17 +22,25 @@ class DbManager:
         self.data = {}
         
         if puuid:
-            self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
+            # If puuid is given is because we want to update the summoner database
+            self.summoner_instance = None
     
     def update(self, data: dict):
         
-        self.data = data
+        if self.puuid:
             
-        self._update_summoner()
-        self._update_ranked_stats()
-        self._update_summoner_matches()
-        self._update_participants()
-        self._update_champion_stats()
+            # Set given data to self.data
+            self.data = data
+            
+            # Update the database
+            self._update_summoner()
+            self._update_ranked_stats()
+            self._update_summoner_matches()
+            self._update_champion_stats()
+        
+        else:
+            raise Exception("Summoner PuuID was not given. Are you sure you want to use this method?")
+            
     
     def _update_summoner(self):
         
@@ -48,6 +56,9 @@ class DbManager:
         }
         
         Summoner.objects.update_or_create(puuid=self.puuid, defaults=defaults)
+        
+        # After updating the summoner, we need to get the instance to use it in other methods
+        self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
 
 
     def _update_ranked_stats(self):
