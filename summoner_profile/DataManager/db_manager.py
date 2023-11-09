@@ -18,11 +18,11 @@ class DbManager:
     
     def __init__(self, puuid = None) -> None:
         
+        self.puuid = puuid
+        self.data = {}
+        
         if puuid:
-            self.puuid = puuid
             self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
-            
-            self.data = {}
     
     def update(self, data: dict = None, model: Model = None):
         
