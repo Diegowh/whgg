@@ -36,13 +36,13 @@ class ItemsManager:
             response = requests.get(self.ITEMS_URL)
             items_json = response.json()
                 
+            if isinstance(items_json, dict) and len(items_json) > 0:
+                self._fetch(items_json)
                 
         except Exception as e:
             print(e)
             return None
             
-        if isinstance(items_json, dict) and len(items_json) > 0:
-            self._fetch(items_json)
             
             
         
