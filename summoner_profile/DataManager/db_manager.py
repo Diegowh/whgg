@@ -24,9 +24,15 @@ class DbManager:
         if puuid:
             self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
     
-    def update(self, data: dict = None, model: Model = None):
+    def update(self, data: dict):
         
         self.data = data
+            
+        self._update_summoner()
+        self._update_ranked_stats()
+        self._update_summoner_matches()
+        self._update_participants()
+        self._update_champion_stats()
     
     def _update_summoner(self):
         
