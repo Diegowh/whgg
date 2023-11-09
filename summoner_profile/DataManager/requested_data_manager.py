@@ -5,6 +5,8 @@ import time
 
 from asgiref.sync import async_to_sync
 
+from .db_manager import DbManager
+
 from .dataclasses import (
     
     SummonerInfo,
@@ -85,6 +87,9 @@ class RequestedDataManager:
         self.summoner_info = async_to_sync(self.fetch_summoner)() # Always request summoner info based on summoner name to Riot API
         self._puuid: str = self.summoner_info["puuid"]
         self._id: str = self.summoner_info["id"]
+        
+        # Create DbManager instance
+        self.db_manager = DbManager(puuid=self._puuid)
         
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
