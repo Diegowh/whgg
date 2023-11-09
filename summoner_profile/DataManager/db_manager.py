@@ -10,6 +10,10 @@ from ..models.models import (
     
 )
 
+
+from django.db.models import Model
+
+
 class DbManager:
     
     def __init__(self, puuid = None) -> None:
@@ -20,7 +24,7 @@ class DbManager:
             
             self.data = {}
     
-    def update(self, data: dict):
+    def update(self, data: dict = None, model: Model = None):
         
         self.data = data
     
