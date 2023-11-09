@@ -50,7 +50,7 @@ class DbManager:
                 "league_points": ranked_stats["league_points"],
                 "wins": ranked_stats["wins"],
                 "losses": ranked_stats["losses"],
-                "winrate": int(round(ranked_stats["winrate"])),
+                "winrate": int(round(ranked_stats["winrate", 0])),
                 "summoner": self.summoner_instance
             }
             
