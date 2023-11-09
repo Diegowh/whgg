@@ -4,8 +4,6 @@ Items manager periodically updates and collect all items data from League of Leg
 
 import requests
 
-from ..models.item import Item
-
 from .db_manager import DbManager
 
 
@@ -46,18 +44,8 @@ class ItemsManager:
             
         
         # Save the new items data into the database
-        self.update_database()
         
         
-        
-    def update_database(self):
-        
-        for item in self.items():
-            
-            Item.objects.update_or_create(
-                id=item["id"],
-                defaults=item
-            )
     
     def _fetch(self, json: dict) -> list:
         '''
