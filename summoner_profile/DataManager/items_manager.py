@@ -6,6 +6,7 @@ import requests
 
 from ..models.item import Item
 
+from .db_manager import DbManager
 
 
 class ItemsManager:
