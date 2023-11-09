@@ -17,6 +17,9 @@ class ItemsManager:
         
         self._items = []
         
+        # Create an instance for DbManager
+        db_manager = DbManager()
+        
     def items(self) -> list:
         '''
         Returns all item collected data
@@ -44,7 +47,7 @@ class ItemsManager:
             
         
         # Save the new items data into the database
-        
+        self.db_manager.update_items(items=self.items())
         
     
     def _fetch(self, json: dict) -> list:
