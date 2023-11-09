@@ -141,3 +141,14 @@ class DbManager:
             }
             
             ChampionStats.objects.update_or_create(id=champion_stats_id, defaults=defaults)
+            
+    # Items 
+    def update_items(self, items: list):
+        
+        for item in items:
+            
+            Item.objects.update_or_create(
+                id=item["id"],
+                defaults=item,
+                
+            )
