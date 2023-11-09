@@ -18,7 +18,7 @@ class ItemsManager:
         self._items = []
         
         # Create an instance for DbManager
-        db_manager = DbManager()
+        self.db_manager = DbManager()
         
     def items(self) -> list:
         '''
