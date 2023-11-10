@@ -56,9 +56,9 @@ class ItemsManager:
         items = []
         
         if 'data' in json:
-            items = json['data']
+            items_data: dict = json['data']
             
-            for item_id, item_info in items.items():
+            for item_id, item_info in items_data.items():
                 
                 item = {
                     'id': item_id,
