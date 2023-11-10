@@ -1,12 +1,5 @@
-'''
-Items manager periodically updates and collect all items data from League of Legends
-'''
-
-import requests
 
 from .base_manager import BaseManager
-
-from ..DataManager.db_manager import DbManager
 
 
 class ItemsManager(BaseManager):
@@ -19,7 +12,7 @@ class ItemsManager(BaseManager):
         
     def _filter(self, json: dict) -> list:
         '''
-        Collects the desired data from the given json to return it as a list
+        Filters the desired data from the given json to return it as a list
         '''
         items = []
         

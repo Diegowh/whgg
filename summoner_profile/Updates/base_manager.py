@@ -1,7 +1,6 @@
 import requests
 from abc import ABC, abstractmethod
 
-from ..DataManager.db_manager import DbManager
 
 class BaseManager(ABC):
 

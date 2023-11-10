@@ -1,9 +1,6 @@
-import requests
-
 
 from .base_manager import BaseManager
 
-from ..DataManager.db_manager import DbManager
 
 class SummonerSpellsManager(BaseManager):
     
