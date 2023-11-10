@@ -4,26 +4,18 @@ Items manager periodically updates and collect all items data from League of Leg
 
 import requests
 
+from .base_manager import BaseManager
+
 from ..DataManager.db_manager import DbManager
 
 
-class ItemsManager:
+class ItemsManager(BaseManager):
     
     ITEMS_URL = "http://ddragon.leagueoflegends.com/cdn/13.21.1/data/en_US/item.json"
     
     
     def __init__(self) -> None:
-        
-        self._items = []
-        
-        # Create an instance for DbManager
-        self.db_manager = DbManager()
-        
-    def items(self) -> list:
-        '''
-        Returns all item collected data
-        '''
-        return self._items
+        super().__init__(url=self.ITEMS_URL)
         
     def _filter(self, json: dict) -> list:
         '''
@@ -47,29 +39,5 @@ class ItemsManager:
 
                 items.append(item)
         
-            self._items = items
+            self._data = items
     
-    def _fetch(self):
-        
-        response = requests.get(self.ITEMS_URL)
-        items_json = response.json()
-                
-        if isinstance(items_json, dict) and len(items_json) > 0:
-            self._fetch(items_json)
-    
-    def update(self):
-        '''
-        Updates self._items to the latest values collecting the data from DataDragon
-        '''
-        
-        # Try to find a latest version
-        try:
-            self._fetch()
-                
-        except Exception as e:
-            print(e)
-            return None
-            
-        # Save the new items data into the database
-        self.db_manager.update_items(items=self.items())
-        
