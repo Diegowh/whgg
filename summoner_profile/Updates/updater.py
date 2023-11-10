@@ -4,6 +4,8 @@ import requests
 from .items_manager import ItemsManager
 from ..models.version import Version
 
+from ..DataManager.db_manager import DbManager
+
 
 class Updater:
     '''
@@ -15,6 +17,8 @@ class Updater:
     VERSIONS_URL = "https://ddragon.leagueoflegends.com/api/versions.json"
     
     def __init__(self) -> None:
+        
+        self.db_manager = DbManager()
         
         self.latest_version = None
         self.previous_version = None
@@ -68,4 +72,9 @@ class Updater:
     def update_items(self):
         
         items_manager = ItemsManager()
-        items_manager.update()
+        
+        if items_manager.is_updated():
+            
+            items = items_manager.data
+            
+            self.db_manager.update_items(items=items)
