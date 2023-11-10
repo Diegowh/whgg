@@ -5,12 +5,10 @@ from ..DataManager.db_manager import DbManager
 
 class BaseManager(ABC):
 
-    def __init__(self, url, db_manager, update_func) -> None:
+    def __init__(self, url) -> None:
         
         self._data = []
         self.url = url
-        self.db_manager = db_manager
-        self.update_func = update_func
         
     @property
     def data(self) -> list:
@@ -20,9 +18,6 @@ class BaseManager(ABC):
     def _filter(self, json: dict) -> None:
         pass
         
-    @abstractmethod
-    def update(self):
-        pass
     
     def _fetch(self):
         try:
@@ -35,3 +30,7 @@ class BaseManager(ABC):
         except Exception as e:
             print(e)
             return None
+    
+    def is_updated(self) -> bool:
+        self._fetch()
+        return True
