@@ -4,5 +4,4 @@ from ..models.participant import Participant
 from ..models.ranked_stats import RankedStats
 from ..models.summoner_match import SummonerMatch
 from ..models.summoner import Summoner
-from ..models.version import Version
 from ..models.summoner_spell import SummonerSpell
