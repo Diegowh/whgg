@@ -30,6 +30,7 @@ class ItemsManager:
         '''
         Updates self._items to the latest values collecting the data from DataDragon
         '''
+        
         # Try to find a latest version
         try:
             response = requests.get(self.ITEMS_URL)
@@ -42,9 +43,6 @@ class ItemsManager:
             print(e)
             return None
             
-            
-            
-        
         # Save the new items data into the database
         self.db_manager.update_items(items=self.items())
         
