@@ -23,6 +23,10 @@ class DbManager:
         if puuid:
             # If puuid is given is because we want to update the summoner database
             self.summoner_instance = None
+            
+    def is_puuid_in_database(self) -> bool:
+        
+        return Summoner.objects.filter(puuid=self.puuid).exists()
     
     def update(self, data: dict):
         
