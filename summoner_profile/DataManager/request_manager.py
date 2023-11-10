@@ -23,7 +23,7 @@ from ..models.summoner import Summoner
 from ...utils.utils import hours_to_seconds
 
 
-class RequestedDataManager:
+class RequestManager:
     
     HOURS_BEFORE_UPDATING_DATABASE = 1.5
     SECONDS_BEFORE_UPDATING_DATABASE = hours_to_seconds(hours=HOURS_BEFORE_UPDATING_DATABASE)
