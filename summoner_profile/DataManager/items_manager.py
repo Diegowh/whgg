@@ -9,7 +9,6 @@ from .db_manager import DbManager
 
 class ItemsManager:
     
-    VERSIONS_URL = "https://ddragon.leagueoflegends.com/api/versions.json" # This url provides an updated json file with all versions
     ITEMS_URL = "http://ddragon.leagueoflegends.com/cdn/13.21.1/data/en_US/item.json"
     
     
