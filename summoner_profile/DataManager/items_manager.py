@@ -25,29 +25,7 @@ class ItemsManager:
         '''
         return self._items
         
-            
-    def update(self):
-        '''
-        Updates self._items to the latest values collecting the data from DataDragon
-        '''
-        
-        # Try to find a latest version
-        try:
-            response = requests.get(self.ITEMS_URL)
-            items_json = response.json()
-                
-            if isinstance(items_json, dict) and len(items_json) > 0:
-                self._fetch(items_json)
-                
-        except Exception as e:
-            print(e)
-            return None
-            
-        # Save the new items data into the database
-        self.db_manager.update_items(items=self.items())
-        
-    
-    def _fetch(self, json: dict) -> list:
+    def _filter(self, json: dict) -> list:
         '''
         Collects the desired data from the given json to return it as a list
         '''
@@ -70,3 +48,28 @@ class ItemsManager:
                 items.append(item)
         
             self._items = items
+    
+    def _fetch(self):
+        
+        response = requests.get(self.ITEMS_URL)
+        items_json = response.json()
+                
+        if isinstance(items_json, dict) and len(items_json) > 0:
+            self._fetch(items_json)
+    
+    def update(self):
+        '''
+        Updates self._items to the latest values collecting the data from DataDragon
+        '''
+        
+        # Try to find a latest version
+        try:
+            self._fetch()
+                
+        except Exception as e:
+            print(e)
+            return None
+            
+        # Save the new items data into the database
+        self.db_manager.update_items(items=self.items())
+        

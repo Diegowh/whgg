@@ -21,7 +21,7 @@ class SummonerSpellsManager:
         '''
         return self._summ_spells
     
-    def _fetch(self, json: dict) -> list:
+    def _filter(self, json: dict) -> list:
         '''
         Filters the desired data from the given json to return it as a list
         '''
@@ -45,17 +45,20 @@ class SummonerSpellsManager:
                 
             self._summ_spells = summ_spells
             
+    def _fetch(self):
+        
+        response = requests.get(self.SUMMONER_SPELLS_URL)
+        summ_spells_json = response.json()
+        
+        if isinstance(summ_spells_json, dict) and len(summ_spells_json) > 0:
+            self._filter(summ_spells_json)
+
+        
     def update(self):
         '''
         Updates self._summ_spells to the latest values collecting the data from DataDragon'''
-        
-        # Try to find a latest version
         try:
-            response = requests.get(self.SUMMONER_SPELLS_URL)
-            summ_spells_json = response.json()
-            
-            if isinstance(summ_spells_json, dict) and len(summ_spells_json) > 0:
-                self._fetch(summ_spells_json)
+            self._fetch()
         
         except Exception as e:
             print(e)
