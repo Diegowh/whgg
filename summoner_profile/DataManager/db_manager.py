@@ -163,7 +163,7 @@ class DbManager:
             
             ChampionStats.objects.update_or_create(id=champion_stats_id, defaults=defaults)
             
-    # Items 
+    # Periodic Updates
     def update_items(self, items: list):
         
         for item in items:
@@ -172,4 +172,13 @@ class DbManager:
                 id=item["id"],
                 defaults=item,
                 
+            )
+            
+    def update_summoner_spells(self, summoner_spells: list):
+        
+        for spell in summoner_spells:
+            
+            SummonerSpell.objects.update_or_create(
+                id=spell["id"],
+                defaults=spell,
             )
