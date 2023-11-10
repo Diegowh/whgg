@@ -1,6 +1,6 @@
 import requests
 
-from .db_manager import DbManager
+from ..DataManager.db_manager import DbManager
 
 
 class SummonerSpellsManager:

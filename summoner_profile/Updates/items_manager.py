@@ -4,7 +4,7 @@ Items manager periodically updates and collect all items data from League of Leg
 
 import requests
 
-from .db_manager import DbManager
+from ..DataManager.db_manager import DbManager
 
 
 class ItemsManager:
