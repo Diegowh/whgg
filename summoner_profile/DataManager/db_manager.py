@@ -16,7 +16,7 @@ from django.db.models import Model
 
 class DbManager:
     
-    def __init__(self, puuid = None) -> None:
+    def __init__(self, puuid: str = None) -> None:
         
         self.puuid = puuid
         self.data = {}
