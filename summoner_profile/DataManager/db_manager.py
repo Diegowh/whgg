@@ -28,6 +28,10 @@ class DbManager:
         
         return Summoner.objects.filter(puuid=self.puuid).exists()
     
+    def last_update(self) -> int:
+        
+        return Summoner.objects.get(puuid=self.puuid).last_update
+    
     def update(self, data: dict):
         
         if self.puuid:
