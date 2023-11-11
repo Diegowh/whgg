@@ -20,7 +20,7 @@ from ..api.utils.dataclasses import (
 from ..api.api_client import ApiClient
 from ..api.utils.exceptions import RiotApiKeyNotFound
 from ..models.summoner import Summoner
-from ...utils.utils import hours_to_seconds
+from ..api.utils.utils import hours_to_seconds
 
 
 class RequestManager:
