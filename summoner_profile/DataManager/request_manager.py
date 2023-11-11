@@ -121,7 +121,7 @@ class RequestManager:
         all_champion_stats.append(champion_stats)
     
     
-    def get_data_from_database(self):
+    def fetch_from_database(self):
         
         # If the summoner puuid is already in the database
         if self.db_manager.is_puuid_in_database():
@@ -137,6 +137,11 @@ class RequestManager:
             else:
                 # Return summoners data from the database without an update
                 pass
+        
+        # If the summoner puuid is not in the database
+        else:
+            # Update the database
+            pass
     
     # Request data from Riot API
     async def fetch_summoner(self):
