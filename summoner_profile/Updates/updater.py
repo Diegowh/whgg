@@ -4,7 +4,7 @@ import requests
 from .items_manager import ItemsManager
 from ..models.version import Version
 
-from ..DataManager.db_manager import DbManager
+from ..controllers.db_manager import DbManager
 
 
 class Updater:
