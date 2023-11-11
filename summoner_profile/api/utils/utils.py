@@ -49,3 +49,7 @@ def get_timestamp(headers):
     except Exception as e:
         timestamp = int(time.time())
     return timestamp
+
+
+def hours_to_seconds(hours):
+    return hours * 60 * 60
