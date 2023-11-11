@@ -189,3 +189,5 @@ class DbManager:
                 id=spell["id"],
                 defaults=spell,
             )
+            
+    #TODO: Fetch methods to return data from the database
