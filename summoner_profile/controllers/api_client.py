@@ -5,10 +5,10 @@ import asyncio
 import aiohttp
 from functools import wraps
 
-from .utils import utils as utils
-from .utils import exceptions as exc
+from ..apis.riot.utils import utils as utils
+from ..apis.riot.utils import exceptions as exc
 
-from .RateLimit.rate_limiter_manager import RateLimiterManager
+from ..apis.riot.RateLimit.rate_limiter_manager import RateLimiterManager
 
 class ApiClient:
     

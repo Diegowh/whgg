@@ -7,7 +7,7 @@ from asgiref.sync import async_to_sync
 
 from .db_manager import DbManager
 
-from ..api.utils.dataclasses import (
+from ..apis.riot.utils.dataclasses import (
     
     SummonerInfo,
     SoloqInfo,
@@ -17,10 +17,10 @@ from ..api.utils.dataclasses import (
     
 )
 
-from ..api.api_client import ApiClient
-from ..api.utils.exceptions import RiotApiKeyNotFound
+from .api_client import ApiClient
+from ..apis.riot.utils.exceptions import RiotApiKeyNotFound
+from ..apis.riot.utils.utils import hours_to_seconds
 from ..models.summoner import Summoner
-from ..api.utils.utils import hours_to_seconds
 
 
 class RequestManager:
