@@ -19,9 +19,9 @@ class ApiClient:
     BASE_URL_LOR = BASE_URL + "lor/"
     BASE_URL_RIOT = BASE_URL + "riot/"
     
-    PLATFORMS = ["br1","eun1","euw1","jp1","kr","la1","la2","na1","oc1","tr1","ru"]
-    REGIONS = ["americas","asia","europe", "esports","ap","br","eu","kr","latam","na"]
-    PLATFORMS_TO_REGIONS = {"br1":"americas","eun1":"europe","euw1":"europe","jp1":"asia","kr":"asia","la1":"americas","la2":"americas","na1":"americas","oc1":"americas","tr1":"europe","ru":"europe"}
+    PLATFORMS = ["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1", "tr1", "ru", "sg2", "th2", "tw2", "vn2"]
+    REGIONS = ["americas", "asia", "europe",  "esports", "ap", "br", "eu", "kr", "latam", "na", "sea"]
+    PLATFORMS_TO_REGIONS = {"br1": "americas", "eun1": "europe", "euw1": "europe", "jp1": "asia", "kr": "asia", "la1": "americas", "la2": "americas", "na1": "americas", "oc1": "sea", "tr1": "europe", "ru": "europe", "sg2": "sea", "th2": "sea", "tw2": "sea", "vn2": "sea"}
     TOURNAMENT_REGIONS = "americas"
     
     SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
