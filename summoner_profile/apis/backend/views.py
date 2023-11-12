@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .api.api_client import ApiClient
+from ...controllers.api_client import ApiClient
 from dotenv import dotenv_values
 from asgiref.sync import async_to_sync
 

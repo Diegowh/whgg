@@ -1,4 +1,4 @@
-from ..models.models import (
+from summoner_profile.models import (
     ChampionStats,
     Item,
     Participant,
