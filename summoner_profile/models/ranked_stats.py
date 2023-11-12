@@ -2,7 +2,8 @@ from django.db import models
 
 class RankedStats(models.Model):
     queue_type = models.CharField(max_length=200)
-    rank = models.CharField(max_length=200)
+    tier = models.CharField(max_length=50)
+    rank = models.CharField(max_length=50)
     league_points = models.IntegerField()
     wins = models.IntegerField()
     losses = models.IntegerField()
