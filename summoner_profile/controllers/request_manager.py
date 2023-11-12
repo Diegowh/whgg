@@ -136,7 +136,10 @@ class RequestManager:
             last_update = self.db_manager.last_update()
             
             if (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE:
-                # Update the database
+                # Request data from Riot API using ApiClient
+                summoner_data = self.summoner_info
+                ranked_stats_data = async_to_sync(self.fetch_ranked_stats)()
+                # Send the data to DbManager to update the database
                 pass
             
             else:
@@ -168,9 +171,38 @@ class RequestManager:
         
         return summoner
     
-    async def fetch_ranked_stats(self):
+    async def fetch_ranked_stats(self) -> dict:
         '''
         Returns structured data ready to send it to RankedStats model
         '''
-        response = await self.api_client.get_league_by_summoner()
+        response = await self.api_client.get_league_by_summoner(summoner_id=self._id)
         
+        soloq_stats = flex_stats = None
+        
+        for queue_stats in response:
+            
+            if queue_stats["queueType"] == "RANKED_SOLO_5x5":
+                
+                soloq_stats = {
+                    "queue_type": queue_stats["queueType"],
+                    "tier": queue_stats["tier"],
+                    "rank": queue_stats["rank"],
+                    "league_points": queue_stats["leaguePoints"],
+                    "wins": queue_stats["wins"],
+                    "losses": queue_stats["losses"],
+                    "winrate": int(queue_stats["wins"] / (queue_stats["wins"] + queue_stats["losses"]) * 100)
+                }
+            
+            if queue_stats["queueType"] == "RANKED_FLEX_SR":
+                
+                flex_stats = {
+                    "queue_type": queue_stats["queueType"],
+                    "tier": queue_stats["tier"],
+                    "rank": queue_stats["rank"],
+                    "league_points": queue_stats["leaguePoints"],
+                    "wins": queue_stats["wins"],
+                    "losses": queue_stats["losses"],
+                    "winrate": int(queue_stats["wins"] / (queue_stats["wins"] + queue_stats["losses"]) * 100)
+                }
+        
+        return {"soloq": soloq_stats, "flex": flex_stats}
