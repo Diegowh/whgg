@@ -7,6 +7,8 @@ from asgiref.sync import async_to_sync
 
 from .db_manager import DbManager
 
+from .data_formatter import DataFormatter
+
 from ..apis.riot.utils.dataclasses import (
     
     SummonerInfo,
@@ -90,6 +92,9 @@ class RequestManager:
         
         # Create DbManager instance
         self.db_manager = DbManager(puuid=self._puuid)
+        
+        # Create DataFormatter instance
+        self.data_formatter = DataFormatter()
         
     
     def _add_summoner_info(self, summoner_info: SummonerInfo):
