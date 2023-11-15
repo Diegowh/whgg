@@ -75,7 +75,7 @@ class RequestManager:
         self._requested_data = new_data
     
     
-    def fetch_from_database(self): #TODO Refactorizar este metodo para que esta funcionalidad se haga en la clase DataFormatter. Esta clase debe enviar una peticion de los datos ya formateados a la base de datos mediante el DataFormatter.
+    def fetch_requested_data(self): #TODO Refactorizar este metodo para que esta funcionalidad se haga en la clase DataFormatter. Esta clase debe enviar una peticion de los datos ya formateados a la base de datos mediante el DataFormatter.
         
         # If the summoner puuid is already in the database
         if self.db_manager.is_puuid_in_database():
