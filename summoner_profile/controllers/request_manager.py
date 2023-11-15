@@ -85,9 +85,12 @@ class RequestManager:
             last_update = self.db_manager.last_update()
             
             if (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE:
+                
                 # Request data from Riot API using ApiClient
-                summoner_data = self.summoner_info
-                ranked_stats_data = async_to_sync(self.fetch_ranked_stats)()
+                summoner_request = async_to_sync(self.fetch_summoner)()
+                ranked_stats_request = async_to_sync(self.fetch_ranked_stats)()
+                champion_stats_request = ...
+                
                 # Send the data to DbManager to update the database
                 pass
             
