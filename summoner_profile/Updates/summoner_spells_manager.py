@@ -10,7 +10,7 @@ class SummonerSpellsManager(BaseManager):
     def __init__(self) -> None:
         super().__init__(url=self.SUMMONER_SPELLS_URL)
     
-    def _filter(self, json: dict) -> list:
+    def _filter(self, json: dict):
         '''
         Filters the desired data from the given json to return it as a list
         '''
@@ -23,7 +23,7 @@ class SummonerSpellsManager(BaseManager):
             for spell_id, spell_info in data.items():
                 
                 spell = {
-                    "id": spell_id,
+                    "id": int(spell_id),
                     "name": spell_info["name"],
                     "description": spell_info["description"],
                     "image_name": spell_info["image"]["full"],

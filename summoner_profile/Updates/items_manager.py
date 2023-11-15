@@ -10,7 +10,7 @@ class ItemsManager(BaseManager):
     def __init__(self) -> None:
         super().__init__(url=self.ITEMS_URL)
         
-    def _filter(self, json: dict) -> list:
+    def _filter(self, json: dict):
         '''
         Filters the desired data from the given json to return it as a list
         '''
@@ -22,7 +22,7 @@ class ItemsManager(BaseManager):
             for item_id, item_info in items_data.items():
                 
                 item = {
-                    'id': item_id,
+                    'id': int(item_id),
                     'name': item_info['name'],
                     'plaintext': item_info['plaintext'],
                     'description': item_info['description'],
