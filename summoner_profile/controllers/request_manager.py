@@ -11,11 +11,11 @@ from .data_formatter import DataFormatter
 
 from ..apis.riot.utils.dataclasses import (
     
-    SummonerInfo,
-    SoloqInfo,
-    FlexInfo,
-    RankedInfo,
-    ChampionStats,
+    SummonerData,
+    SoloqData,
+    FlexData,
+    RankedData,
+    ChampionStatsData,
     
 )
 
