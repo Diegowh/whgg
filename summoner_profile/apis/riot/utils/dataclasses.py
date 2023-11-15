@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
 @dataclass
-class SummonerInfo:
+class SummonerData:
     name: str
     icon_id: int
     account_level: int
 
 @dataclass
-class SoloqInfo:
+class SoloqData:
     rank: str
     league_points: int
     wins: int
@@ -15,7 +15,7 @@ class SoloqInfo:
     winrate: int
 
 @dataclass
-class FlexInfo:
+class FlexData:
     rank: str
     league_points: int
     wins: int
@@ -23,12 +23,12 @@ class FlexInfo:
     winrate: int
 
 @dataclass
-class RankedInfo:
-    soloq: SoloqInfo
-    flex: FlexInfo
+class RankedData:
+    soloq: SoloqData
+    flex: FlexData
     
 @dataclass
-class ChampionStats:
+class ChampionStatsData:
     name: str
     games: int
     winrate: int
