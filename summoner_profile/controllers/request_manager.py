@@ -66,7 +66,13 @@ class RequestManager:
         self.data_formatter = DataFormatter()
         
     
+    @property
+    def requested_data(self):
+        return self._requested_data
     
+    @requested_data.setter
+    def requested_data(self, new_data):
+        self._requested_data = new_data
     
     
     def fetch_from_database(self): #TODO Refactorizar este metodo para que esta funcionalidad se haga en la clase DataFormatter. Esta clase debe enviar una peticion de los datos ya formateados a la base de datos mediante el DataFormatter.
