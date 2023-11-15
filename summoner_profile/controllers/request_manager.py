@@ -66,33 +66,7 @@ class RequestManager:
         self.data_formatter = DataFormatter()
         
     
-    def _add_summoner_info(self, summoner_info: SummonerInfo):
-        """Add SummonerInfo data into self.data."""
-        
-        self.data["summoner_info"]["name"] = summoner_info.name
-        self.data["summoner_info"]["icon_id"] = summoner_info.icon_id
-        self.data["summoner_info"]["account_level"] = summoner_info.account_level
     
-    def _add_ranked_info(self, ranked_info: RankedInfo):
-        """Add RankedInfo data into self.data."""
-        
-        self.data["ranked_info"]["soloq"]["rank"] = ranked_info.soloq.rank
-        self.data["ranked_info"]["soloq"]["league_points"] = ranked_info.soloq.league_points
-        self.data["ranked_info"]["soloq"]["wins"] = ranked_info.soloq.wins
-        self.data["ranked_info"]["soloq"]["losses"] = ranked_info.soloq.losses
-        self.data["ranked_info"]["soloq"]["winrate"] = ranked_info.soloq.winrate
-
-        self.data["ranked_info"]["flex"]["rank"] = ranked_info.flex.rank
-        self.data["ranked_info"]["flex"]["league_points"] = ranked_info.flex.league_points
-        self.data["ranked_info"]["flex"]["wins"] = ranked_info.flex.wins
-        self.data["ranked_info"]["flex"]["losses"] = ranked_info.flex.losses
-        self.data["ranked_info"]["flex"]["winrate"] = ranked_info.flex.winrate
-    
-    def _add_champion_stats(self, champion_stats: ChampionStats):
-        
-        all_champion_stats = []
-        
-        all_champion_stats.append(champion_stats)
     
     
     def fetch_from_database(self): #TODO Refactorizar este metodo para que esta funcionalidad se haga en la clase DataFormatter. Esta clase debe enviar una peticion de los datos ya formateados a la base de datos mediante el DataFormatter.
