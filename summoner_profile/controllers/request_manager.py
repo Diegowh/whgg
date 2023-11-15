@@ -32,38 +32,7 @@ class RequestManager:
     
     def __init__(self, summoner_name: str, server: str) -> None:
         
-        # Set default structure for self.data
-        self.data = {
-            
-            "summoner_info": {
-                "name": None,
-                "icon_id": None,
-                "account_level": None,
-            },
-            
-            "ranked_stats": {
-                
-                "soloq": {
-                    "rank": None,
-                    "league_points": None,
-                    "wins": None,
-                    "losses": None,
-                    "winrate": None,
-                    },
-                    
-                "flex": {
-                    "rank": None,
-                    "league_points": None,
-                    "wins": None,
-                    "losses": None,
-                    "winrate": None,
-                    },
-            },
-            
-            "champion_stats": [],
-            
-            "last_20_matches":[],
-        }
+        self._requested_data = {}
         
         # Summoner requested attributes
         self.summoner_name = summoner_name
