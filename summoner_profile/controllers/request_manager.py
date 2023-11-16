@@ -121,7 +121,7 @@ class RequestManager:
             pass
     
     
-    def fetch_all_matches(self):
+    def all_match_ids(self) -> list:
         MAX_MATCHES = 5000 # To set a limit to the number of matches to request
         REQUEST_CAP = 100 # The api only allows to request 100 matches at a time
         season_start = int(datetime(2023, 1, 14).timestamp()) # TODO Get this date from the database
@@ -147,3 +147,5 @@ class RequestManager:
                 break
             
             match_ids += matchlist_response
+        
+        return match_ids
