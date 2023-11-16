@@ -58,7 +58,7 @@ class RequestManager:
         self._id: str = self.summoner_info["id"]
             
         
-    
+    # Properties
     @property
     def requested_data(self):
         return self._requested_data
