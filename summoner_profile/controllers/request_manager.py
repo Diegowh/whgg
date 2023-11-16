@@ -48,7 +48,7 @@ class RequestManager:
             raise RiotApiKeyNotFound()
         
         # Initialize all the needed classes
-        self.api_client = ApiClient(server=self.server, api_key=api_key, debug=True)
+        self.api_client = ApiClient(server=self.server, api_key=self.api_key, debug=True)
         self.db_manager = DbManager(puuid=self._puuid)
         self.data_formatter = DataFormatter()
         
@@ -66,6 +66,10 @@ class RequestManager:
     @requested_data.setter
     def requested_data(self, new_data):
         self._requested_data = new_data
+        
+    @property
+    def api_key(self):
+        return self._api_key
     
     @property
     def puuid(self):
