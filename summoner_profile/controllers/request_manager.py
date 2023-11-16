@@ -120,31 +120,7 @@ class RequestManager:
             # Update the database
             pass
     
-    # Request data from Riot API
-    async def fetch_summoner(self):
-        '''
-        Returns structured data ready to send it to Summoner model
-        '''
-        response = await self.api_client.get_summoner_by_name()
-        
-        summoner = {
-            "puuid": response["puuid"],
-            "id": response["id"],
-            "name": response["name"],
-            "server": self.server,
-            "icon_id": response["profileIconId"],
-            "summoner_level": response["summonerLevel"],
-            "last_update": response["revisionDate"]
-            
-        }
-        
-        return summoner
     
-    async def fetch_ranked_stats(self) -> dict:
-        '''
-        Returns structured data ready to send it to RankedStats model
-        '''
-        response = await self.api_client.get_league_by_summoner(summoner_id=self._id)
         
         soloq_stats = flex_stats = None
         
