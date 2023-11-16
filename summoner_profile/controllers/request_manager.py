@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 import dotenv
 import os
 import time
@@ -9,20 +10,19 @@ from .db_manager import DbManager
 
 from .data_formatter import DataFormatter
 
-from ..apis.riot.utils.dataclasses import (
+from summoner_profile.utils.dataclasses import (
     
     SummonerData,
-    SoloqData,
-    FlexData,
-    RankedData,
+    RankedStatsData,
     ChampionStatsData,
+    SummonerMatchData,
+    ParticipantData,
     
 )
 
 from .api_client import ApiClient
-from ..apis.riot.utils.exceptions import RiotApiKeyNotFound
-from ..apis.riot.utils.utils import hours_to_seconds
-from ..models.summoner import Summoner
+from summoner_profile.utils.exceptions import RiotApiKeyNotFound
+from summoner_profile.utils.utils import hours_to_seconds
 
 
 class RequestManager:
@@ -35,8 +35,8 @@ class RequestManager:
         self._requested_data = {}
         
         # Summoner requested attributes
-        self.summoner_name = summoner_name
-        self.server = server
+        self._summoner_name = summoner_name
+        self._server = server
         
         # Get ApiKey from .env 
         try:
@@ -50,20 +50,16 @@ class RequestManager:
         except EnvironmentError:
             raise RiotApiKeyNotFound()
         
-        # Instantiate ApiClient to manage requests to Riot API
+        # Initialize all the needed classes
         self.api_client = ApiClient(server=self.server, api_key=api_key, debug=True)
+        self.db_manager = DbManager(puuid=self._puuid)
+        self.data_formatter = DataFormatter()
         
-        
-        # To avoid repetitive requests for the IDs
-        self.summoner_info = async_to_sync(self.fetch_summoner)() # Always request summoner info based on summoner name to Riot API
+        # Always request summoner info based on summoner name to Riot API
+        self.summoner_info = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name=self.summoner_name)
         self._puuid: str = self.summoner_info["puuid"]
         self._id: str = self.summoner_info["id"]
-        
-        # Create DbManager instance
-        self.db_manager = DbManager(puuid=self._puuid)
-        
-        # Create DataFormatter instance
-        self.data_formatter = DataFormatter()
+            
         
     
     @property
@@ -73,6 +69,22 @@ class RequestManager:
     @requested_data.setter
     def requested_data(self, new_data):
         self._requested_data = new_data
+    
+    @property
+    def puuid(self):
+        return self._puuid
+    
+    @property
+    def id(self):
+        return self._id
+    
+    @property
+    def summoner_name(self):
+        return self._summoner_name
+    
+    @property
+    def server(self):
+        return self._server
     
     
     def fetch_requested_data(self): #TODO Refactorizar este metodo para que esta funcionalidad se haga en la clase DataFormatter. Esta clase debe enviar una peticion de los datos ya formateados a la base de datos mediante el DataFormatter.
@@ -87,8 +99,12 @@ class RequestManager:
             if (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE:
                 
                 # Request data from Riot API using ApiClient
-                summoner_request = async_to_sync(self.fetch_summoner)()
-                ranked_stats_request = async_to_sync(self.fetch_ranked_stats)()
+                summoner_request = async_to_sync(self.api_client.get_summoner_by_name)(
+                    summoner_name=self.summoner_name
+                    )
+                ranked_stats_request = async_to_sync(self.api_client.get_league_by_summoner)(
+                    summoner_id=self._id
+                    )
                 champion_stats_request = ...
                 
                 # Send the data to DbManager to update the database
