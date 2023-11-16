@@ -47,12 +47,12 @@ class RequestManager:
         except EnvironmentError:
             raise RiotApiKeyNotFound()
         
-        # Initialize all the needed classes
+        # Initialize classes
         self.api_client = ApiClient(server=self.server, api_key=self.api_key, debug=True)
         self.db_manager = DbManager(puuid=self._puuid)
         self.data_formatter = DataFormatter()
         
-        # Always request summoner info based on summoner name to Riot API
+        # Always request summoner info from API because the summoner name can change for the same puuid
         self.summoner_info = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name=self.summoner_name)
         self._puuid: str = self.summoner_info["puuid"]
         self._id: str = self.summoner_info["id"]
