@@ -3,8 +3,11 @@ import re
 import dotenv
 import os
 import time
+import asyncio
 
 from asgiref.sync import async_to_sync
+
+from summoner_profile.models import summoner
 
 from .db_manager import DbManager
 
@@ -106,7 +109,7 @@ class RequestManager:
                 ranked_stats_request = async_to_sync(self.api_client.get_league_by_summoner)(
                     summoner_id=self._id
                     )
-                champion_stats_request = ...
+                last_matches_request = ...
                 
                 # Send the data to DbManager to update the database
                 pass
@@ -149,3 +152,37 @@ class RequestManager:
             match_ids += matchlist_response
         
         return match_ids
+    
+    
+    async def matches_data(self, match_ids):
+        
+        tasks = [self.api_client.get_match(match_id=match_id) for match_id in match_ids]
+        responses = await asyncio.gahter(*tasks)
+        
+    async def process_response(self, response):
+        
+        summoner_match_data = {
+            
+            "id": response["metadata"]["matchId"],
+            "game_start": response["info"]["gameStartTimestamp"],
+            "game_end": response["info"]["gameEndTimestamp"],
+            "game_duration": response["info"]["gameDuration"],
+            "game_mode": response["info"]["gameMode"],
+            "game_type": response["info"]["gameType"],
+        }
+        
+        participants_info = response["info"]["participants"]
+        
+        for participant in participants_info:
+            
+            if participant["puuid"] == self.puuid:
+                    
+                summoner_match_data["champion_played"] = participant["championName"]
+                summoner_match_data["win"] = participant["win"]
+                summoner_match_data["kills"] = participant["kills"]
+                summoner_match_data["deaths"] = participant["deaths"]
+                summoner_match_data["assists"] = participant["assists"]
+                
+                kda = round((summoner_match_data["kills"] + summoner_match_data["assists"] / summoner_match_data["deaths"]), 2) #TODO Make a function to calculate kda
+                summoner_match_data["kda"] =  kda
+                summoner_match_data["minion_kills"] = participant["totalMinionsKilled"] + participant["totalAllyJungleMinionsKilled"] + participant["totalEnemyJungleMinionsKilled"] # TODO Make a function to calculate minion kills
