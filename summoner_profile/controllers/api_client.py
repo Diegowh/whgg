@@ -15,8 +15,8 @@ from summoner_profile.utils.decorators import (
     
 )
 
-from ..apis.riot.utils import utils as utils
-from ..apis.riot.utils import exceptions as exc
+from summoner_profile.utils import utils as utils
+from summoner_profile.utils import exceptions as exc
 from ..apis.riot.RateLimit.rate_limiter_manager import RateLimiterManager
 
 class ApiClient:

@@ -3,8 +3,8 @@ from functools import wraps
 import asyncio
 import json
 
-from ..apis.riot.utils import utils as utils
-from ..apis.riot.utils import exceptions as exc
+from summoner_profile.utils import utils as utils
+from summoner_profile.utils import exceptions as exc
 
 def ratelimit_platform(func):
     """
