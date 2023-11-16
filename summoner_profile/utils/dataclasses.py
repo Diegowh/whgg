@@ -42,8 +42,9 @@ class ChampionStatsData:
 @dataclass
 class SummonerMatchData:
     id: str
-    season: int
-    queue: int
+    game_start: int
+    game_end: int
+    game_duration: int
     game_mode: str
     game_type: str
     champion_played: str
