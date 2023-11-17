@@ -13,35 +13,15 @@ class BaseDataView(APIView):
         return Response(data)
 
 class SummonerDataView(APIView):
-    
-    def get(self, request, summoner_name: str, server: str, format=None):
-        
-        request_manager = RequestManager(summoner_name=summoner_name, server=server)
-        data = request_manager.requested_data["summoner_info"]
-        return Response(data)
-        
+    data_key = "summoner_data"
 
 class RankedDataView(APIView):
-    
-    def get(self, request, summoner_name: str, server: str, format=None):
-        
-        request_manager = RequestManager(summoner_name=summoner_name, server=server)
-        data = request_manager.requested_data["ranked_data"]
-        return Response(data)
+    data_key = "ranked_data"
     
     
 class ChampionStatView(APIView):
-    
-    def get(self, request, summoner_name: str, server: str, format=None):
-        
-        request_manager = RequestManager(summoner_name=summoner_name, server=server)
-        data = request_manager.requested_data["champion_stats"]
-        return Response(data)
+    data_key = "champion_stats"
+
     
 class MatchHistoryView(APIView):
-    
-    def get(self, request, summoner_name: str, server: str, format=None):
-        
-        request_manager = RequestManager(summoner_name=summoner_name, server=server)
-        data = request_manager.requested_data["match_history"]
-        return Response(data)
+    data_key = "match_history"
