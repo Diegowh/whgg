@@ -3,6 +3,15 @@ from rest_framework.response import Response
 from controllers.request_manager import RequestManager
 
 
+class BaseDataView(APIView):
+    data_key = ""
+    
+    def get(self, request, summoner_name: str, server: str, format=None):
+        
+        request_manager = RequestManager(summoner_name=summoner_name, server=server)
+        data = request_manager.requested_data[self.data_key]
+        return Response(data)
+
 class SummonerDataView(APIView):
     
     def get(self, request, summoner_name: str, server: str, format=None):
