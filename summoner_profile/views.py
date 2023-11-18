@@ -8,5 +8,5 @@ class ProfileDataView(APIView):
     def get(self, request, summoner_name: str, server: str):
         
         request_manager = RequestManager(summoner_name=summoner_name, server=server)
-        data = request_manager.profile_data
+        data = request_manager.get()
         return Response(data)

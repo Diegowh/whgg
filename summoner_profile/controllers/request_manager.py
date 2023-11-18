@@ -95,6 +95,7 @@ class RequestManager:
     # Creo este metodo porque posiblemente refactorice los otros metodos y no se incluiran en RequestManager
     def get(self):
         self._fetch_requested_data()
+        return self.profile_data
         
         
     def _fetch_requested_data(self): 
