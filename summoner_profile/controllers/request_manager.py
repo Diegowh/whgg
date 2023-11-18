@@ -92,7 +92,11 @@ class RequestManager:
         return self._server
     
     
-    
+    # Creo este metodo porque posiblemente refactorice los otros metodos y no se incluiran en RequestManager
+    def get(self):
+        self._fetch_requested_data()
+        
+        
     def _fetch_requested_data(self): 
         
         # If the summoner puuid is already in the database
