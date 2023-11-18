@@ -92,7 +92,8 @@ class RequestManager:
         return self._server
     
     
-    def fetch_requested_data(self): 
+    
+    def _fetch_requested_data(self): 
         
         # If the summoner puuid is already in the database
         if self.db_manager.is_puuid_in_database():
