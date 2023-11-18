@@ -37,7 +37,7 @@ class RequestManager:
     
     def __init__(self, summoner_name: str, server: str) -> None:
         
-        self._requested_data = {}
+        self._profile_data = {}
         
         # Summoner requested attributes
         self._summoner_name = summoner_name
@@ -64,12 +64,12 @@ class RequestManager:
         
     # Properties
     @property
-    def requested_data(self):
-        return self._requested_data
+    def profile_data(self):
+        return self._profile_data
     
-    @requested_data.setter
-    def requested_data(self, new_data):
-        self._requested_data = new_data
+    @profile_data.setter
+    def profile_data(self, new_data):
+        self._profile_data = new_data
         
     @property
     def api_key(self):
