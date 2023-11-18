@@ -161,10 +161,11 @@ class RequestManager:
         return match_ids
     
     
-    async def matches_data(self, match_ids):
+    def matches_data(self, match_ids):
         
-        tasks = [self.api_client.get_match(match_id=match_id) for match_id in match_ids]
-        responses = await asyncio.gahter(*tasks)
+        return [async_to_sync(self.api_client.get_match)(match_id=match_id) for match_id in match_ids]
+        
+        
         
     async def process_response(self, response):
         
