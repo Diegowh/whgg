@@ -167,7 +167,7 @@ class RequestManager:
         
         
         
-    async def process_response(self, response):
+    def process_response(self, response):
         
         summoner_match_data = {
             
