@@ -130,7 +130,9 @@ class RequestManager:
             # Update the database
             pass
     
+    # Match data
     
+    # Consigue los match ids de la ultima temporada
     def all_match_ids(self) -> list:
         MAX_MATCHES = 5000 # To set a limit to the number of matches to request
         REQUEST_CAP = 100 # The api only allows to request 100 matches at a time
@@ -160,13 +162,13 @@ class RequestManager:
         
         return match_ids
     
-    
+    # Obtiene los datos de un match dado su id
     def matches_data(self, match_ids):
         
         return [async_to_sync(self.api_client.get_match)(match_id=match_id) for match_id in match_ids]
         
         
-        
+    # Formatea los datos de los matches para ser guardados en la base de datos
     def process_response(self, response):
         
         summoner_match_data = {
