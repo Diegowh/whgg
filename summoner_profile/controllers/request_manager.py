@@ -132,6 +132,22 @@ class RequestManager:
     
     # Match data
     
+    def last_matches_data(self, amount: int = 20):
+            
+        # Get the match ids
+        match_ids = self.all_match_ids()
+        
+        # Get the match data
+        matches_data = self.matches_data(match_ids=match_ids)
+        
+        # Ensure amount is not greater than the number of matches
+        amount = min(amount, len(match_ids))
+        
+        formatted_matches_data = [self.data_formatter.filter_match(match_data=matches_data[i]) for i in range(amount)]
+        
+        return formatted_matches_data
+    
+    
     # Consigue los match ids de la ultima temporada
     def all_match_ids(self) -> list:
         MAX_MATCHES = 5000 # To set a limit to the number of matches to request
@@ -166,3 +182,4 @@ class RequestManager:
     def matches_data(self, match_ids):
         
         return [async_to_sync(self.api_client.get_match)(match_id=match_id) for match_id in match_ids]
+        
