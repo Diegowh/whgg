@@ -187,4 +187,8 @@ class DbManager:
                 defaults=spell,
             )
             
-    #TODO: Fetch methods to return data from the database
+    def fetch_summoner(self, puuid: str):
+        
+        summoner = Summoner.objects.get(puuid=puuid)
+        
+        return summoner
