@@ -53,3 +53,7 @@ def get_timestamp(headers):
 
 def hours_to_seconds(hours):
     return hours * 60 * 60
+
+
+def calculate_kda(kills, deaths, assists):
+    return round((kills + assists / deaths), 2)
