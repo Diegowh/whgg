@@ -184,6 +184,15 @@ class RequestManager:
                 summoner_match_data["deaths"] = participant["deaths"]
                 summoner_match_data["assists"] = participant["assists"]
                 
-                kda = round((summoner_match_data["kills"] + summoner_match_data["assists"] / summoner_match_data["deaths"]), 2) #TODO Make a function to calculate kda
-                summoner_match_data["kda"] =  kda
-                summoner_match_data["minion_kills"] = participant["totalMinionsKilled"] + participant["totalAllyJungleMinionsKilled"] + participant["totalEnemyJungleMinionsKilled"] # TODO Make a function to calculate minion kills
+                summoner_match_data["kda"] =  calculate_kda(
+                    kills=participant["kills"],
+                    deaths=participant["deaths"],
+                    assists=participant["assists"],
+                )
+                
+                summoner_match_data["minion_kills"] = sum(
+                    participant["totalMinionsKilled"],
+                    participant["neutralMinionsKilledTeamJungle"],
+                    participant["neutralMinionsKilledEnemyJungle"],
+                )
+                
