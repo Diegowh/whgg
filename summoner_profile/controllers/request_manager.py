@@ -14,19 +14,20 @@ from .db_manager import DbManager
 from .data_formatter import DataFormatter
 
 from summoner_profile.utils.dataclasses import (
-    
     SummonerData,
     RankedStatsData,
     ChampionStatsData,
     SummonerMatchData,
     ParticipantData,
-    
 )
 
 from .api_client import ApiClient
 from summoner_profile.utils.exceptions import RiotApiKeyNotFound
-from summoner_profile.utils.utils import hours_to_seconds
 from summoner_profile.utils.env_loader import EnvLoader
+from summoner_profile.utils.utils import (
+    hours_to_seconds,
+    calculate_kda,
+)
 
 
 class RequestManager:
