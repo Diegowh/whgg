@@ -104,7 +104,7 @@ class RequestManager:
         
         return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
         
-        
+    # TODO La logica de este metodo la tiene que gestionar DbManager
     def _fetch_requested_data(self): 
         
         # If the summoner puuid is already in the database
