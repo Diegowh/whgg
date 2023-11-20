@@ -1,6 +1,6 @@
 from django.db import models
 
-class SummonerMatch(models.Model):
+class Match(models.Model):
     id = models.CharField(max_length=200, primary_key=True, unique=True)
     game_start = models.IntegerField()
     game_end = models.IntegerField()
