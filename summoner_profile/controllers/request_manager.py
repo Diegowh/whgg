@@ -98,6 +98,12 @@ class RequestManager:
     def get(self):
         self._fetch_requested_data()
         return self.profile_data
+    
+    def is_time_to_update(self) -> bool:
+        now = int(time.time())
+        last_update = self.db_manager.last_update()
+        
+        return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
         
         
     def _fetch_requested_data(self): 
@@ -106,10 +112,8 @@ class RequestManager:
         if self.db_manager.is_puuid_in_database():
             
             # Check how much time has been since last update
-            now = int(time.time())
-            last_update = self.db_manager.last_update()
             
-            if (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE:
+            if self.is_time_to_update():
                 
                 #TODO Creo que el RequestManager no deberia encargarse de esto, quizas su funcion deberia ser decirle a los otros modulos como DataFormatter que datos debe pedir y tal.
                 # Request data from Riot API using ApiClient
