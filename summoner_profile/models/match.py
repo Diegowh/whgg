@@ -16,6 +16,7 @@ class Match(models.Model):
     minion_kills = models.IntegerField()
     vision_score = models.IntegerField()
     team_position = models.CharField(max_length=200)
+    team_id = models.IntegerField()
     
     # Foreign Keys
     summoner = models.ForeignKey('Summoner', on_delete=models.CASCADE, related_name='summoner_matches')
@@ -23,3 +24,5 @@ class Match(models.Model):
     item_purchase = models.ManyToManyField('Item', related_name='summoner_matches')
     
     summoner_spells = models.ManyToManyField('SummonerSpell', related_name='summoner_matches')
+    
+    # Puedo acceder a todos los participantes de un Match a traves de match.participants.all()
