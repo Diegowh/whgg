@@ -67,6 +67,7 @@ class ParticipantData:
     champion_name: str
     team_id: int
     summoner_match: str
+    match: str
     
 @dataclass
 class ItemData:
