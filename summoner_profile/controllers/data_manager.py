@@ -1,4 +1,4 @@
-from mimetypes import init
+from datetime import datetime
 import re
 
 from .api_client import ApiClient
@@ -10,7 +10,7 @@ from summoner_profile.utils.dataclasses import (
     SummonerData,
     RankedStatsData,
     ChampionStatsData,
-    SummonerMatchData,
+    MatchData,
     ParticipantData,
 )
 
@@ -80,6 +80,37 @@ class DataManager:
             ranked_stats_list.append(ranked_stats_data)
         
         return ranked_stats_list
+        
+    def _create_match_data_list(self) -> list[MatchData]:
+        ...
+        
+    def _all_match_ids(self) -> list[str]:
+        MAX_MATCHES = 5000 # Por poner un limite a la cantidad de partidas que se pidan
+        REQUEST_CAP = 100 # La API solo permite pedir de 100 en 100
+        season_start = int(datetime(2023, 1, 14).timestamp()) # TODO: Obtener esta fecha de la base de datos
+        
+        match_ids = []
+        params = {
+            "startTime": season_start,
+            "type": "ranked",
+        }
+        
+        for start_index in range(0, MAX_MATCHES, REQUEST_CAP):
+            
+            params["start"] = start_index
+            params["count"] = int(min(REQUEST_CAP, MAX_MATCHES - start_index)) # Para evitar pedir más partidas de las que se pueden
+            
+            matchlist_response: list = async_to_sync(self.api_client.get_matchlist_by_puuid)(
+                puuid=self.puuid,
+                params= params,
+                )
+            
+            if matchlist_response == []:
+                break
+            
+            match_ids += matchlist_response
+        
+        return match_ids
         
     def filter_match(self, match_data) -> dict:
         
