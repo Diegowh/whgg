@@ -125,40 +125,77 @@ class DataManager:
         
         return match_ids
         
-    def filter_match_data(self, match_data) -> MatchData:
+    def _create_participant_data(self, participant, match_id):
+        return ParticipantData(
+            puuid = participant["puuid"],
+            name = participant["summonerName"],
+            champion_name = participant["championName"],
+            team_id = participant["teamId"],
+            match = match_id,
+        )
         
-        filtered_match_data = {
+    def _create_match_data(self, match_data_response) -> MatchData:
+        return MatchData(
+            id = match_data_response["metadata"]["matchId"],
+            game_start = match_data_response["info"]["gameStartTimestamp"],
+            game_end = match_data_response["info"]["gameEndTimestamp"],
+            game_duration = match_data_response["info"]["gameDuration"],
+            game_mode = match_data_response["info"]["gameMode"],
+            game_type = match_data_response["info"]["gameType"],
             
-            "id": match_data["metadata"]["matchId"],
-            "game_start": match_data["info"]["gameStartTimestamp"],
-            "game_end": match_data["info"]["gameEndTimestamp"],
-            "game_duration": match_data["info"]["gameDuration"],
-            "game_mode": match_data["info"]["gameMode"],
-            "game_type": match_data["info"]["gameType"],
-        }
+            )
         
-        participants_info = match_data["info"]["participants"]
+    def _fill_match_data(self, match_data: MatchData, participant) -> MatchData:
+        '''
+        Completa los datos de la instancia de MatchData con los datos del participante
+        '''
         
-        for participant in participants_info:
+        match_data.champion_played = participant["championName"]
+        match_data.win = participant["win"]
+        match_data.kills = participant["kills"]
+        match_data.deaths = participant["deaths"]
+        match_data.assists = participant["assists"]
+        
+        match_data.kda =  calculate_kda(
+            kills=participant["kills"],
+            deaths=participant["deaths"],
+            assists=participant["assists"],
+        )
+        
+        match_data.minion_kills = sum(
+            participant["totalMinionsKilled"],
+            participant["neutralMinionsKilledTeamJungle"],
+            participant["neutralMinionsKilledEnemyJungle"],
+        )
+        
+        match_data.vision_score = participant["visionScore"]
+        match_data.team_position = participant["teamPosition"]
+        match_data.team_id = participant["teamId"]
+        match_data.summoner = self.puuid
+        match_data.item_purchase = [participant[f"item{i}"] for i in range(7)]
+        match_data.summoner_spells = [participant[f"summoner{i}Id"] for i in range(1, 3)]
+    
+    
+    def filter_match_data(self, match_data_response) -> tuple[MatchData, list[ParticipantData]]:
+        
+        # Crea una instancia de MatchData con los datos referentes al match
+        match_data = self._create_match_data(match_data_response)
+        
+        # Obtiene una lista con los datos de todos los participantes
+        all_participants: list[dict] = match_data_response["info"]["participants"]
+        
+        filtered_participant_data: list[ParticipantData] = []
+        
+        for participant in all_participants:
             
+            # Si el puuid del participante es el del summoner, son los datos de este.
             if participant["puuid"] == self.puuid:
-                    
-                filtered_match_data["champion_played"] = participant["championName"]
-                filtered_match_data["win"] = participant["win"]
-                filtered_match_data["kills"] = participant["kills"]
-                filtered_match_data["deaths"] = participant["deaths"]
-                filtered_match_data["assists"] = participant["assists"]
                 
-                filtered_match_data["kda"] =  calculate_kda(
-                    kills=participant["kills"],
-                    deaths=participant["deaths"],
-                    assists=participant["assists"],
-                )
-                
-                filtered_match_data["minion_kills"] = sum(
-                    participant["totalMinionsKilled"],
-                    participant["neutralMinionsKilledTeamJungle"],
-                    participant["neutralMinionsKilledEnemyJungle"],
-                )
-                
-        return filtered_match_data
+                # Completa los datos de la instancia de MatchData con los datos del participante
+                self._fill_match_data(match_data=match_data, participant=participant)
+            
+            participant_data = self._create_participant_data(participant=participant, match_id=match_data.id)
+            
+            filtered_participant_data.append(participant_data)
+            
+        return match_data, filtered_participant_data
