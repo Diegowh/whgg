@@ -119,7 +119,7 @@ class RequestManager:
                 summoner_data = self.data_manager.get_summoner_data(summoner_name=self.summoner_name
                     )
                 ranked_stats_data = self.data_manager.get_ranked_stats_data()
-                last_matches_request = ...
+                recent_matches_data = self.data_manager.get_recent_matches_data()
                 
                 # Send the data to DbManager to update the database
                 pass
