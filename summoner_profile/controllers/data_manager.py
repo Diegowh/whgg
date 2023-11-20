@@ -34,6 +34,7 @@ class DataManager:
             summoner_level=response["summonerLevel"],
             last_update=response["revisionDate"]
         )
+        return summoner_data
                 
     def filter_match(self, match_data) -> dict:
         
