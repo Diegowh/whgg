@@ -1,6 +1,9 @@
 from mimetypes import init
 import re
 from .db_manager import DbManager
+from summoner_profile.utils.utils import (
+    calculate_kda,
+)
 
 
 class DataFormatter:

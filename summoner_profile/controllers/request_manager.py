@@ -131,7 +131,6 @@ class RequestManager:
             pass
     
     # Match data
-    
     def last_matches_data(self, amount: int = 20):
             
         # Get the match ids
