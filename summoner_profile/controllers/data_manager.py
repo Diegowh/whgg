@@ -201,3 +201,20 @@ class DataManager:
             filtered_participant_data.append(participant_data)
             
         return match_data, filtered_participant_data
+
+
+    # TODO Refactorizar esta funcion
+    def last_matches_data(self, amount: int = 20):
+            
+        # Get the match ids
+        match_ids = self._all_match_ids()
+        
+        # Get the match data
+        matches_data = self.matches_data(match_ids=match_ids)
+        
+        # Ensure amount is not greater than the number of matches
+        amount = min(amount, len(match_ids))
+        
+        formatted_matches_data = [self.data_manager.filter_match(match_data=matches_data[i]) for i in range(amount)]
+        
+        return formatted_matches_data

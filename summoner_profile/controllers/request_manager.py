@@ -132,18 +132,3 @@ class RequestManager:
             # Update the database
             pass
     
-    # Match data
-    def last_matches_data(self, amount: int = 20):
-            
-        # Get the match ids
-        match_ids = self.all_match_ids()
-        
-        # Get the match data
-        matches_data = self.matches_data(match_ids=match_ids)
-        
-        # Ensure amount is not greater than the number of matches
-        amount = min(amount, len(match_ids))
-        
-        formatted_matches_data = [self.data_manager.filter_match(match_data=matches_data[i]) for i in range(amount)]
-        
-        return formatted_matches_data
