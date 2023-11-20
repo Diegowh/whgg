@@ -109,6 +109,7 @@ class RequestManager:
             
             if (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE:
                 
+                #TODO Creo que el RequestManager no deberia encargarse de esto, quizas su funcion deberia ser decirle a los otros modulos como DataFormatter que datos debe pedir y tal.
                 # Request data from Riot API using ApiClient
                 summoner_request = async_to_sync(self.api_client.get_summoner_by_name)(
                     summoner_name=self.summoner_name
