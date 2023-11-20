@@ -3,7 +3,7 @@ from summoner_profile.models import (
     Item,
     Participant,
     RankedStats,
-    SummonerMatch,
+    Match,
     Summoner,
     SummonerSpell,
     
@@ -113,7 +113,7 @@ class DbManager:
                 "summoner_spells": summoner_spells,
             }
         
-            SummonerMatch.objects.update_or_create(id=match_id, defaults=defaults)
+            Match.objects.update_or_create(id=match_id, defaults=defaults)
             
             
             # Obtain match participants

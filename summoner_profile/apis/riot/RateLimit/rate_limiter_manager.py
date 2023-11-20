@@ -1,5 +1,5 @@
 from .rate_limiter import RateLimiter
-from ..utils.utils import Singleton
+from summoner_profile.utils.utils import Singleton
 
 
 class RateLimiterManager(metaclass=Singleton):
