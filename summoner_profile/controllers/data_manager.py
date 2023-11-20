@@ -27,6 +27,14 @@ class DataManager:
         self._summoner_data = self._create_summoner_data(summoner_name=summoner_name)
         return self._summoner_data
     
+    def get_summoner_puuid(self) -> str:
+        self._summoner_data = self._create_summoner_data(summoner_name=summoner_name)
+        return self._summoner_data.puuid
+    
+    def get_summoner_id(self) -> str:
+        self._summoner_data = self._create_summoner_data(summoner_name=summoner_name)
+        return self._summoner_data.id
+    
     def _create_summoner_data(self, summoner_name) -> SummonerData:
         response = async_to_sync(self.api_client.get_summoner_by_name)(
                     summoner_name=summoner_name
