@@ -27,6 +27,7 @@ class DataManager:
         
         self.ranked_stats_data = self._create_ranked_stats_list()
     
+    # Getters
     def get_summoner_data(self) -> SummonerData:
         return self._summoner_data
     
@@ -38,6 +39,7 @@ class DataManager:
     
     def get_ranked_stats_data(self) -> list[RankedStatsData]:
         return self.ranked_stats_data
+    
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
     def _create_summoner_data(self) -> SummonerData:
