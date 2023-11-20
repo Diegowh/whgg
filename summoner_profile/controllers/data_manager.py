@@ -51,7 +51,7 @@ class DataManager:
         return summoner_data
                 
                 
-    def _create_ranked_stats_data(self) -> list[RankedStatsData]:
+    def _create_ranked_stats_list(self) -> list[RankedStatsData]:
         response: list = async_to_sync(self.api_client.get_league_by_summoner)(
                 summoner_id=self.id
                 )
