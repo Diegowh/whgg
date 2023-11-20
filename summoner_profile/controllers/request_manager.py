@@ -118,9 +118,7 @@ class RequestManager:
                 # Request data from Riot API using ApiClient
                 summoner_data = self.data_manager.get_summoner_data(summoner_name=self.summoner_name
                     )
-                ranked_stats_request = async_to_sync(self.api_client.get_league_by_summoner)(
-                    summoner_id=self._id
-                    )
+                ranked_stats_data = self.data_manager.get_ranked_stats_data()
                 last_matches_request = ...
                 
                 # Send the data to DbManager to update the database
