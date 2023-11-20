@@ -21,6 +21,9 @@ class DataManager:
         self.api_client = api_client
         
         self._summoner_data: SummonerData = self._create_summoner_data(summoner_name=self.summoner_name)
+        
+        self.puuid = self._summoner_data.puuid
+        self.id = self._summoner_data.id
     
     def get_summoner_data(self) -> SummonerData:
         return self._summoner_data
@@ -47,6 +50,22 @@ class DataManager:
         )
         return summoner_data
                 
+                
+    def _create_ranked_stats_data(self) -> RankedStatsData:
+        response = async_to_sync(self.api_client.get_league_by_summoner)(
+                summoner_id=self.id
+                )
+        ranked_stats_data = RankedStatsData(
+            queue_type=response["queueType"],
+            tier=response["tier"],
+            rank=response["rank"],
+            league_points=response["leaguePoints"],
+            wins=response["wins"],
+            losses=response["losses"],
+            winrate=response["wins"] / (response["wins"] + response["losses"]), # TODO: Crea una función para calcular el winrate
+            summoner=self.puuid
+        )
+        
     def filter_match(self, match_data) -> dict:
         
         formatted_match_data = {

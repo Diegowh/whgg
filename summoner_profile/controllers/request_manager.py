@@ -115,7 +115,6 @@ class RequestManager:
             
             if self.is_time_to_update():
                 
-                #TODO Creo que el RequestManager no deberia encargarse de esto, quizas su funcion deberia ser decirle a los otros modulos como DataFormatter que datos debe pedir y tal.
                 # Request data from Riot API using ApiClient
                 summoner_data = self.data_manager.get_summoner_data(summoner_name=self.summoner_name
                     )
