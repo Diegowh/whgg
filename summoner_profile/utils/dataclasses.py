@@ -9,7 +9,6 @@ class SummonerData:
     puuid: str
     id: str
     name: str
-    server: str
     icon_id: int
     summoner_level: int
     last_update: int

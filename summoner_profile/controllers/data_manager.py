@@ -21,7 +21,7 @@ class DataManager:
         self.db_manager = db_manager
         self.api_client = api_client
     
-    def filter_summoner(self, summoner_name, server) -> SummonerData:
+    def filter_summoner(self, summoner_name) -> SummonerData:
         response = async_to_sync(self.api_client.get_summoner_by_name)(
                     summoner_name=summoner_name
                     )
@@ -30,7 +30,6 @@ class DataManager:
             puuid=response["puuid"],
             id=response["id"],
             name=response["name"],
-            server=,
             icon_id=response["profileIconId"],
             summoner_level=response["summonerLevel"],
             last_update=response["revisionDate"]
