@@ -11,7 +11,7 @@ from summoner_profile.models import summoner
 
 from .db_manager import DbManager
 
-from .data_formatter import DataFormatter
+from .data_manager import DataManager
 
 from summoner_profile.utils.dataclasses import (
     SummonerData,
@@ -54,7 +54,7 @@ class RequestManager:
         # Initialize classes
         self.api_client = ApiClient(server=self.server, api_key=self.api_key, debug=True)
         self.db_manager = DbManager(puuid=self._puuid)
-        self.data_formatter = DataFormatter()
+        self.data_manager = DataManager(db_manager=self.db_manager, api_client=self.api_client)
         
         # Always request summoner info from API because the summoner name can change for the same puuid
         self.summoner_info = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name=self.summoner_name)
@@ -143,7 +143,7 @@ class RequestManager:
         # Ensure amount is not greater than the number of matches
         amount = min(amount, len(match_ids))
         
-        formatted_matches_data = [self.data_formatter.filter_match(match_data=matches_data[i]) for i in range(amount)]
+        formatted_matches_data = [self.data_manager.filter_match(match_data=matches_data[i]) for i in range(amount)]
         
         return formatted_matches_data
     
