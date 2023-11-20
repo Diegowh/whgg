@@ -89,7 +89,7 @@ class DataManager:
             
             match_data_response = async_to_sync(self.api_client.get_match)(match_id=match_id)
             
-            filtered_match_data = self.filter_match_data(match_data=match_data_response)
+            match_data, all_participant_data = self.filter_match_response(match_data_response=match_data_response)
 
             all_match_data.append(filtered_match_data)
         
@@ -176,8 +176,10 @@ class DataManager:
         match_data.summoner_spells = [participant[f"summoner{i}Id"] for i in range(1, 3)]
     
     
-    def filter_match_data(self, match_data_response) -> tuple[MatchData, list[ParticipantData]]:
-        
+    def filter_match_response(self, match_data_response) -> tuple[MatchData, list[ParticipantData]]:
+        '''
+        Recibe una la respuesta de la API de Riot con los datos de una partida y devuelve una instancia de MatchData y una lista de ParticipantData
+        '''
         # Crea una instancia de MatchData con los datos referentes al match
         match_data = self._create_match_data(match_data_response)
         
