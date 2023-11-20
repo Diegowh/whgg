@@ -1,27 +1,40 @@
 from mimetypes import init
 import re
+
+from .api_client import ApiClient
 from .db_manager import DbManager
 from summoner_profile.utils.utils import (
     calculate_kda,
 )
+from asgiref.sync import async_to_sync
+from summoner_profile.utils.dataclasses import (
+    SummonerData,
+    RankedStatsData,
+    ChampionStatsData,
+    SummonerMatchData,
+    ParticipantData,
+)
 
-
-class DataFormatter:
+class DataManager:
     
-    def __init__(self) -> None:
-        pass
+    def __init__(self, db_manager: DbManager, api_client: ApiClient) -> None:
+        self.db_manager = db_manager
+        self.api_client = api_client
     
-    
-    def filter(self, data: dict, type: str):
+    def filter_summoner(self, summoner_name, server) -> SummonerData:
+        response = async_to_sync(self.api_client.get_summoner_by_name)(
+                    summoner_name=summoner_name
+                    )
         
-        match type:
-            case "summoner":
-                self.filter_summoner(data=data)
-            case "ranked":
-                self.filter_ranked(data=data)
-            case "match":
-                self.filter_match(match_data=data)
-                
+        summoner_data = SummonerData(
+            puuid=response["puuid"],
+            id=response["id"],
+            name=response["name"],
+            server=,
+            icon_id=response["profileIconId"],
+            summoner_level=response["summonerLevel"],
+            last_update=response["revisionDate"]
+        )
                 
     def filter_match(self, match_data) -> dict:
         
