@@ -57,9 +57,8 @@ class RequestManager:
         self.data_manager = DataManager(db_manager=self.db_manager, api_client=self.api_client)
         
         # Always request summoner info from API because the summoner name can change for the same puuid
-        self.summoner_info = async_to_sync(self.api_client.get_summoner_by_name)(summoner_name=self.summoner_name)
-        self._puuid: str = self.summoner_info["puuid"]
-        self._id: str = self.summoner_info["id"]
+        self._puuid: str = self.data_manager.get_summoner_puuid(summoner_name=self.summoner_name)
+        self._id: str = self.data_manager.get_summoner_id(summoner_name=self.summoner_name)
             
         
     # Properties
@@ -111,8 +110,7 @@ class RequestManager:
                 
                 #TODO Creo que el RequestManager no deberia encargarse de esto, quizas su funcion deberia ser decirle a los otros modulos como DataFormatter que datos debe pedir y tal.
                 # Request data from Riot API using ApiClient
-                summoner_request = async_to_sync(self.api_client.get_summoner_by_name)(
-                    summoner_name=self.summoner_name
+                summoner_data = self.data_manager.get_summoner_data(summoner_name=self.summoner_name
                     )
                 ranked_stats_request = async_to_sync(self.api_client.get_league_by_summoner)(
                     summoner_id=self._id
