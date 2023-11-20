@@ -20,8 +20,14 @@ class DataManager:
     def __init__(self, db_manager: DbManager, api_client: ApiClient) -> None:
         self.db_manager = db_manager
         self.api_client = api_client
+        
+        self._summoner_data = None
     
-    def filter_summoner(self, summoner_name) -> SummonerData:
+    def get_summoner_data(self, summoner_name) -> SummonerData:
+        self._summoner_data = self._create_summoner_data(summoner_name=summoner_name)
+        return self._summoner_data
+    
+    def _create_summoner_data(self, summoner_name) -> SummonerData:
         response = async_to_sync(self.api_client.get_summoner_by_name)(
                     summoner_name=summoner_name
                     )
