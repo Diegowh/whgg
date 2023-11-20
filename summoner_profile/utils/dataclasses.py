@@ -55,18 +55,17 @@ class MatchData:
     minion_kills: int
     vision_score: int
     team_position: str
+    team_id: int
     summoner: str
     item_purchase: List[int]
     summoner_spells: List[int]
     
 @dataclass
 class ParticipantData:
-    id: int
     puuid: str
     name: str
     champion_name: str
     team_id: int
-    summoner_match: str
     match: str
     
 @dataclass
