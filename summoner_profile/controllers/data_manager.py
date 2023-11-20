@@ -2,7 +2,6 @@ from mimetypes import init
 import re
 
 from .api_client import ApiClient
-from .db_manager import DbManager
 from summoner_profile.utils.utils import (
     calculate_kda,
 )
@@ -17,9 +16,8 @@ from summoner_profile.utils.dataclasses import (
 
 class DataManager:
     
-    def __init__(self, summoner_name: str, db_manager: DbManager, api_client: ApiClient) -> None:
+    def __init__(self, summoner_name: str, api_client: ApiClient) -> None:
         self.summoner_name = summoner_name
-        self.db_manager = db_manager
         self.api_client = api_client
         
         self._summoner_data: SummonerData = self._create_summoner_data(summoner_name=self.summoner_name)
@@ -33,6 +31,7 @@ class DataManager:
     def get_summoner_id(self) -> str:
         return self._summoner_data.id
     
+    # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
     def _create_summoner_data(self) -> SummonerData:
         response = async_to_sync(self.api_client.get_summoner_by_name)(
                     summoner_name=self.summoner_name

@@ -54,7 +54,7 @@ class RequestManager:
         # Initialize classes
         self.api_client = ApiClient(server=self.server, api_key=self.api_key, debug=True)
         self.db_manager = DbManager(puuid=self._puuid)
-        self.data_manager = DataManager(summoner_name = self.summoner_name, db_manager=self.db_manager, api_client=self.api_client)
+        self.data_manager = DataManager(summoner_name = self.summoner_name, api_client=self.api_client)
         
         # Always request summoner info from API because the summoner name can change for the same puuid
         self._puuid: str = self.data_manager.get_summoner_puuid()
