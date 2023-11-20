@@ -82,8 +82,21 @@ class DataManager:
         return ranked_stats_list
         
     def _create_match_data_list(self) -> list[MatchData]:
-        ...
         
+        all_match_data: list[MatchData] = []
+        
+        for match_id in self._all_match_ids():
+            
+            match_data_response = async_to_sync(self.api_client.get_match)(match_id=match_id)
+            
+            filtered_match_data = self.filter_match_data(match_data=match_data_response)
+
+            all_match_data.append(filtered_match_data)
+        
+        return all_match_data
+            
+            
+
     def _all_match_ids(self) -> list[str]:
         MAX_MATCHES = 5000 # Por poner un limite a la cantidad de partidas que se pidan
         REQUEST_CAP = 100 # La API solo permite pedir de 100 en 100
@@ -112,9 +125,9 @@ class DataManager:
         
         return match_ids
         
-    def filter_match(self, match_data) -> dict:
+    def filter_match_data(self, match_data) -> MatchData:
         
-        formatted_match_data = {
+        filtered_match_data = {
             
             "id": match_data["metadata"]["matchId"],
             "game_start": match_data["info"]["gameStartTimestamp"],
@@ -130,22 +143,22 @@ class DataManager:
             
             if participant["puuid"] == self.puuid:
                     
-                formatted_match_data["champion_played"] = participant["championName"]
-                formatted_match_data["win"] = participant["win"]
-                formatted_match_data["kills"] = participant["kills"]
-                formatted_match_data["deaths"] = participant["deaths"]
-                formatted_match_data["assists"] = participant["assists"]
+                filtered_match_data["champion_played"] = participant["championName"]
+                filtered_match_data["win"] = participant["win"]
+                filtered_match_data["kills"] = participant["kills"]
+                filtered_match_data["deaths"] = participant["deaths"]
+                filtered_match_data["assists"] = participant["assists"]
                 
-                formatted_match_data["kda"] =  calculate_kda(
+                filtered_match_data["kda"] =  calculate_kda(
                     kills=participant["kills"],
                     deaths=participant["deaths"],
                     assists=participant["assists"],
                 )
                 
-                formatted_match_data["minion_kills"] = sum(
+                filtered_match_data["minion_kills"] = sum(
                     participant["totalMinionsKilled"],
                     participant["neutralMinionsKilledTeamJungle"],
                     participant["neutralMinionsKilledEnemyJungle"],
                 )
                 
-        return formatted_match_data
+        return filtered_match_data
