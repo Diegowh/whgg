@@ -113,7 +113,7 @@ class DataManager:
             params["start"] = start_index
             params["count"] = int(min(REQUEST_CAP, MAX_MATCHES - start_index)) # Para evitar pedir más partidas de las que se pueden
             
-            matchlist_response: list = async_to_sync(self.api_client.get_matchlist_by_puuid)(
+            matchlist_response: list = async_to_sync(self.api_client.get_matchlist)(
                 puuid=self.puuid,
                 params= params,
                 )
