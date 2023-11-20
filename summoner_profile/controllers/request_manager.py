@@ -17,7 +17,7 @@ from summoner_profile.utils.dataclasses import (
     SummonerData,
     RankedStatsData,
     ChampionStatsData,
-    SummonerMatchData,
+    MatchData,
     ParticipantData,
 )
 

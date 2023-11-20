@@ -39,7 +39,7 @@ class ChampionStatsData:
     minion_kills: int
     
 @dataclass
-class SummonerMatchData:
+class MatchData:
     id: str
     game_start: int
     game_end: int
