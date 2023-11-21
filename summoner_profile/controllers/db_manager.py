@@ -8,13 +8,21 @@ from summoner_profile.models import (
     SummonerSpell,
     
 )
+from .data_manager import DataManager
+
+from summoner_profile.utils.dataclasses import (
+    RequestData,
+)
 
 
 class DbManager:
     
-    def __init__(self, puuid: str = None) -> None:
+    def __init__(self, request: RequestData) -> None:
         
-        self.puuid = puuid
+        self.request = request
+        
+        self.data_manager = DataManager(request=self.request)
+        self.puuid = self.data_manager.get_summoner_puuid()
         self.data = {}
         
         if puuid:
