@@ -12,13 +12,20 @@ from summoner_profile.utils.dataclasses import (
     ChampionStatsData,
     MatchData,
     ParticipantData,
+    RequestData
 )
+
+
 
 class DataManager:
     
-    def __init__(self, summoner_name: str, api_client: ApiClient) -> None:
-        self.summoner_name = summoner_name
-        self.api_client = api_client
+    def __init__(self, request: RequestData) -> None:
+        
+        self.request = request
+        self.summoner_name = self.request.summoner_name
+        
+        
+        self.api_client = ApiClient(server=self.request.server, debug=True)
         
         self._summoner_data: SummonerData = self._create_summoner_data(summoner_name=self.summoner_name)
         
