@@ -8,6 +8,7 @@ from summoner_profile.models import (
     SummonerSpell,
     
 )
+from summoner_profile.utils.utils import calculate_kda
 from .data_manager import DataManager
 
 from summoner_profile.utils.dataclasses import (
@@ -175,6 +176,53 @@ class DbManager:
             }
             
             ChampionStats.objects.update_or_create(id=champion_stats_id, defaults=defaults)
+            
+    def update_champion_stats(self):
+            
+            # Obtiene los matches del summoner
+            matches = Match.objects.filter(summoner=self.summoner_instance)
+            
+            for match_ in matches:
+                
+                # Obtiene el nombre del campeon jugado en ese match
+                champion_name = match_.champion_played
+                
+                # Busca una entrada existente de ChampionStats con ese nombre de campeon y summoner
+                champion_stats, created = ChampionStats.objects.get_or_create(
+                    name=champion_name,
+                    summoner=self.summoner_instance,
+                    defaults = {
+                        "games": 1,
+                        "wins": 1 if match_.win else 0,
+                        "losses": 1 if not match_.win else 0,
+                        "winrate": 100 if match_.win else 0,
+                        "kills": match_.kills,
+                        "deaths": match_.deaths,
+                        "assists": match_.assists,
+                        "kda": calculate_kda(match_.kills, match_.deaths, match_.assists),
+                        "minion_kills": match_.minion_kills,
+                    }
+                )
+                
+                # Si existe, actualiza sus estadisticas
+                if not created:
+                    
+                    self._update_stats(champion_stats, match_)
+                    
+    def _update_stats(self, champion_stats: ChampionStats, match: Match):
+        
+        # Actualiza las estadisticas del campeon
+        champion_stats.games += 1
+        champion_stats.wins += 1 if match.win else 0
+        champion_stats.losses += 1 if not match.win else 0
+        champion_stats.winrate = int((champion_stats.wins / champion_stats.games) * 100)
+        champion_stats.kills += match.kills
+        champion_stats.deaths += match.deaths
+        champion_stats.assists += match.assists
+        champion_stats.kda = calculate_kda(champion_stats.kills, champion_stats.deaths, champion_stats.assists)
+        champion_stats.minion_kills += match.minion_kills
+        
+        champion_stats.save()
             
     # Periodic Updates
     def update_items(self, items: list):

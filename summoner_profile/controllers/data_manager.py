@@ -107,6 +107,8 @@ class DataManager:
                 # Guarda los respectivos a los participantes
                 self.db_manager.update_participants_data(data=self.participants_data)
                 
+                # Actualiza los champion stats
+                self.db_manager.update_champion_stats()
                 
             # Si no es el momento de actualizar, obtiene los datos de la base de datos directamente
             else: 
