@@ -1,7 +1,6 @@
 from django.db import models
 
 class ChampionStats(models.Model):
-    id = models.CharField(max_length=200, primary_key=True, unique=True)
     name = models.CharField(max_length=200)
     games = models.IntegerField()
     wins = models.IntegerField()
@@ -15,3 +14,6 @@ class ChampionStats(models.Model):
     
     # Foreign Keys
     summoner = models.ForeignKey('Summoner', on_delete=models.CASCADE, related_name='champion_stats')
+    
+    class Meta:
+        unique_together = ("name", "summoner")
