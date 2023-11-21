@@ -29,32 +29,40 @@ class DataManager:
     
     def __init__(self, request: RequestData) -> None:
         
-        self.request = request
+        self._request = request
         
-        self.api_client = ApiClient(server=self.request.server, debug=True)
-        self.db_manager = DbManager()
+        self._api_client = ApiClient(server=self.request.server, debug=True)
+        self._db_manager = DbManager()
         
-        # Primera request para obtener el puuid y el id del summoner name solicitado
+        # Pide los datos al inicializar la clase para obtener el puuid y el id
         self._summoner_data: SummonerData = self._create_summoner_data(summoner_name=self.summoner_name)
         
-        # TODO Hacer propiedades para estos dos atributos
-        self.puuid = self._summoner_data.puuid
-        self.id = self._summoner_data.id 
-        
-        self.ranked_stats_data = self._create_ranked_stats_list() # Necesito esto aqui???
+        self._puuid = self._summoner_data.puuid
+        self._id = self._summoner_data.id 
     
-    # Getters
-    def get_summoner_data(self) -> SummonerData:
+    @property
+    def request(self):
+        return self._request
+    
+    @property
+    def api_client(self):
+        return self._api_client
+    
+    @property
+    def db_manager(self):
+        return self._db_manager
+    
+    @property
+    def summoner_data(self):
         return self._summoner_data
     
-    def get_summoner_puuid(self) -> str:
-        return self._summoner_data.puuid
+    @property
+    def puuid(self):
+        return self._puuid
     
-    def get_summoner_id(self) -> str:
-        return self._summoner_data.id
-    
-    def get_ranked_stats_data(self) -> list[RankedStatsData]:
-        return self.ranked_stats_data
+    @property
+    def id(self):
+        return self._id
     
     
     def get_requested_data(self):
