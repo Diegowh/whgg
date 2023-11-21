@@ -19,6 +19,8 @@ from summoner_profile.utils.dataclasses import (
     ChampionStatsData,
     MatchData,
     ParticipantData,
+    RequestData,
+    
 )
 
 from .api_client import ApiClient
@@ -36,6 +38,8 @@ class RequestManager:
     def __init__(self, summoner_name: str, server: str) -> None:
         
         self._profile_data = {}
+        
+        self._request_data: RequestData = RequestData(summoner_name=summoner_name, server=server)
         
         # Summoner requested attributes
         self._summoner_name = summoner_name
