@@ -12,20 +12,19 @@ from .data_manager import DataManager
 
 from summoner_profile.utils.dataclasses import (
     RequestData,
+    SummonerData,
 )
 
 
 class DbManager:
     
-    def __init__(self, request: RequestData) -> None:
+    def __init__(self) -> None:
         
-        self.request = request
         
-        self.data_manager = DataManager(request=self.request)
         self.puuid = self.data_manager.get_summoner_puuid()
         self.data = {}
         
-        if puuid:
+        if self.puuid: #TODO Cambiar esto, al cambiar los argumentos de Dbmanager siempre va a obtener ahora el puuid y no funciona como antes
             # If puuid is given is because we want to update the summoner database
             self.summoner_instance = None
             
@@ -200,3 +199,13 @@ class DbManager:
         summoner = Summoner.objects.get(puuid=puuid)
         
         return summoner
+    
+    # Metodos para pedir a DataManager que obtenga los datos de la API de Riot
+    
+    def fetch_summoner_data_from_api(self) -> SummonerData:
+        
+        return self.data_manager.get_summoner_data(summoner_name=self.request.summoner_name
+                    )
+    def fetch_ranked_stats_data_from_api(self) -> list:
+        
+        return self.data_manager.get_ranked_stats_data()
