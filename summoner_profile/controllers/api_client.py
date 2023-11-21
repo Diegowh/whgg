@@ -15,9 +15,11 @@ from summoner_profile.utils.decorators import (
     
 )
 
-from summoner_profile.utils import utils as utils
+from summoner_profile.utils import env_loader, utils as utils
 from summoner_profile.utils import exceptions as exc
 from ..apis.riot.RateLimit.rate_limiter_manager import RateLimiterManager
+from summoner_profile.utils.exceptions import RiotApiKeyNotFound
+from summoner_profile.utils.env_loader import EnvLoader
 
 class ApiClient:
     
@@ -35,8 +37,16 @@ class ApiClient:
     
     SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
     
-    def __init__(self, server: str, api_key: str, auto_retry: bool = False, requests_logging_function = None, debug: bool = False) -> None:
-        self._key = api_key
+    def __init__(self, server: str, auto_retry: bool = False, requests_logging_function = None, debug: bool = False) -> None:
+        
+        # Get ApiKey from .env
+        env_loader = EnvLoader()
+        try:
+            self._key = env_loader.get("RIOT_API_KEY")
+            
+        except EnvironmentError:
+            raise RiotApiKeyNotFound()
+        
         self._rl = RateLimiterManager(debug)
         
         self.set_server(server)

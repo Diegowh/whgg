@@ -22,8 +22,6 @@ from summoner_profile.utils.dataclasses import (
 )
 
 from .api_client import ApiClient
-from summoner_profile.utils.exceptions import RiotApiKeyNotFound
-from summoner_profile.utils.env_loader import EnvLoader
 from summoner_profile.utils.utils import (
     hours_to_seconds,
     calculate_kda,
@@ -42,14 +40,6 @@ class RequestManager:
         # Summoner requested attributes
         self._summoner_name = summoner_name
         self._server = server
-        
-        # Get ApiKey from .env 
-        env_loader = EnvLoader()
-        try:
-            self._api_key = env_loader.get("RIOT_API_KEY")
-            
-        except EnvironmentError:
-            raise RiotApiKeyNotFound()
         
         # Initialize classes
         self.api_client = ApiClient(server=self.server, api_key=self.api_key, debug=True)
