@@ -17,6 +17,7 @@ from summoner_profile.utils.dataclasses import (
     RequestData,
     SummonerData,
     MatchData,
+    ResponseData
 )
 
 
@@ -244,12 +245,48 @@ class DbManager:
                 defaults=spell,
             )
             
-    def fetch_summoner(self, puuid: str):
+    def get_summoner_data_from_db(self, puuid: str) -> SummonerData:
         
         summoner = Summoner.objects.get(puuid=puuid)
         
-        return summoner
+        return SummonerData(
+            puuid=summoner.puuid,
+            id=summoner.id,
+            name=summoner.name,
+            icon_id=summoner.icon_id,
+            summoner_level=summoner.summoner_level,
+            last_update=summoner.last_update,
+        )
+        
+    def get_ranked_stats_data_list_from_db(self) -> list[RankedStatsData]:
+            
+            ranked_stats = RankedStats.objects.filter(summoner=self.summoner_instance)
+            
+            ranked_stats_data_list: list[RankedStatsData] = []
+            
+            for ranked_stats_entry in ranked_stats:
+                
+                ranked_stats_data_list.append(
+                    RankedStatsData(
+                        queue_type=ranked_stats_entry.queue_type,
+                        tier=ranked_stats_entry.tier,
+                        rank=ranked_stats_entry.rank,
+                        league_points=ranked_stats_entry.league_points,
+                        wins=ranked_stats_entry.wins,
+                        losses=ranked_stats_entry.losses,
+                        winrate=ranked_stats_entry.winrate,
+                    )
+                )
+                
+            return ranked_stats_data_list
     
+    def get_response_data(self) -> ResponseData:
+        ResponseData (
+            summoner_data=self.get_summoner_data_from_db(),
+            ranked_stats_data_list=self.get_ranked_stats_data_list_from_db(),
+        )
+        
+        
     # Metodos para pedir a DataManager que obtenga los datos de la API de Riot
     
     def fetch_summoner_data_from_api(self) -> SummonerData:
