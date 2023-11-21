@@ -3,7 +3,7 @@ import time
 
 
 from .data_manager import DataManager
-from summoner_profile.utils.dataclasses import RequestData
+from summoner_profile.utils.dataclasses import RequestData, ResponseData
 
 
 
@@ -33,5 +33,5 @@ class RequestManager:
     def request_data(self):
         return self._request_data
     
-    def get(self):
+    def get(self) -> ResponseData:
         return self.data_manager.get_requested_data()
