@@ -1,6 +1,3 @@
-from os import name
-from tkinter import image_names
-from typing import List
 
 from dataclasses import dataclass
 
@@ -12,6 +9,9 @@ class SummonerData:
     icon_id: int
     summoner_level: int
     last_update: int
+    
+    def to_dict(self):
+        return self.__dict__
 
 @dataclass
 class RankedStatsData:
@@ -23,6 +23,9 @@ class RankedStatsData:
     losses: int
     winrate: int
     summoner: str
+    
+    def to_dict(self):
+        return self.__dict__
     
 @dataclass
 class ChampionStatsData:
@@ -37,6 +40,9 @@ class ChampionStatsData:
     assists: float
     kda: float
     minion_kills: int
+    
+    def to_dict(self):
+        return self.__dict__
     
 @dataclass
 class MatchData:
@@ -59,6 +65,9 @@ class MatchData:
     summoner: str
     item_purchase: List[int]
     summoner_spells: List[int]
+
+    def to_dict(self):
+        return self.__dict__
     
 @dataclass
 class ParticipantData:
@@ -67,6 +76,9 @@ class ParticipantData:
     champion_name: str
     team_id: int
     match: str
+
+    def to_dict(self):
+        return self.__dict__
     
 @dataclass
 class ItemData:
@@ -76,6 +88,9 @@ class ItemData:
     description: str
     gold_base: int
     gold_total: int
+
+    def to_dict(self):
+        return self.__dict__
     
 @dataclass
 class SummonerSpellData:
@@ -84,9 +99,30 @@ class SummonerSpellData:
     description: str
     image_name: str
     sprite_name: str
+
+    def to_dict(self):
+        return self.__dict__
     
     
 @dataclass
 class RequestData:
     summoner_name: str
     server: str
+
+    def to_dict(self):
+        return self.__dict__
+
+@dataclass
+class ResponseData:
+    summoner_data: SummonerData
+    ranked_stats_data_list: List[RankedStatsData]
+    champion_stats_data_list: List[ChampionStatsData]
+    recent_match_data_list: List[tuple[MatchData, list[ParticipantData]]]
+    
+    def to_dict(self):
+        return {
+            'summoner_data': self.summoner_data.to_dict(),
+            'ranked_stats_data_list': [data.to_dict() for data in self.ranked_stats_data_list],
+            'champion_stats_data_list': [data.to_dict() for data in self.champion_stats_data_list],
+            'recent_match_data_list': [(match.to_dict(), [participant.to_dict() for participant in participants]) for match, participants in self.recent_match_data_list],
+        }
