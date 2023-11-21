@@ -1,8 +1,12 @@
 from datetime import datetime
+import time
 import re
 
 from .api_client import ApiClient
+from .db_manager import DbManager
+
 from summoner_profile.utils.utils import (
+    hours_to_seconds,
     calculate_kda,
 )
 from asgiref.sync import async_to_sync
@@ -19,20 +23,25 @@ from summoner_profile.utils.dataclasses import (
 
 class DataManager:
     
+    HOURS_BEFORE_UPDATING_DATABASE = 1.5
+    SECONDS_BEFORE_UPDATING_DATABASE = hours_to_seconds(hours=HOURS_BEFORE_UPDATING_DATABASE)
+    
+    
     def __init__(self, request: RequestData) -> None:
         
         self.request = request
-        self.summoner_name = self.request.summoner_name
-        
         
         self.api_client = ApiClient(server=self.request.server, debug=True)
+        self.db_manager = DbManager()
         
+        # Primera request para obtener el puuid y el id del summoner name solicitado
         self._summoner_data: SummonerData = self._create_summoner_data(summoner_name=self.summoner_name)
         
+        # TODO Hacer propiedades para estos dos atributos
         self.puuid = self._summoner_data.puuid
-        self.id = self._summoner_data.id
+        self.id = self._summoner_data.id 
         
-        self.ranked_stats_data = self._create_ranked_stats_list()
+        self.ranked_stats_data = self._create_ranked_stats_list() # Necesito esto aqui???
     
     # Getters
     def get_summoner_data(self) -> SummonerData:
@@ -46,6 +55,36 @@ class DataManager:
     
     def get_ranked_stats_data(self) -> list[RankedStatsData]:
         return self.ranked_stats_data
+    
+    
+    def get_requested_data(self):
+        
+        # Si el puuid existia en la base de datos 
+        if self.db_manager.is_puuid_in_database():
+            
+            # Si es el momento de actualizar en base al tiempo desde la ultima actualizacion
+            if self.is_time_to_update():
+                
+                # Pide los datos a la API de Riot y los guarda en la base de datos
+                pass
+            
+            # Si no es el momento de actualizar, obtiene los datos de la base de datos directamente
+            else: 
+                pass
+                
+        # Si el puuid no existia en la base de datos previamente
+        else:
+            # Pide los datos a la API de Riot y los guarda en la base de datos
+            pass
+    
+    def is_time_to_update(self) -> bool:
+        '''
+        Comprueba si ha pasado el tiempo suficiente desde la ultima actualizacion de la base de datos
+        '''
+        now = int(time.time())
+        last_update = self.db_manager.last_update()
+        
+        return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
     
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
