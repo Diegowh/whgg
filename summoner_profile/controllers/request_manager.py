@@ -41,21 +41,9 @@ class RequestManager:
         
         self._request_data: RequestData = RequestData(summoner_name=summoner_name, server=server)
         
-        # Summoner requested attributes
-        self._summoner_name = summoner_name
-        self._server = server
         
         # Initialize classes
-        self.api_client = ApiClient(server=self.server, debug=True)
-        self.data_manager = DataManager(summoner_name = self.summoner_name, api_client=self.api_client)
-        
-        # Always request summoner info from API because the summoner name can change for the same puuid
-        self._puuid: str = self.data_manager.get_summoner_puuid()
-        self._id: str = self.data_manager.get_summoner_id()
-        
-        
-        self.db_manager = DbManager(puuid=self._puuid)
-        
+        self.db_manager = DbManager(request=self._request_data)
         
     # Properties
     @property
@@ -67,24 +55,8 @@ class RequestManager:
         self._profile_data = new_data
         
     @property
-    def api_key(self):
-        return self._api_key
-    
-    @property
-    def puuid(self):
-        return self._puuid
-    
-    @property
-    def id(self):
-        return self._id
-    
-    @property
-    def summoner_name(self):
-        return self._summoner_name
-    
-    @property
-    def server(self):
-        return self._server
+    def request_data(self):
+        return self._request_data
     
     
     # Creo este metodo porque posiblemente refactorice los otros metodos y no se incluiran en RequestManager
