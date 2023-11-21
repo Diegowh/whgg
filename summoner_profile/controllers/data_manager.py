@@ -91,7 +91,8 @@ class DataManager:
             
             match_data, all_participant_data = self.filter_match_response(match_data_response=match_data_response)
 
-            all_match_data.append(filtered_match_data)
+            all_match_data.append(match_data)
+            
         
         return all_match_data
             
