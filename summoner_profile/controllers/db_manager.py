@@ -11,8 +11,11 @@ from summoner_profile.models import (
 from .data_manager import DataManager
 
 from summoner_profile.utils.dataclasses import (
+    ParticipantData,
+    RankedStatsData,
     RequestData,
     SummonerData,
+    MatchData,
 )
 
 
@@ -24,10 +27,19 @@ class DbManager:
         self.puuid = self.data_manager.get_summoner_puuid()
         self.data = {}
         
-        if self.puuid: #TODO Cambiar esto, al cambiar los argumentos de Dbmanager siempre va a obtener ahora el puuid y no funciona como antes
-            # If puuid is given is because we want to update the summoner database
-            self.summoner_instance = None
+        self._summoner_instance = None
             
+            
+    @property
+    def summoner_instance(self):
+        return self._summoner_instance
+    
+    @summoner_instance.setter
+    def summoner_instance(self, new_value: Summoner):
+        if isinstance(new_value, Summoner):
+            self._summoner_instance = new_value
+        
+    
     def is_puuid_in_database(self) -> bool:
         
         return Summoner.objects.filter(puuid=self.puuid).exists()
@@ -53,100 +65,90 @@ class DbManager:
             raise Exception("Summoner PuuID was not given. Are you sure you want to use this method?")
             
     
-    def _update_summoner(self):
-        
-        summoner_data = self.data["summoner"]
+    def update_summoner(self, data: SummonerData):
         
         defaults = {
-            "id": summoner_data["id"],
-            "name": summoner_data["name"],
-            "server": summoner_data["server"],
-            "icon_id": summoner_data["icon_id"],
-            "summoner_level": summoner_data["summoner_level"],
-            "last_update": summoner_data["last_update"]
+            "id": data.id,
+            "name": data.name,
+            "icon_id": data.icon_id,
+            "summoner_level": data.summoner_level,
+            "last_update": data.last_update,
         }
         
-        Summoner.objects.update_or_create(puuid=self.puuid, defaults=defaults)
+        Summoner.objects.update_or_create(puuid=data.puuid, defaults=defaults)
         
-        # After updating the summoner, we need to get the instance to use it in other methods
+        # Obtengo la instancia del summoner que acabo de actualizar para poder usarla en los siguientes metodos
         self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
 
 
-    def _update_ranked_stats(self):
+    def update_ranked_stats(self, data: list[RankedStatsData]):
         
-        for queue, ranked_stats in self.data["ranked_stats"].items():
-            
-            defaults = {
-                "queue_type": queue,
-                "rank": ranked_stats["rank"],
-                "league_points": ranked_stats["league_points"],
-                "wins": ranked_stats["wins"],
-                "losses": ranked_stats["losses"],
-                "winrate": int(round(ranked_stats["winrate", 0])),
-                "summoner": self.summoner_instance
+        for ranked_stats in data:
+            defaults: {
+                "tier": ranked_stats.tier,
+                "rank": ranked_stats.rank,
+                "league_points": ranked_stats.league_points,
+                "wins": ranked_stats.wins,
+                "losses": ranked_stats.losses,
+                "winrate": ranked_stats.winrate,
+                
             }
             
-            RankedStats.objects.update_or_create(queue_type=queue, summoner=self.summoner_instance, defaults=defaults)
+            RankedStats.objects.update_or_create(queue_type=ranked_stats.queue_type, summoner=self.summoner_instance, defaults=defaults)
 
-    def _update_summoner_matches(self):
+    def update_match_data(self, data: list[MatchData]):
         
-        matches_to_update = self.data["last_20_matches"]
-        
-        for match_data in matches_to_update:
-            match_id = match_data["id"]
-            
-            
-            item_purchase = [Item.objects.get(id=item_id) for item_id in match_data["item_ids"]]
-            summoner_spells = [SummonerSpell.objects.get(id=spell_id) for spell_id in match_data["summoner_spells"]]
+        for match_data in data:
         
             defaults = {
-                "id": match_id,
-                "season_id": match_data["season_id"],
-                "queue_id": match_data["queue_id"],
-                "game_mode": match_data["game_mode"],
-                "game_type": match_data["game_type"],
-                "champion_name": match_data["champion_name"],
-                "win": match_data["win"],
-                "kills": match_data["kills"],
-                "deaths": match_data["deaths"],
-                "assists": match_data["assists"],
-                "kda": match_data["kda"],
-                "minion_kills": match_data["minion_kills"],
-                "vision_score": match_data["vision_score"],
-                "team_position": match_data["team_position"],
+                "game_start": match_data.game_start,
+                "game_end": match_data.game_end,
+                "game_duration": match_data.game_duration,
+                "game_mode": match_data.game_mode,
+                "game_type": match_data.game_type,
+                "champion_played": match_data.champion_played,
+                "win": match_data.win,
+                "kills": match_data.kills,
+                "deaths": match_data.deaths,
+                "assists": match_data.assists,
+                "kda": match_data.kda,
+                "minion_kills": match_data.minion_kills,
+                "vision_score": match_data.vision_score,
+                "team_position": match_data.team_position,
+                "team_id": match_data.team_id,
                 
                 "summoner": self.summoner_instance,
-                "item_purchase": item_purchase,
-                "summoner_spells": summoner_spells,
             }
         
-            Match.objects.update_or_create(id=match_id, defaults=defaults)
+            match, created = Match.objects.update_or_create(id=match_data.id, defaults=defaults)
+            
+            # Obtiene los objetos Item para los items comprados en este match
+            items = Item.objects.filter(id__in=match_data.item_purchase)
+            
+            # Agrega los items al match
+            match.item_purchase.set(items)
+            
+            # Obtiene los objetos Participant para los participantes de este match
+            summoner_spells = SummonerSpell.objects.filter(id__in=match_data.summoner_spells)
+            
+            #  Agrego los summoner spells al match
+            match.summoner_spells.set(summoner_spells)
             
             
-            # Obtain match participants
-            participants: list = match_data["participants"]
-            
-            self._update_participants(participants)
-            
-            
-            
-    def _update_participants(self, match_participants):
+    def update_participants_data(self, data: list[ParticipantData]):
         
-        for participant_data in match_participants:
+        for participant_data in data:
             
-            participant_id = participant_data["id"]
+            # Obtengo la instancia de Match a la que pertenece el participante
+            match_instance = Match.objects.get(id=participant_data.match)
             
             defaults = {
-                "puuid": participant_data["puuid"],
-                "name": participant_data["name"],
-                "champion_name": participant_data["champion_name"],
-                "team_id": participant_data["team_id"],
+                "name": participant_data.name,
+                "champion_name": participant_data.champion_name,
+                "team_id": participant_data.team_id,
             }
             
-            # Each participant represents a player in a summoner match and is unique and unchangeable for that specific match. 
-            # Even if the data (puuid, name, champion_name, and team_id) for two different participants is the same, 
-            # they will always refer to distinct instances in a summoner match.
-            Participant.objects.get_or_create(id=participant_id, defaults=defaults)
+            Participant.objects.update_or_create(puuid=participant_data.puuid, match=match_instance, defaults=defaults)
             
             
     def _update_champion_stats(self):

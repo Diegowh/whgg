@@ -35,10 +35,14 @@ class DataManager:
         self._db_manager = DbManager()
         
         # Pide los datos al inicializar la clase para obtener el puuid y el id
-        self._summoner_data: SummonerData = self._create_summoner_data(summoner_name=self.summoner_name)
+        self._summoner_data: SummonerData = self._get_summoner_data_from_api(summoner_name=self.summoner_name)
         
         self._puuid = self._summoner_data.puuid
         self._id = self._summoner_data.id 
+        
+        self._match_and_participant_data = ()
+        self._matches_data = []
+        self._participants_data = []
     
     @property
     def request(self):
@@ -64,6 +68,18 @@ class DataManager:
     def id(self):
         return self._id
     
+    @property
+    def matches_data(self):
+        if not self._match_and_participant_data:
+            self._get_match_and_participant_data_from_api()
+        return self._match_and_participant_data[0]
+    
+    @property
+    def participants_data(self):
+        if not self._match_and_participant_data:
+            self._get_match_and_participant_data_from_api()
+        return self._match_and_participant_data[1]
+    
     
     def get_requested_data(self):
         
@@ -73,9 +89,25 @@ class DataManager:
             # Si es el momento de actualizar en base al tiempo desde la ultima actualizacion
             if self.is_time_to_update():
                 
-                # Pide los datos a la API de Riot y los guarda en la base de datos
-                pass
-            
+                # Guarda el data_summoner en la base de datos (ya estaban solicitados previamente)
+                self.db_manager.update_summoner(data=self.summoner_data)
+                
+                # Pide los datos de ranked stats
+                ranked_stats_data_list = self._get_ranked_stats_list_from_api()
+                
+                # Los guarda en la base de datos
+                self.db_manager.update_ranked_stats(data=ranked_stats_data_list)
+                
+                # Pide los datos de las ultimas partidas
+                self._get_match_and_participant_data_from_api()
+
+                # Guarda los respectivos al match
+                self.db_manager.update_match_data(data=self.matches_data)
+                
+                # Guarda los respectivos a los participantes
+                self.db_manager.update_participants_data(data=self.participants_data)
+                
+                
             # Si no es el momento de actualizar, obtiene los datos de la base de datos directamente
             else: 
                 pass
@@ -96,7 +128,7 @@ class DataManager:
     
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
-    def _create_summoner_data(self) -> SummonerData:
+    def _get_summoner_data_from_api(self) -> SummonerData:
         response = async_to_sync(self.api_client.get_summoner_by_name)(
                     summoner_name=self.summoner_name
                     )
@@ -112,7 +144,7 @@ class DataManager:
         return summoner_data
                 
                 
-    def _create_ranked_stats_data_list(self) -> list[RankedStatsData]:
+    def _get_ranked_stats_list_from_api(self) -> list[RankedStatsData]:
         response: list = async_to_sync(self.api_client.get_league_by_summoner)(
                 summoner_id=self.id
                 )
@@ -135,21 +167,22 @@ class DataManager:
         
         return ranked_stats_list
         
-    def _create_match_data_list(self) -> list[MatchData]:
+    def _get_match_and_participant_data_from_api(self) -> tuple[list[MatchData], list[ParticipantData]]:
         
         all_match_data: list[MatchData] = []
+        all_participant_data: list[ParticipantData] = []
         
         for match_id in self._all_match_ids():
             
             match_data_response = async_to_sync(self.api_client.get_match)(match_id=match_id)
             
-            match_data, all_participant_data = self.filter_match_response(match_data_response=match_data_response)
+            match_data, participant_data = self.filter_match_response(match_data_response=match_data_response)
 
             all_match_data.append(match_data)
+            all_participant_data += participant_data
             
         
-        return all_match_data
-            
+        self._match_and_participant_data = all_match_data, all_participant_data
             
 
     def _all_match_ids(self) -> list[str]:
