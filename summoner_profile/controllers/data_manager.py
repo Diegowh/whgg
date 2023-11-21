@@ -16,7 +16,8 @@ from summoner_profile.utils.dataclasses import (
     ChampionStatsData,
     MatchData,
     ParticipantData,
-    RequestData
+    RequestData,
+    ResponseData
 )
 
 
@@ -81,7 +82,8 @@ class DataManager:
         return self._match_and_participant_data[1]
     
     
-    def get_requested_data(self):
+    def get_requested_data(self) -> ResponseData:
+        # TODO Refactorizar este metodo entero en varios metodos mas pequeños
         
         # Si el puuid existia en la base de datos 
         if self.db_manager.is_puuid_in_database():
@@ -110,6 +112,8 @@ class DataManager:
                 # Actualiza los champion stats
                 self.db_manager.update_champion_stats()
                 
+                # Construye el objeto ResponseData
+                response_data = self.db_manager.get_response_data()
             # Si no es el momento de actualizar, obtiene los datos de la base de datos directamente
             else: 
                 pass
