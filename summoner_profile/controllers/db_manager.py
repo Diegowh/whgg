@@ -9,7 +9,6 @@ from summoner_profile.models import (
     
 )
 from summoner_profile.utils.utils import calculate_kda
-from .data_manager import DataManager
 
 from summoner_profile.utils.dataclasses import (
     ParticipantData,
