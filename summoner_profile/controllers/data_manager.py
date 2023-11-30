@@ -1,6 +1,5 @@
 from datetime import datetime
 import time
-import re
 
 from .api_client import ApiClient
 from .db_manager import DbManager
@@ -40,7 +39,7 @@ class DataManager:
         self._puuid = self._summoner_data.puuid
         self._id = self._summoner_data.id 
         
-        self._db_manager = DbManager()
+        self._db_manager = DbManager(puuid=self.puuid)
         
         self._match_and_participant_data = ()
         self._matches_data = []
@@ -87,6 +86,7 @@ class DataManager:
         
         # Si el puuid existía en la base de datos y no es el momento de actualizar, obtiene los datos de la base de datos directamente
         if self.db_manager.is_puuid_in_database() and not self.is_time_to_update():
+            print("El puuid ya existia, y no hace falta actualizar")
             response_data = self.db_manager.fetch_response_data()
             return response_data
         
@@ -122,7 +122,7 @@ class DataManager:
         Comprueba si ha pasado el tiempo suficiente desde la ultima actualizacion de la base de datos
         '''
         now = int(time.time())
-        last_update = self.db_manager.last_update(puuid=self.puuid)
+        last_update = self.db_manager.last_update()
         
         return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
     
@@ -259,7 +259,6 @@ class DataManager:
         match_data.vision_score = participant["visionScore"]
         match_data.team_position = participant["teamPosition"]
         match_data.team_id = participant["teamId"]
-        match_data.summoner = self.puuid
         match_data.item_purchase = [participant[f"item{i}"] for i in range(7)]
         match_data.summoner_spells = [participant[f"summoner{i}Id"] for i in range(1, 3)]
     
@@ -289,20 +288,3 @@ class DataManager:
             filtered_participant_data.append(participant_data)
             
         return match_data, filtered_participant_data
-
-
-    # TODO Refactorizar esta funcion
-    def last_matches_data(self, amount: int = 20):
-            
-        # Get the match ids
-        match_ids = self._all_match_ids()
-        
-        # Get the match data
-        matches_data = self.matches_data(match_ids=match_ids)
-        
-        # Ensure amount is not greater than the number of matches
-        amount = min(amount, len(match_ids))
-        
-        formatted_matches_data = [self.data_manager.filter_match(match_data=matches_data[i]) for i in range(amount)]
-        
-        return formatted_matches_data
