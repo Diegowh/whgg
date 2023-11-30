@@ -34,4 +34,4 @@ class RequestManager:
         return self._request_data
     
     def get(self) -> ResponseData:
-        return self.data_manager.get_requested_data()
+        return self.data_manager.get_response_data()

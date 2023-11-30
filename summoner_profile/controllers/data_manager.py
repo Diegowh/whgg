@@ -31,7 +31,6 @@ class DataManager:
     def __init__(self, request: RequestData) -> None:
         
         self._request = request
-        self._response_data = ResponseData()
         
         self._api_client = ApiClient(server=self.request.server, debug=True)
         self._db_manager = DbManager()
@@ -82,72 +81,40 @@ class DataManager:
             self._get_match_and_participant_data_from_api()
         return self._match_and_participant_data[1]
     
-    @property
-    def response_data(self):
-        return self._response_data
     
-    
-    def get_requested_data(self) -> ResponseData:
+    def get_response_data(self) -> ResponseData:
         
-        # Si el puuid existia en la base de datos 
-        if self.db_manager.is_puuid_in_database():
-            
-            # Si es el momento de actualizar en base al tiempo desde la ultima actualizacion
-            if self.is_time_to_update():
+        # Si el puuid existía en la base de datos y no es el momento de actualizar, obtiene los datos de la base de datos directamente
+        if self.db_manager.is_puuid_in_database() and not self.is_time_to_update():
+            response_data = self.db_manager.fetch_response_data()
+            return response_data
+        
+        # Pide los datos de la API de Riot y los guarda en la base de datos
+        self.db_manager.update_summoner(data=self.summoner_data)
                 
-                # Guarda el data_summoner en la base de datos (ya estaban solicitados previamente)
-                self.db_manager.update_summoner(data=self.summoner_data)
-                
-                # Pide los datos de ranked stats
-                ranked_stats_data_list = self._get_ranked_stats_list_from_api()
-                
-                # Los guarda en la base de datos
-                self.db_manager.update_ranked_stats(data=ranked_stats_data_list)
-                
-                # Pide los datos de las ultimas partidas
-                self._get_match_and_participant_data_from_api()
+        # Pide los datos de ranked stats
+        ranked_stats_data_list = self._get_ranked_stats_list_from_api()
+        
+        # Los guarda en la base de datos
+        self.db_manager.update_ranked_stats(data=ranked_stats_data_list)
+        
+        # Pide los datos de las ultimas partidas
+        self._get_match_and_participant_data_from_api()
 
-                # Guarda los respectivos al match
-                self.db_manager.update_match_data(data=self.matches_data)
-                
-                # Guarda los respectivos a los participantes
-                self.db_manager.update_participants_data(data=self.participants_data)
-                
-                # Actualiza los champion stats
-                self.db_manager.update_champion_stats()
-                
-                # Construye el objeto ResponseData
-                self._response_data = self.db_manager.fetch_response_data()
-                
-            # Si no es el momento de actualizar, obtiene los datos de la base de datos directamente
-            else: 
-                self._response_data = self.db_manager.fetch_response_data()
-
-        # Si el puuid no existia en la base de datos previamente
-        else:
-            # Pide los datos a la API de Riot y los guarda en la base de datos
-            self.db_manager.update_summoner(data=self.summoner_data)
-            
-            # Pide los datos de ranked stats
-            ranked_stats_data_list = self._get_ranked_stats_list_from_api()
-            
-            # Los guarda en la base de datos
-            self.db_manager.update_ranked_stats(data=ranked_stats_data_list)
-            
-            # Pide los datos de las ultimas partidas
-            self._get_match_and_participant_data_from_api()
-
-            # Guarda los respectivos al match
-            self.db_manager.update_match_data(data=self.matches_data)
-            
-            # Guarda los respectivos a los participantes
-            self.db_manager.update_participants_data(data=self.participants_data)
-            
-            # Actualiza los champion stats
-            self.db_manager.update_champion_stats()
-            
-            # Construye el objeto ResponseData
-            self._response_data = self.db_manager.fetch_response_data()
+        # Guarda los respectivos al match
+        self.db_manager.update_match_data(data=self.matches_data)
+        
+        # Guarda los respectivos a los participantes
+        self.db_manager.update_participants_data(data=self.participants_data)
+        
+        # Actualiza los champion stats
+        self.db_manager.update_champion_stats()
+        
+        # Construye el objeto ResponseData
+        response_data = self.db_manager.fetch_response_data()
+        
+        return response_data
+        
     
     def is_time_to_update(self) -> bool:
         '''
