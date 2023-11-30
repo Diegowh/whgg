@@ -29,7 +29,6 @@ class RankedStatsData:
     
 @dataclass
 class ChampionStatsData:
-    id: str
     name: str
     games: int
     wins: int
@@ -117,12 +116,12 @@ class ResponseData:
     summoner_data: SummonerData
     ranked_stats_data_list: List[RankedStatsData]
     champion_stats_data_list: List[ChampionStatsData]
-    recent_match_data_list: List[tuple[MatchData, list[ParticipantData]]]
+    match_data_list: List[tuple[MatchData, list[ParticipantData]]]
     
     def to_dict(self):
         return {
             'summoner_data': self.summoner_data.to_dict(),
             'ranked_stats_data_list': [data.to_dict() for data in self.ranked_stats_data_list],
             'champion_stats_data_list': [data.to_dict() for data in self.champion_stats_data_list],
-            'recent_match_data_list': [(match.to_dict(), [participant.to_dict() for participant in participants]) for match, participants in self.recent_match_data_list],
+            'recent_match_data_list': [(match.to_dict(), [participant.to_dict() for participant in participants]) for match, participants in self.match_data_list],
         }
