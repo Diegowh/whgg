@@ -25,9 +25,9 @@ from summoner_profile.utils.dataclasses import (
 
 class DbManager:
     
-    def __init__(self) -> None:
+    def __init__(self, puuid: str) -> None:
         self._summoner_instance = None
-            
+        self._puuid = puuid
             
     @property
     def summoner_instance(self):
@@ -37,15 +37,19 @@ class DbManager:
     def summoner_instance(self, new_value: Summoner):
         if isinstance(new_value, Summoner):
             self._summoner_instance = new_value
+    
+    @property
+    def puuid(self):
+        return self._puuid
         
     
-    def is_puuid_in_database(self, puuid) -> bool:
+    def is_puuid_in_database(self) -> bool:
         
-        return Summoner.objects.filter(puuid=puuid).exists()
+        return Summoner.objects.filter(puuid=self.puuid).exists()
     
-    def last_update(self, puuid) -> int:
+    def last_update(self) -> int:
         
-        return Summoner.objects.get(puuid=puuid).last_update
+        return Summoner.objects.get(puuid=self.puuid).last_update
     
     # Metodos Update
     def update_summoner(self, data: SummonerData):
@@ -227,9 +231,9 @@ class DbManager:
             )
     
     # Fetch Methods
-    def _fetch_summoner_data(self, puuid: str) -> SummonerData:
+    def _fetch_summoner_data(self) -> SummonerData:
         
-        summoner = Summoner.objects.get(puuid=puuid)
+        summoner = Summoner.objects.get(puuid=self.puuid)
         
         return SummonerData(
             puuid=summoner.puuid,
@@ -385,7 +389,7 @@ class DbManager:
         
         
     def fetch_response_data(self) -> ResponseData:
-        ResponseData (
+        return ResponseData (
             summoner_data=self._fetch_summoner_data(),
             ranked_stats_data_list=self._fetch_ranked_stats_data_list(),
             champion_stats_data_list=self._fetch_champion_stats_data_list(),
