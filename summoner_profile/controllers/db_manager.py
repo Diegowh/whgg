@@ -311,8 +311,27 @@ class DbManager:
         
         return champion_stats_data_list
     
+    def _fetch_item_purchase(self, match: Match) -> list[ItemData]:
+        
+        items = match.item_purchase.all()
+        item_purchase: list[ItemData] = []
+        
+        for item in items:
+            ItemData(
+                id=item.id,
+                name=item.name,
+                plaintext=item.plaintext,
+                description=item.description,
+                gold_base=item.gold_base,
+                gold_total=item.gold_total,
+            )
+            item_purchase.append(item)
+            
+        return item_purchase
+    
     def _fetch_match_data_list(self, match_amount: int = 10) -> list[tuple[MatchData, list[ParticipantData]]]:
         
+        #TODO Refactorizar este metodo
         # Obtiene los matches ordenados descendientemente por game_start y toma los primeros (match_amount) matches
         matches = Match.objects.filter(summoner=self.summoner_instance).order_by("-game_start")[:match_amount]
         
@@ -321,20 +340,7 @@ class DbManager:
         for match_ in matches:
             
             # Obtiene los items comprados en este match
-            items = match_.item_purchase.all()
-            item_purchase: list[ItemData] = []
-            
-            for item in items:
-                ItemData(
-                    id=item.id,
-                    name=item.name,
-                    plaintext=item.plaintext,
-                    description=item.description,
-                    gold_base=item.gold_base,
-                    gold_total=item.gold_total,
-                )
-                item_purchase.append(item)
-                
+            item_purchase = self._fetch_item_purchase(match_)
             
             # Obtiene los summoner spells usados en este match
             spells = match_.summoner_spells.all()
