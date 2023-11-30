@@ -346,25 +346,9 @@ class DbManager:
                 
             return summoner_spells
     
-    def _fetch_match_data_list(self, match_amount: int = 10) -> list[tuple[MatchData, list[ParticipantData]]]:
-        
-        #TODO Refactorizar este metodo
-        # Obtiene los matches ordenados descendientemente por game_start y toma los primeros (match_amount) matches
-        matches = Match.objects.filter(summoner=self.summoner_instance).order_by("-game_start")[:match_amount]
-        
-        match_data_list: list[tuple[MatchData, list[ParticipantData]]] = []
-        
-        for match_ in matches:
+    def _fetch_participants(self, match: Match) -> list[ParticipantData]:
             
-            # Obtiene los items comprados en este match
-            item_purchase = self._fetch_item_purchase(match_)
-            
-            # Obtiene los summoner spells usados en este match
-
-            summoner_spells: list[SummonerSpellData] = self._fetch_summoner_spells(match_)
-
-            # Obtiene los participantes de este match mediante la relacion inversa de match.participants
-            participants_query = match_.participants.all()
+            participants_query = match.participants.all()
             participants: list[ParticipantData] = []
             
             for participant in participants_query:
@@ -373,13 +357,32 @@ class DbManager:
                     name=participant.name,
                     champion_name=participant.champion_name,
                     team_id=participant.team_id,
-                    match=match_.id,
+                    match=match.id,
                 )
                 participants.append(participant)
+                
+            return participants
+    def _fetch_match_data_list(self, match_amount: int = 10) -> list[MatchData]:
+        
+        #TODO Refactorizar este metodo
+        # Obtiene los matches ordenados descendientemente por game_start y toma los primeros (match_amount) matches
+        matches = Match.objects.filter(summoner=self.summoner_instance).order_by("-game_start")[:match_amount]
+        
+        match_data_list: list[MatchData] = []
+        
+        for match_ in matches:
+            
+            # Obtiene los items comprados en este match
+            item_purchase = self._fetch_item_purchase(match_)
+            
+            # Obtiene los summoner spells usados en este match
+            summoner_spells = self._fetch_summoner_spells(match_)
+
+            # Obtiene los participantes de este match mediante la relacion inversa de match.participants
+            participants = self._fetch_participants(match_)
             
             match_data_list.append(
-                (
-                    MatchData(
+                MatchData(
                         id=match_.id,
                         game_start=match_.game_start,
                         game_end=match_.game_end,
@@ -398,8 +401,7 @@ class DbManager:
                         team_id=match_.team_id,
                         item_purchase=item_purchase,
                         summoner_spells=summoner_spells,
-                        participants=...
-                    )
+                        participants=participants,
                 )
             )
         
