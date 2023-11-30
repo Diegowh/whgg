@@ -9,4 +9,6 @@ class SummonerProfileView(APIView):
         
         request_manager = RequestManager(summoner_name=summoner_name, server=server)
         response_data = request_manager.get()
-        return Response(response_data.to_dict())
+        
+        response = Response(response_data.to_dict())
+        return response
