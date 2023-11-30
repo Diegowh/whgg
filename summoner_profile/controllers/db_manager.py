@@ -71,7 +71,7 @@ class DbManager:
     def update_ranked_stats(self, data: list[RankedStatsData]):
         
         for ranked_stats in data:
-            defaults: {
+            defaults = {
                 "tier": ranked_stats.tier,
                 "rank": ranked_stats.rank,
                 "league_points": ranked_stats.league_points,
