@@ -85,7 +85,7 @@ class DataManager:
     def get_response_data(self) -> ResponseData:
         
         # Si el puuid existía en la base de datos y no es el momento de actualizar, obtiene los datos de la base de datos directamente
-        if self.db_manager.is_puuid_in_database() and not self.is_time_to_update():
+        if self.db_manager.is_puuid_in_database() and self.is_time_to_update(): # TODO Poner el not cuando termine de hacer pruebas
             print("El puuid ya existia, y no hace falta actualizar")
             response_data = self.db_manager.fetch_response_data()
             return response_data
