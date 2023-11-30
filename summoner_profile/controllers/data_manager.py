@@ -113,7 +113,7 @@ class DataManager:
                 self.db_manager.update_champion_stats()
                 
                 # Construye el objeto ResponseData
-                response_data = self.db_manager.get_response_data()
+                response_data = self.db_manager.fetch_response_data()
             # Si no es el momento de actualizar, obtiene los datos de la base de datos directamente
             else: 
                 pass

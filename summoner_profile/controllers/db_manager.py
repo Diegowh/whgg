@@ -50,6 +50,7 @@ class DbManager:
         
         return Summoner.objects.get(puuid=self.puuid).last_update
     
+    # Metodos Update
     def update(self, data: dict):
         
         if self.puuid:
@@ -244,8 +245,9 @@ class DbManager:
                 id=spell["id"],
                 defaults=spell,
             )
-            
-    def get_summoner_data_from_db(self, puuid: str) -> SummonerData:
+    
+    # Fetch Methods
+    def _fetch_summoner_data(self, puuid: str) -> SummonerData:
         
         summoner = Summoner.objects.get(puuid=puuid)
         
@@ -258,7 +260,7 @@ class DbManager:
             last_update=summoner.last_update,
         )
         
-    def get_ranked_stats_data_list_from_db(self) -> list[RankedStatsData]:
+    def _fetch_ranked_stats_data_list(self) -> list[RankedStatsData]:
             
             ranked_stats = RankedStats.objects.filter(summoner=self.summoner_instance)
             
@@ -279,11 +281,16 @@ class DbManager:
                 )
                 
             return ranked_stats_data_list
-    
-    def get_response_data(self) -> ResponseData:
+        
+        
+    def _fetch_champion_stats_data_list(self, champion_amount: int = 7) -> list[ChampionStatsData]:
+        pass
+        
+    def fetch_response_data(self) -> ResponseData:
         ResponseData (
-            summoner_data=self.get_summoner_data_from_db(),
-            ranked_stats_data_list=self.get_ranked_stats_data_list_from_db(),
+            summoner_data=self._fetch_summoner_data(),
+            ranked_stats_data_list=self._fetch_ranked_stats_data_list(),
+            champion_stats_data_list=self._fetch_champion_stats_data_list(), #TODO Estoy aqui
         )
         
         
