@@ -1,7 +1,3 @@
-from datetime import datetime
-import time
-
-
 from .data_manager import DataManager
 from summoner_profile.utils.dataclasses import RequestData, ResponseData
 
