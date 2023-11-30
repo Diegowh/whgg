@@ -128,9 +128,9 @@ class DataManager:
     
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
-    def _get_summoner_data_from_api(self) -> SummonerData:
+    def _get_summoner_data_from_api(self, summoner_name: str) -> SummonerData:
         response = async_to_sync(self.api_client.get_summoner_by_name)(
-                    summoner_name=self.summoner_name
+                    summoner_name=summoner_name
                     )
         
         summoner_data = SummonerData(
