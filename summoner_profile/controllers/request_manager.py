@@ -9,7 +9,7 @@ from summoner_profile.utils.dataclasses import RequestData, ResponseData
 
 class RequestManager:
 
-    def __init__(self, summoner_name: str, server: str) -> None:
+    def __init__(self, summoner_name: str, server: str) -> None: #TODO Cambiar esto para que obtenga un Riot ID en vez de un Summoner Name
         
         self._summoner_name = summoner_name
         self._server = server
