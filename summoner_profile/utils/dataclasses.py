@@ -118,10 +118,10 @@ class ResponseData:
     champion_stats_data_list: List[ChampionStatsData]
     match_data_list: List[MatchData]
     
-def to_dict(self):
-    return {
-        'summoner_data': self.summoner_data.to_dict(),
-        'ranked_stats_data_list': [data.to_dict() for data in self.ranked_stats_data_list],
-        'champion_stats_data_list': [data.to_dict() for data in self.champion_stats_data_list],
-        'match_data_list': [match.to_dict() for match in self.match_data_list],
-    }
+    def to_dict(self):
+        return {
+            'summoner_data': self.summoner_data.to_dict(),
+            'ranked_stats_data_list': [data.to_dict() for data in self.ranked_stats_data_list],
+            'champion_stats_data_list': [data.to_dict() for data in self.champion_stats_data_list],
+            'match_data_list': [match.to_dict() for match in self.match_data_list],
+        }
