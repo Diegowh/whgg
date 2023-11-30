@@ -44,31 +44,6 @@ class ChampionStatsData:
         return self.__dict__
     
 @dataclass
-class MatchData:
-    id: str
-    game_start: int
-    game_end: int
-    game_duration: int
-    game_mode: str
-    game_type: str
-    champion_played: str
-    win: bool
-    kills: int
-    deaths: int
-    assists: int
-    kda: float
-    minion_kills: int
-    vision_score: int
-    team_position: str
-    team_id: int
-    summoner: str
-    item_purchase: List[int]
-    summoner_spells: List[int]
-
-    def to_dict(self):
-        return self.__dict__
-    
-@dataclass
 class ParticipantData:
     puuid: str
     name: str
@@ -102,6 +77,31 @@ class SummonerSpellData:
     def to_dict(self):
         return self.__dict__
     
+@dataclass
+class MatchData:
+    id: str
+    game_start: int
+    game_end: int
+    game_duration: int
+    game_mode: str
+    game_type: str
+    champion_played: str
+    win: bool
+    kills: int
+    deaths: int
+    assists: int
+    kda: float
+    minion_kills: int
+    vision_score: int
+    team_position: str
+    team_id: int
+    item_purchase: List[ItemData]
+    summoner_spells: List[SummonerSpellData]
+    participants: List[ParticipantData]
+
+    def to_dict(self):
+        return self.__dict__
+    
     
 @dataclass
 class RequestData:
@@ -116,12 +116,12 @@ class ResponseData:
     summoner_data: SummonerData
     ranked_stats_data_list: List[RankedStatsData]
     champion_stats_data_list: List[ChampionStatsData]
-    match_data_list: List[tuple[MatchData, list[ParticipantData]]]
+    match_data_list: List[MatchData]
     
-    def to_dict(self):
-        return {
-            'summoner_data': self.summoner_data.to_dict(),
-            'ranked_stats_data_list': [data.to_dict() for data in self.ranked_stats_data_list],
-            'champion_stats_data_list': [data.to_dict() for data in self.champion_stats_data_list],
-            'recent_match_data_list': [(match.to_dict(), [participant.to_dict() for participant in participants]) for match, participants in self.match_data_list],
-        }
+def to_dict(self):
+    return {
+        'summoner_data': self.summoner_data.to_dict(),
+        'ranked_stats_data_list': [data.to_dict() for data in self.ranked_stats_data_list],
+        'champion_stats_data_list': [data.to_dict() for data in self.champion_stats_data_list],
+        'match_data_list': [match.to_dict() for match in self.match_data_list],
+    }
