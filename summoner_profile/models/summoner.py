@@ -6,4 +6,4 @@ class Summoner(models.Model):
     name = models.CharField(max_length=200)
     icon_id = models.IntegerField()
     summoner_level = models.IntegerField()
-    last_update = models.IntegerField()
+    last_update = models.BigIntegerField()
