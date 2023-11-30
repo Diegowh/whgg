@@ -288,6 +288,27 @@ class DbManager:
         # Obtiene los champion_stats ordenados descendientemente por games jugados y toma los primeros (champion_amount) campeones
         champion_stats = ChampionStats.objects.filter(summoner=self.summoner_instance).order_by("-games")[:champion_amount]
         
+        champion_stats_data_list: list[ChampionStatsData] = []
+        
+        for champion_stats_entry in champion_stats:
+            
+            champion_stats_data_list.append(
+                ChampionStatsData(
+                    name=champion_stats_entry.name,
+                    games=champion_stats_entry.games,
+                    wins=champion_stats_entry.wins,
+                    losses=champion_stats_entry.losses,
+                    winrate=champion_stats_entry.winrate,
+                    kills=champion_stats_entry.kills,
+                    deaths=champion_stats_entry.deaths,
+                    assists=champion_stats_entry.assists,
+                    kda=champion_stats_entry.kda,
+                    minion_kills=champion_stats_entry.minion_kills,
+                )
+            )
+        
+        return champion_stats_data_list
+        
     def fetch_response_data(self) -> ResponseData:
         ResponseData (
             summoner_data=self._fetch_summoner_data(),
