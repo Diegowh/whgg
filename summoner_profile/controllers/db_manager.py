@@ -329,6 +329,23 @@ class DbManager:
             
         return item_purchase
     
+    def _fetch_summoner_spells(self, match: Match) -> list[SummonerSpellData]:
+            
+            spells = match.summoner_spells.all()
+            summoner_spells: list[SummonerSpellData] = []
+            
+            for spell in spells:
+                SummonerSpellData(
+                    id=spell.id,
+                    name=spell.name,
+                    description=spell.description,
+                    image_name=spell.image_name,
+                    sprite_name=spell.sprite_name,
+                )
+                summoner_spells.append(spell)
+                
+            return summoner_spells
+    
     def _fetch_match_data_list(self, match_amount: int = 10) -> list[tuple[MatchData, list[ParticipantData]]]:
         
         #TODO Refactorizar este metodo
@@ -343,20 +360,9 @@ class DbManager:
             item_purchase = self._fetch_item_purchase(match_)
             
             # Obtiene los summoner spells usados en este match
-            spells = match_.summoner_spells.all()
-            summoner_spells: list[SummonerSpellData] = []
-            
-            for summ_spell in summoner_spells:
-                SummonerSpellData(
-                    id=summ_spell.id,
-                    name=summ_spell.name,
-                    description=summ_spell.description,
-                    image_name=summ_spell.image_name,
-                    sprite_name=summ_spell.sprite_name,
-                )
-                summoner_spells.append(summ_spell)
-                
-            
+
+            summoner_spells: list[SummonerSpellData] = self._fetch_summoner_spells(match_)
+
             # Obtiene los participantes de este match mediante la relacion inversa de match.participants
             participants_query = match_.participants.all()
             participants: list[ParticipantData] = []
