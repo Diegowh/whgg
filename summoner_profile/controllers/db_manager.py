@@ -18,6 +18,8 @@ from summoner_profile.utils.dataclasses import (
     MatchData,
     ResponseData,
     ChampionStatsData,
+    ItemData,
+    SummonerSpellData,
 )
 
 
@@ -308,10 +310,92 @@ class DbManager:
             )
         
         return champion_stats_data_list
+    
+    def _fetch_match_data_list(self, match_amount: int = 10) -> list[tuple[MatchData, list[ParticipantData]]]:
+        
+        # Obtiene los matches ordenados descendientemente por game_start y toma los primeros (match_amount) matches
+        matches = Match.objects.filter(summoner=self.summoner_instance).order_by("-game_start")[:match_amount]
+        
+        match_data_list: list[tuple[MatchData, list[ParticipantData]]] = []
+        
+        for match_ in matches:
+            
+            # Obtiene los items comprados en este match
+            items = match_.item_purchase.all()
+            item_purchase: list[ItemData] = []
+            
+            for item in items:
+                ItemData(
+                    id=item.id,
+                    name=item.name,
+                    plaintext=item.plaintext,
+                    description=item.description,
+                    gold_base=item.gold_base,
+                    gold_total=item.gold_total,
+                )
+                item_purchase.append(item)
+                
+            
+            # Obtiene los summoner spells usados en este match
+            spells = match_.summoner_spells.all()
+            summoner_spells: list[SummonerSpellData] = []
+            
+            for summ_spell in summoner_spells:
+                SummonerSpellData(
+                    id=summ_spell.id,
+                    name=summ_spell.name,
+                    description=summ_spell.description,
+                    image_name=summ_spell.image_name,
+                    sprite_name=summ_spell.sprite_name,
+                )
+                summoner_spells.append(summ_spell)
+                
+            
+            # Obtiene los participantes de este match mediante la relacion inversa de match.participants
+            participants_query = match_.participants.all()
+            participants: list[ParticipantData] = []
+            
+            for participant in participants_query:
+                ParticipantData(
+                    puuid=participant.puuid,
+                    name=participant.name,
+                    champion_name=participant.champion_name,
+                    team_id=participant.team_id,
+                    match=match_.id,
+                )
+                participants.append(participant)
+            
+            match_data_list.append(
+                (
+                    MatchData(
+                        id=match_.id,
+                        game_start=match_.game_start,
+                        game_end=match_.game_end,
+                        game_duration=match_.game_duration,
+                        game_mode=match_.game_mode,
+                        game_type=match_.game_type,
+                        champion_played=match_.champion_played,
+                        win=match_.win,
+                        kills=match_.kills,
+                        deaths=match_.deaths,
+                        assists=match_.assists,
+                        kda=match_.kda,
+                        minion_kills=match_.minion_kills,
+                        vision_score=match_.vision_score,
+                        team_position=match_.team_position,
+                        team_id=match_.team_id,
+                        item_purchase=item_purchase,
+                        summoner_spells=summoner_spells,
+                        participants=...
+                    )
+                )
+            )
+        
         
     def fetch_response_data(self) -> ResponseData:
         ResponseData (
             summoner_data=self._fetch_summoner_data(),
             ranked_stats_data_list=self._fetch_ranked_stats_data_list(),
-            champion_stats_data_list=self._fetch_champion_stats_data_list(), #TODO Estoy aqui
+            champion_stats_data_list=self._fetch_champion_stats_data_list(),
+            match_data_list=self._fetch_match_data_list(),
         )
