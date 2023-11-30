@@ -33,13 +33,14 @@ class DataManager:
         self._request = request
         
         self._api_client = ApiClient(server=self.request.server, debug=True)
-        self._db_manager = DbManager()
         
         # Pide los datos al inicializar la clase para obtener el puuid y el id
         self._summoner_data: SummonerData = self._get_summoner_data_from_api(summoner_name=self.summoner_name)
         
         self._puuid = self._summoner_data.puuid
         self._id = self._summoner_data.id 
+        
+        self._db_manager = DbManager()
         
         self._match_and_participant_data = ()
         self._matches_data = []
@@ -121,7 +122,7 @@ class DataManager:
         Comprueba si ha pasado el tiempo suficiente desde la ultima actualizacion de la base de datos
         '''
         now = int(time.time())
-        last_update = self.db_manager.last_update()
+        last_update = self.db_manager.last_update(puuid=self.puuid)
         
         return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
     

@@ -26,11 +26,6 @@ from summoner_profile.utils.dataclasses import (
 class DbManager:
     
     def __init__(self) -> None:
-        
-        
-        self.puuid = self.data_manager.get_summoner_puuid()
-        self.data = {}
-        
         self._summoner_instance = None
             
             
@@ -44,32 +39,15 @@ class DbManager:
             self._summoner_instance = new_value
         
     
-    def is_puuid_in_database(self) -> bool:
+    def is_puuid_in_database(self, puuid) -> bool:
         
-        return Summoner.objects.filter(puuid=self.puuid).exists()
+        return Summoner.objects.filter(puuid=puuid).exists()
     
-    def last_update(self) -> int:
+    def last_update(self, puuid) -> int:
         
-        return Summoner.objects.get(puuid=self.puuid).last_update
+        return Summoner.objects.get(puuid=puuid).last_update
     
     # Metodos Update
-    def update(self, data: dict):
-        
-        if self.puuid:
-            
-            # Set given data to self.data
-            self.data = data
-            
-            # Update the database
-            self._update_summoner()
-            self._update_ranked_stats()
-            self._update_summoner_matches()
-            self._update_champion_stats()
-        
-        else:
-            raise Exception("Summoner PuuID was not given. Are you sure you want to use this method?")
-            
-    
     def update_summoner(self, data: SummonerData):
         
         defaults = {
