@@ -35,7 +35,7 @@ class DataManager:
         self._api_client = ApiClient(server=self.request.server, debug=True)
         
         # Pide los datos al inicializar la clase para obtener el puuid y el id
-        self._summoner_data: SummonerData = self._get_summoner_data_from_api(summoner_name=self.summoner_name)
+        self._summoner_data: SummonerData = self._get_summoner_data_from_api(summoner_name=self.request.summoner_name)
         
         self._puuid = self._summoner_data.puuid
         self._id = self._summoner_data.id 
