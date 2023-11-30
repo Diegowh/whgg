@@ -292,14 +292,3 @@ class DbManager:
             ranked_stats_data_list=self._fetch_ranked_stats_data_list(),
             champion_stats_data_list=self._fetch_champion_stats_data_list(), #TODO Estoy aqui
         )
-        
-        
-    # Metodos para pedir a DataManager que obtenga los datos de la API de Riot
-    
-    def fetch_summoner_data_from_api(self) -> SummonerData:
-        
-        return self.data_manager.get_summoner_data(summoner_name=self.request.summoner_name
-                    )
-    def fetch_ranked_stats_data_from_api(self) -> list:
-        
-        return self.data_manager.get_ranked_stats_data()
