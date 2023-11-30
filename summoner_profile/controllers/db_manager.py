@@ -284,7 +284,9 @@ class DbManager:
         
         
     def _fetch_champion_stats_data_list(self, champion_amount: int = 7) -> list[ChampionStatsData]:
-        pass
+        
+        # Obtiene los champion_stats ordenados descendientemente por games jugados y toma los primeros (champion_amount) campeones
+        champion_stats = ChampionStats.objects.filter(summoner=self.summoner_instance).order_by("-games")[:champion_amount]
         
     def fetch_response_data(self) -> ResponseData:
         ResponseData (
