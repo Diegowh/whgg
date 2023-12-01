@@ -56,4 +56,6 @@ def hours_to_seconds(hours):
 
 
 def calculate_kda(kills, deaths, assists):
+    if deaths == 0:
+        deaths = 1 # Para evitar que se divida por 0 y siga devolviendo float
     return round((kills + assists / deaths), 2)
