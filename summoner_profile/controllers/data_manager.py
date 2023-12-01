@@ -250,10 +250,7 @@ class DataManager:
             assists=participant["assists"],
         )
         
-        match_data.minion_kills = sum(
-            participant["totalMinionsKilled"],
-            participant["neutralMinionsKilled "],
-        )
+        match_data.minion_kills = participant["totalMinionsKilled"] + participant["neutralMinionsKilled"]
         
         match_data.vision_score = participant["visionScore"]
         match_data.team_position = participant["teamPosition"]
