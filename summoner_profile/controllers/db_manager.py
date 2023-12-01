@@ -13,7 +13,6 @@ from summoner_profile.utils.utils import calculate_kda
 from summoner_profile.utils.dataclasses import (
     ParticipantData,
     RankedStatsData,
-    RequestData,
     SummonerData,
     MatchData,
     ResponseData,
