@@ -1,5 +1,5 @@
 from typing import List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class SummonerData:
@@ -85,19 +85,19 @@ class MatchData:
     game_duration: int
     game_mode: str
     game_type: str
-    champion_played: str
-    win: bool
-    kills: int
-    deaths: int
-    assists: int
-    kda: float
-    minion_kills: int
-    vision_score: int
-    team_position: str
-    team_id: int
-    item_purchase: List[ItemData]
-    summoner_spells: List[SummonerSpellData]
-    participants: List[ParticipantData]
+    champion_played: str = None
+    win: bool = None
+    kills: int = None
+    deaths: int = None
+    assists: int = None
+    kda: float = None
+    minion_kills: int = None
+    vision_score: int = None
+    team_position: str = None
+    team_id: int = None
+    item_purchase: List[ItemData] = field(default_factory=list)
+    summoner_spells: List[SummonerSpellData] = field(default_factory=list)
+    participants: List[ParticipantData] = field(default_factory=list)
 
     def to_dict(self):
         return self.__dict__
