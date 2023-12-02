@@ -2,9 +2,9 @@ from django.db import models
 
 class Match(models.Model):
     id = models.CharField(max_length=200, primary_key=True, unique=True)
-    game_start = models.IntegerField()
-    game_end = models.IntegerField()
-    game_duration = models.IntegerField()
+    game_start = models.BigIntegerField()
+    game_end = models.BigIntegerField()
+    game_duration = models.BigIntegerField()
     game_mode = models.CharField(max_length=100)
     game_type = models.CharField(max_length=100)
     champion_played = models.CharField(max_length=200)
