@@ -1,8 +1,8 @@
 from datetime import datetime
 import time
 
-from .api_client import ApiClient
 from .db_manager import DbManager
+from .api_controller import ApiController
 
 from summoner_profile.utils.utils import (
     hours_to_seconds,
@@ -31,7 +31,7 @@ class DataManager:
         
         self._request = request
         
-        self._api_client = ApiClient(server=self.request.server, debug=True)
+        self._api_controller = ApiController(server=self.request.server, debug=True)
         
         # Pide los datos al inicializar la clase para obtener el puuid y el id
         self._summoner_data: SummonerData = self._get_summoner_data_from_api(summoner_name=self.request.summoner_name)
@@ -41,7 +41,6 @@ class DataManager:
         
         self._db_manager = DbManager(puuid=self.puuid)
         
-        self._match_and_participant_data = ()
         self._matches_data = []
         self._participants_data = []
     
@@ -50,8 +49,8 @@ class DataManager:
         return self._request
     
     @property
-    def api_client(self):
-        return self._api_client
+    def api_controller(self):
+        return self._api_controller
     
     @property
     def db_manager(self):
@@ -71,15 +70,11 @@ class DataManager:
     
     @property
     def matches_data(self):
-        if not self._match_and_participant_data:
-            self._get_match_and_participant_data_from_api()
-        return self._match_and_participant_data[0]
+        return self._matches_data
     
     @property
     def participants_data(self):
-        if not self._match_and_participant_data:
-            self._get_match_and_participant_data_from_api()
-        return self._match_and_participant_data[1]
+        return self._participants_data
     
     
     def get_response_data(self) -> ResponseData:
@@ -129,7 +124,7 @@ class DataManager:
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
     def _get_summoner_data_from_api(self, summoner_name: str) -> SummonerData:
-        response = async_to_sync(self.api_client.get_summoner_by_name)(
+        response = self.api_controller.get_summoner_by_name(
                     summoner_name=summoner_name
                     )
         
@@ -145,7 +140,7 @@ class DataManager:
                 
                 
     def _get_ranked_stats_list_from_api(self) -> list[RankedStatsData]:
-        response: list = async_to_sync(self.api_client.get_league_by_summoner)(
+        response: list = self.api_controller.get_league_by_summoner(
                 summoner_id=self.id
                 )
         
@@ -167,22 +162,27 @@ class DataManager:
         
         return ranked_stats_list
         
-    def _get_match_and_participant_data_from_api(self) -> tuple[list[MatchData], list[ParticipantData]]:
+    def _get_match_and_participant_data_from_api(self) -> None:
         
         all_match_data: list[MatchData] = []
         all_participant_data: list[ParticipantData] = []
         
+        matchdatas_obtenidos = 0
+        matchdatas_filtrados = 0
         for match_id in self._all_match_ids():
-            
-            match_data_response = async_to_sync(self.api_client.get_match)(match_id=match_id)
-            
+            match_data_response = self.api_controller.get_match(match_id=match_id)
+            matchdatas_obtenidos += 1
+            print(f"Matchdatas obtenidos: {matchdatas_obtenidos}")
+
             match_data, participant_data = self.filter_match_response(match_data_response=match_data_response)
+            matchdatas_filtrados += 1
+            print(f"Matchdatas filtrados: {matchdatas_filtrados}")
 
             all_match_data.append(match_data)
             all_participant_data += participant_data
             
-        
-        self._match_and_participant_data = all_match_data, all_participant_data
+        self._matches_data = all_match_data
+        self._participants_data = all_participant_data
             
 
     def _all_match_ids(self) -> list[str]:
@@ -201,7 +201,7 @@ class DataManager:
             params["start"] = start_index
             params["count"] = int(min(REQUEST_CAP, MAX_MATCHES - start_index)) # Para evitar pedir más partidas de las que se pueden
             
-            matchlist_response: list = async_to_sync(self.api_client.get_matchlist)(
+            matchlist_response: list = self.api_controller.get_matchlist(
                 puuid=self.puuid,
                 params= params,
                 )
@@ -223,6 +223,7 @@ class DataManager:
         )
         
     def _create_match_data(self, match_data_response) -> MatchData:
+
         return MatchData(
             id = match_data_response["metadata"]["matchId"],
             game_start = match_data_response["info"]["gameStartTimestamp"],
