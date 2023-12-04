@@ -6,11 +6,11 @@ class ChampionStats(models.Model):
     wins = models.IntegerField()
     losses = models.IntegerField()
     winrate = models.IntegerField()
-    kills = models.FloatField()
-    deaths = models.FloatField()
-    assists = models.FloatField()
-    kda = models.FloatField()
-    minion_kills = models.IntegerField()
+    kills = models.DecimalField(max_digits= 5, decimal_places=1)
+    deaths = models.DecimalField(max_digits= 5, decimal_places=1)
+    assists = models.DecimalField(max_digits= 5, decimal_places=1)
+    kda = models.DecimalField(max_digits=5, decimal_places=2)
+    minion_kills = models.DecimalField(max_digits=5, decimal_places=1)
     
     # Foreign Keys
     summoner = models.ForeignKey('Summoner', on_delete=models.CASCADE, related_name='champion_stats')
