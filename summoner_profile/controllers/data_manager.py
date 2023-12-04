@@ -7,6 +7,7 @@ from .api_controller import ApiController
 from summoner_profile.utils.utils import (
     hours_to_seconds,
     calculate_kda,
+    league_winrate,
 )
 from asgiref.sync import async_to_sync
 from summoner_profile.utils.dataclasses import (
@@ -155,7 +156,7 @@ class DataManager:
                 league_points=queue["leaguePoints"],
                 wins=queue["wins"],
                 losses=queue["losses"],
-                winrate=queue["wins"] / (queue["wins"] + queue["losses"]), # TODO: Crea una función para calcular el winrate
+                winrate=league_winrate(wins=queue["wins"], losses=queue["losses"]),
             )
             ranked_stats_list.append(ranked_stats_data)
         

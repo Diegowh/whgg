@@ -59,3 +59,9 @@ def calculate_kda(kills, deaths, assists):
     if deaths == 0:
         deaths = 1 # Para evitar que se divida por 0 y siga devolviendo float
     return round((kills + assists / deaths), 2)
+
+def league_winrate(wins, losses) -> int:
+    total_games = wins + losses
+    if total_games == 0:
+        return 0
+    return int(round((wins / total_games) * 100))
