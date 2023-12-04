@@ -251,8 +251,7 @@ class DbManager:
             
             for ranked_stats_entry in ranked_stats:
                 
-                ranked_stats_data_list.append(
-                    RankedStatsData(
+                ranked_stats_data = RankedStatsData(
                         queue_type=ranked_stats_entry.queue_type,
                         tier=ranked_stats_entry.tier,
                         rank=ranked_stats_entry.rank,
@@ -261,7 +260,8 @@ class DbManager:
                         losses=ranked_stats_entry.losses,
                         winrate=ranked_stats_entry.winrate,
                     )
-                )
+                
+                ranked_stats_data_list.append(ranked_stats_data)
                 
             return ranked_stats_data_list
         
@@ -275,8 +275,7 @@ class DbManager:
         
         for champion_stats_entry in champion_stats:
             
-            champion_stats_data_list.append(
-                ChampionStatsData(
+            champ_stats_data = ChampionStatsData(
                     name=champion_stats_entry.name,
                     games=champion_stats_entry.games,
                     wins=champion_stats_entry.wins,
@@ -288,7 +287,7 @@ class DbManager:
                     kda=champion_stats_entry.kda,
                     minion_kills=champion_stats_entry.minion_kills,
                 )
-            )
+            champion_stats_data_list.append(champ_stats_data)
         
         return champion_stats_data_list
     
@@ -298,7 +297,7 @@ class DbManager:
         item_purchase: list[ItemData] = []
         
         for item in items:
-            ItemData(
+            item_data = ItemData(
                 id=item.id,
                 name=item.name,
                 plaintext=item.plaintext,
@@ -306,7 +305,7 @@ class DbManager:
                 gold_base=item.gold_base,
                 gold_total=item.gold_total,
             )
-            item_purchase.append(item)
+            item_purchase.append(item_data)
             
         return item_purchase
     
@@ -316,14 +315,14 @@ class DbManager:
             summoner_spells: list[SummonerSpellData] = []
             
             for spell in spells:
-                SummonerSpellData(
+                summ_spell_data = SummonerSpellData(
                     id=spell.id,
                     name=spell.name,
                     description=spell.description,
                     image_name=spell.image_name,
                     sprite_name=spell.sprite_name,
                 )
-                summoner_spells.append(spell)
+                summoner_spells.append(summ_spell_data)
                 
             return summoner_spells
     
@@ -333,16 +332,17 @@ class DbManager:
             participants: list[ParticipantData] = []
             
             for participant in participants_query:
-                ParticipantData(
+                participant_data = ParticipantData(
                     puuid=participant.puuid,
                     name=participant.name,
                     champion_name=participant.champion_name,
                     team_id=participant.team_id,
                     match=match.id,
                 )
-                participants.append(participant)
+                participants.append(participant_data)
                 
             return participants
+        
     def _fetch_match_data_list(self, match_amount: int = 10) -> list[MatchData]:
         
         #TODO Refactorizar este metodo
@@ -362,29 +362,29 @@ class DbManager:
             # Obtiene los participantes de este match mediante la relacion inversa de match.participants
             participants = self._fetch_participants(match_)
             
-            match_data_list.append(
-                MatchData(
-                        id=match_.id,
-                        game_start=match_.game_start,
-                        game_end=match_.game_end,
-                        game_duration=match_.game_duration,
-                        game_mode=match_.game_mode,
-                        game_type=match_.game_type,
-                        champion_played=match_.champion_played,
-                        win=match_.win,
-                        kills=match_.kills,
-                        deaths=match_.deaths,
-                        assists=match_.assists,
-                        kda=match_.kda,
-                        minion_kills=match_.minion_kills,
-                        vision_score=match_.vision_score,
-                        team_position=match_.team_position,
-                        team_id=match_.team_id,
-                        item_purchase=item_purchase,
-                        summoner_spells=summoner_spells,
-                        participants=participants,
+            match_data = MatchData(
+                id=match_.id,
+                game_start=match_.game_start,
+                game_end=match_.game_end,
+                game_duration=match_.game_duration,
+                game_mode=match_.game_mode,
+                game_type=match_.game_type,
+                champion_played=match_.champion_played,
+                win=match_.win,
+                kills=match_.kills,
+                deaths=match_.deaths,
+                assists=match_.assists,
+                kda=match_.kda,
+                minion_kills=match_.minion_kills,
+                vision_score=match_.vision_score,
+                team_position=match_.team_position,
+                team_id=match_.team_id,
+                item_purchase=item_purchase,
+                summoner_spells=summoner_spells,
+                participants=participants,
                 )
-            )
+            match_data_list.append(match_data)
+            
         return match_data_list
         
         
