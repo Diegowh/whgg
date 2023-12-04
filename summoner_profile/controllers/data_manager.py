@@ -156,7 +156,6 @@ class DataManager:
                 wins=queue["wins"],
                 losses=queue["losses"],
                 winrate=queue["wins"] / (queue["wins"] + queue["losses"]), # TODO: Crea una función para calcular el winrate
-                summoner=self.puuid
             )
             ranked_stats_list.append(ranked_stats_data)
         
