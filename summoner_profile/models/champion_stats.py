@@ -6,9 +6,9 @@ class ChampionStats(models.Model):
     wins = models.IntegerField()
     losses = models.IntegerField()
     winrate = models.IntegerField()
-    kills = models.IntegerField()
-    deaths = models.IntegerField()
-    assists = models.IntegerField()
+    kills = models.FloatField()
+    deaths = models.FloatField()
+    assists = models.FloatField()
     kda = models.FloatField()
     minion_kills = models.IntegerField()
     
