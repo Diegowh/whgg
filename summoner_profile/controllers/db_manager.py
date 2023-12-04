@@ -385,6 +385,8 @@ class DbManager:
                         participants=participants,
                 )
             )
+        return match_data_list
+        
         
         
     def fetch_response_data(self) -> ResponseData:
