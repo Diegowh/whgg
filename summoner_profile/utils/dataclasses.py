@@ -22,7 +22,6 @@ class RankedStatsData:
     wins: int
     losses: int
     winrate: int
-    summoner: str
     
     def to_dict(self):
         return self.__dict__
