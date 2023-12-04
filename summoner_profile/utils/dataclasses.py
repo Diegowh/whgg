@@ -99,8 +99,27 @@ class MatchData:
     participants: List[ParticipantData] = field(default_factory=list)
 
     def to_dict(self):
-        return self.__dict__
-    
+        return {
+            'id': self.id,
+            'game_start': self.game_start,
+            'game_end': self.game_end,
+            'game_duration': self.game_duration,
+            'game_mode': self.game_mode,
+            'game_type': self.game_type,
+            'champion_played': self.champion_played,
+            'win': self.win,
+            'kills': self.kills,
+            'deaths': self.deaths,
+            'assists': self.assists,
+            'kda': self.kda,
+            'minion_kills': self.minion_kills,
+            'vision_score': self.vision_score,
+            'team_position': self.team_position,
+            'team_id': self.team_id,
+            'item_purchase': [item.to_dict() for item in self.item_purchase],
+            'summoner_spells': [spell.to_dict() for spell in self.summoner_spells],
+            'participants': [participant.to_dict() for participant in self.participants],
+        }
     
 @dataclass
 class RequestData:
