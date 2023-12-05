@@ -24,7 +24,7 @@ from summoner_profile.utils.dataclasses import (
 
 class DbManager:
     
-    def __init__(self, puuid: str) -> None:
+    def __init__(self, puuid: str = None) -> None:
         self._summoner_instance = None
         self._puuid = puuid
             
@@ -115,7 +115,7 @@ class DbManager:
             match.item_purchase.set(items)
             
             # Obtiene los objetos Participant para los participantes de este match
-            summoner_spells = SummonerSpell.objects.filter(id__in=match_data.summoner_spells)
+            summoner_spells = SummonerSpell.objects.filter(key__in=match_data.summoner_spells)
             
             #  Agrego los summoner spells al match
             match.summoner_spells.set(summoner_spells)
@@ -137,77 +137,34 @@ class DbManager:
             Participant.objects.update_or_create(puuid=participant_data.puuid, match=match_instance, defaults=defaults)
             
             
-    def _update_champion_stats(self):
-        
-        all_champion_stats = self.data["champion_stats"]
-        
-        for champion_stats_entry in all_champion_stats:
-            
-            champion_stats_id = champion_stats_entry["id"]
-            
-            defaults = {
-                "id": champion_stats_id,
-                "name": champion_stats_entry["name"],
-                "games": champion_stats_entry["games"],
-                "wins": champion_stats_entry["wins"],
-                "losses": champion_stats_entry["losses"],
-                "winrate": champion_stats_entry["winrate"],
-                "kills": champion_stats_entry["kills"],
-                "deaths": champion_stats_entry["deaths"],
-                "assists": champion_stats_entry["assists"],
-                "kda": champion_stats_entry["kda"],
-                "minion_kills": champion_stats_entry["minion_kills"],
-                "summoner": self.summoner_instance
-            }
-            
-            ChampionStats.objects.update_or_create(id=champion_stats_id, defaults=defaults)
             
     def update_champion_stats(self):
-            
-            # Obtiene los matches del summoner
-            matches = Match.objects.filter(summoner=self.summoner_instance)
-            
-            for match_ in matches:
-                
-                # Obtiene el nombre del campeon jugado en ese match
-                champion_name = match_.champion_played
-                
-                # Busca una entrada existente de ChampionStats con ese nombre de campeon y summoner
-                champion_stats, created = ChampionStats.objects.get_or_create(
-                    name=champion_name,
-                    summoner=self.summoner_instance,
-                    defaults = {
-                        "games": 1,
-                        "wins": 1 if match_.win else 0,
-                        "losses": 1 if not match_.win else 0,
-                        "winrate": 100 if match_.win else 0,
-                        "kills": match_.kills,
-                        "deaths": match_.deaths,
-                        "assists": match_.assists,
-                        "kda": calculate_kda(match_.kills, match_.deaths, match_.assists),
-                        "minion_kills": match_.minion_kills,
-                    }
-                )
-                
-                # Si existe, actualiza sus estadisticas
-                if not created:
-                    
-                    self._update_stats(champion_stats, match_)
-                    
-    def _update_stats(self, champion_stats: ChampionStats, match: Match):
+        # Obtiene los matches del summoner
+        matches = Match.objects.filter(summoner=self.summoner_instance)
         
-        # Actualiza las estadisticas del campeon
-        champion_stats.games += 1
-        champion_stats.wins += 1 if match.win else 0
-        champion_stats.losses += 1 if not match.win else 0
-        champion_stats.winrate = int((champion_stats.wins / champion_stats.games) * 100)
-        champion_stats.kills += match.kills
-        champion_stats.deaths += match.deaths
-        champion_stats.assists += match.assists
-        champion_stats.kda = calculate_kda(champion_stats.kills, champion_stats.deaths, champion_stats.assists)
-        champion_stats.minion_kills += match.minion_kills
-        
-        champion_stats.save()
+        for match in matches:
+            # Obtiene el nombre del campeon jugado en ese match
+            champion_name = match.champion_played
+
+            # Busca una entrada existente de ChampionStats con ese nombre de campeon y summoner
+            champion_stats, created = ChampionStats.objects.get_or_create(
+                name=champion_name,
+                summoner=self.summoner_instance,
+            )
+
+            # Actualiza las estadisticas del campeon para este match
+            champion_stats.games += 1
+            champion_stats.wins += 1 if match.win else 0
+            champion_stats.losses += 1 if not match.win else 0
+            champion_stats.kills = round((champion_stats.kills * (champion_stats.games - 1) + match.kills) / champion_stats.games, 1)
+            champion_stats.deaths = round((champion_stats.deaths * (champion_stats.games - 1) + match.deaths) / champion_stats.games, 1)
+            champion_stats.assists = round((champion_stats.assists * (champion_stats.games - 1) + match.assists) / champion_stats.games, 1)
+            champion_stats.kda = round(calculate_kda(champion_stats.kills, champion_stats.deaths, champion_stats.assists), 2)
+            champion_stats.minion_kills = round((champion_stats.minion_kills * (champion_stats.games - 1) + match.minion_kills) / champion_stats.games, 1)
+            champion_stats.winrate = int((champion_stats.wins / champion_stats.games) * 100)
+
+            champion_stats.save()
+            
             
     # Periodic Updates
     def update_items(self, items: list):
@@ -318,6 +275,7 @@ class DbManager:
                 summ_spell_data = SummonerSpellData(
                     id=spell.id,
                     name=spell.name,
+                    key=spell.key,
                     description=spell.description,
                     image_name=spell.image_name,
                     sprite_name=spell.sprite_name,
@@ -329,6 +287,7 @@ class DbManager:
     def _fetch_participants(self, match: Match) -> list[ParticipantData]:
             
             participants_query = match.participants.all()
+            
             participants: list[ParticipantData] = []
             
             for participant in participants_query:
