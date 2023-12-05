@@ -15,21 +15,20 @@ class SummonerSpellsManager(BaseManager):
         Filters the desired data from the given json to return it as a list
         '''
         summ_spells = []
+        data = json["data"]
         
-        if "data" in json:
+        for spell_id, spell_info in data.items():
             
-            data = json["data"]
+            spell = {
+                "id": spell_id,
+                "name": spell_info["name"],
+                "key": spell_info["key"],
+                "description": spell_info["description"],
+                "image_name": spell_info["image"]["full"],
+                "sprite_name": spell_info["image"]["sprite"],
+            }
             
-            for spell_id, spell_info in data.items():
-                
-                spell = {
-                    "id": int(spell_id),
-                    "name": spell_info["name"],
-                    "description": spell_info["description"],
-                    "image_name": spell_info["image"]["full"],
-                    "sprite_name": spell_info["image"]["sprite"],
-                }
-                
-                summ_spells.append(spell)
-                
-            self._data = summ_spells
+            summ_spells.append(spell)
+            
+        self._data = summ_spells
+        print(self._data[0])
