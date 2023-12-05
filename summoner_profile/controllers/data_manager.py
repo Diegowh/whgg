@@ -81,7 +81,7 @@ class DataManager:
     def get_response_data(self) -> ResponseData:
         
         # Si el puuid existía en la base de datos y no es el momento de actualizar, obtiene los datos de la base de datos directamente
-        if self.db_manager.is_puuid_in_database() and self.is_time_to_update(): # TODO Poner el not cuando termine de hacer pruebas
+        if self.db_manager.is_puuid_in_database() and not self.is_time_to_update():
             print("El puuid ya existia, y no hace falta actualizar")
             response_data = self.db_manager.fetch_response_data()
             return response_data
@@ -167,13 +167,10 @@ class DataManager:
         all_match_data: list[MatchData] = []
         all_participant_data: list[ParticipantData] = []
         
-        matchdatas_filtrados = 0 #TODO Borrar esto y el print cuando termine de hacer pruebas
         for match_id in self._all_match_ids():
             match_data_response = self.api_controller.get_match(match_id=match_id)
 
             match_data, participant_data = self.filter_match_response(match_data_response=match_data_response)
-            matchdatas_filtrados += 1
-            print(f"Matchdatas filtrados: {matchdatas_filtrados}")
 
             all_match_data.append(match_data)
             all_participant_data += participant_data

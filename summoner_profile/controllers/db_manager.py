@@ -303,8 +303,6 @@ class DbManager:
             return participants
         
     def _fetch_match_data_list(self, match_amount: int = 10) -> list[MatchData]:
-        
-        #TODO Refactorizar este metodo
         # Obtiene los matches ordenados descendientemente por game_start y toma los primeros (match_amount) matches
         matches = Match.objects.filter(summoner=self.summoner_instance).order_by("-game_start")[:match_amount]
         
