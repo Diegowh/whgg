@@ -167,12 +167,9 @@ class DataManager:
         all_match_data: list[MatchData] = []
         all_participant_data: list[ParticipantData] = []
         
-        matchdatas_obtenidos = 0
-        matchdatas_filtrados = 0
+        matchdatas_filtrados = 0 #TODO Borrar esto y el print cuando termine de hacer pruebas
         for match_id in self._all_match_ids():
             match_data_response = self.api_controller.get_match(match_id=match_id)
-            matchdatas_obtenidos += 1
-            print(f"Matchdatas obtenidos: {matchdatas_obtenidos}")
 
             match_data, participant_data = self.filter_match_response(match_data_response=match_data_response)
             matchdatas_filtrados += 1
