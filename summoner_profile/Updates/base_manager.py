@@ -14,22 +14,21 @@ class BaseManager(ABC):
         return self._data
     
     @abstractmethod
-    def _filter(self, json: dict) -> None:
+    def _filter(self, json: dict):
         pass
         
     
-    def _fetch(self):
+    def fetch(self):
         try:
             response = requests.get(self.url)
             data_json = response.json()
         
             if isinstance(data_json, dict) and len(data_json) > 0:
+                print("Data fetched successfully")
                 self._filter(data_json)
+                
+                return self.data
                 
         except Exception as e:
             print(e)
             return None
-    
-    def is_updated(self) -> bool:
-        self._fetch()
-        return True
