@@ -15,22 +15,19 @@ class ItemsManager(BaseManager):
         Filters the desired data from the given json to return it as a list
         '''
         items = []
+        items_data = json['data']
         
-        if 'data' in json:
-            items_data: dict = json['data']
+        for item_id, item_info in items_data.items():
             
-            for item_id, item_info in items_data.items():
-                
-                item = {
-                    'id': int(item_id),
-                    'name': item_info['name'],
-                    'plaintext': item_info['plaintext'],
-                    'description': item_info['description'],
-                    'gold_base': item_info['gold']['base'],
-                    'gold_total': item_info['gold']['total'],
-                }
+            item = {
+                'id': int(item_id),
+                'name': item_info['name'],
+                'plaintext': item_info['plaintext'],
+                'description': item_info['description'],
+                'gold_base': item_info['gold']['base'],
+                'gold_total': item_info['gold']['total'],
+            }
 
-                items.append(item)
-        
-            self._data = items
+            items.append(item)
     
+        self._data = items
