@@ -67,8 +67,9 @@ class ItemData:
     
 @dataclass
 class SummonerSpellData:
-    id: int
+    id: str
     name: str
+    key: int
     description: str
     image_name: str
     sprite_name: str
