@@ -5,12 +5,13 @@ from summoner_profile.utils.dataclasses import RequestData, ResponseData
 
 class RequestManager:
 
-    def __init__(self, summoner_name: str, server: str) -> None: #TODO Cambiar esto para que obtenga un Riot ID en vez de un Summoner Name
+    def __init__(self, game_name: str, tagline: str, server: str) -> None:
         
-        self._summoner_name = summoner_name
+        self._game_name = game_name
+        self._tagline = tagline
         self._server = server
         
-        self._request_data: RequestData = RequestData(summoner_name=self.summoner_name, server=self.server)
+        self._request_data: RequestData = RequestData(game_name=self.game_name, tagline=self.tagline, server=self.server)
         
         
         # Inicializa el DataManager
@@ -18,8 +19,12 @@ class RequestManager:
         
     # Properties
     @property
-    def summoner_name(self):
-        return self._summoner_name
+    def game_name(self):
+        return self._game_name
+    
+    @property
+    def tagline(self):
+        return self._tagline
     
     @property
     def server(self):

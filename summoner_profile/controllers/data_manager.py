@@ -35,7 +35,7 @@ class DataManager:
         self._api_controller = ApiController(server=self.request.server, debug=True)
         
         # Pide los datos al inicializar la clase para obtener el puuid y el id
-        self._summoner_data: SummonerData = self._get_summoner_data_from_api(summoner_name=self.request.summoner_name)
+        self._summoner_data: SummonerData = self._get_summoner_data_from_api(game_name=self.request.game_name, tagline=self.request.tagline)
         
         self._puuid = self._summoner_data.puuid
         self._id = self._summoner_data.id 
@@ -124,18 +124,24 @@ class DataManager:
     
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
-    def _get_summoner_data_from_api(self, summoner_name: str) -> SummonerData:
-        response = self.api_controller.get_summoner_by_name(
-                    summoner_name=summoner_name
-                    )
+    def _get_summoner_data_from_api(self, game_name: str, tagline: str) -> SummonerData:
+        print("El Game name en el data manager es: " + game_name)
+        riot_acc_response = self.api_controller.get_account_by_riot_id(
+            game_name=game_name,
+            tag_line=tagline,
+        )
+        
+        summ_response = self.api_controller.get_summoner_by_puuid(
+            puuid=riot_acc_response["puuid"],
+        )
         
         summoner_data = SummonerData(
-            puuid=response["puuid"],
-            id=response["id"],
-            name=response["name"],
-            icon_id=response["profileIconId"],
-            summoner_level=response["summonerLevel"],
-            last_update=response["revisionDate"]
+            puuid=riot_acc_response["puuid"],
+            id=summ_response["id"],
+            name=riot_acc_response["gameName"] + "#" + riot_acc_response["tagLine"], # Por ahora lo dejo asi, en el futuro mejorare esto
+            icon_id=summ_response["profileIconId"],
+            summoner_level=summ_response["summonerLevel"],
+            last_update=summ_response["revisionDate"]
         )
         return summoner_data
                 

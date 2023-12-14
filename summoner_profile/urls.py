@@ -3,6 +3,6 @@ from .views import SummonerProfileView
 
 urlpatterns = [
     
-    path('<str:server>/<str:summoner_name>/', SummonerProfileView.as_view()),
+    path('<str:server>/<str:game_name>-<str:tagline>/', SummonerProfileView.as_view()),
     
 ]

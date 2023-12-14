@@ -124,7 +124,8 @@ class MatchData:
     
 @dataclass
 class RequestData:
-    summoner_name: str
+    game_name: str
+    tagline: str
     server: str
 
     def to_dict(self):

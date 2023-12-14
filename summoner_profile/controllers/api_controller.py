@@ -413,10 +413,13 @@ class ApiController:
         
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByRiotId
         """
+        print(f"El game name en ApiController es: {game_name}")
+        url = (self.BASE_URL_RIOT + "account/v1/accounts/by-riot-id/{game_name}/{tag_line}").format(
+            server=self._region, game_name=game_name, tag_line=tag_line)
+        
+        print(f"La url es: {url}")
         return self.fetch(
-            (self.BASE_URL_RIOT + "account/v1/accounts/by-riot-id/{game_name}/{tag_line}").format(server=self._region,
-                                                                                                  game_name=game_name,
-                                                                                                  tag_line=tag_line))
+            url=url)
 
     def get_active_shards(self, puuid, game):
         """
