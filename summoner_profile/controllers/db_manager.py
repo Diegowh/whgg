@@ -48,8 +48,12 @@ class DbManager:
     
     def last_update(self) -> int:
         
-        return Summoner.objects.get(puuid=self.puuid).last_update
-    
+        last_update = Summoner.objects.get(puuid=self.puuid).last_update
+        
+        # Pasa el timestamp de milisegundos a segundos
+        last_update = int(last_update / 1000)
+        
+        return last_update
     # Metodos Update
     def update_summoner(self, data: SummonerData):
         
