@@ -119,6 +119,7 @@ class DataManager:
         '''
         now = int(time.time())
         last_update = self.db_manager.last_update()
+        print(f"Ha pasado: {now - last_update} segundos desde la ultima actualizacion")
         
         return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
     
@@ -141,7 +142,7 @@ class DataManager:
             name=riot_acc_response["gameName"] + "#" + riot_acc_response["tagLine"], # Por ahora lo dejo asi, en el futuro mejorare esto
             icon_id=summ_response["profileIconId"],
             summoner_level=summ_response["summonerLevel"],
-            last_update=summ_response["revisionDate"]
+            last_update=int(time.time()),
         )
         return summoner_data
                 
