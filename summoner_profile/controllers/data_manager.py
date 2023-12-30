@@ -25,7 +25,7 @@ from summoner_profile.utils.dataclasses import (
 class DataManager:
     
     HOURS_BEFORE_UPDATING_DATABASE = 1.5
-    SECONDS_BEFORE_UPDATING_DATABASE = hours_to_seconds(hours=HOURS_BEFORE_UPDATING_DATABASE)
+    SECONDS_BEFORE_UPDATING_DATABASE = int(hours_to_seconds(hours=HOURS_BEFORE_UPDATING_DATABASE))
     
     
     def __init__(self, request: RequestData) -> None:
