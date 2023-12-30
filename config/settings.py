@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-zdnc4k(_(nq##yugbq*%_$qawkg6bni5k8$)k*1dc$ca5gq5ux
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] #TODO Cambiar antes de subir a producción
 
 # Application definition
 BASE_APPS = [
@@ -27,8 +27,8 @@ BASE_APPS = [
 ]
 LOCAL_APPS = [
     'summoner_profile',
-
 ]
+
 THIRD_APPS = [
     'rest_framework',
 ]
