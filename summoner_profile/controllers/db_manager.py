@@ -189,15 +189,15 @@ class DbManager:
     # Fetch Methods
     def _fetch_summoner_data(self) -> SummonerData:
         
-        summoner = Summoner.objects.get(puuid=self.puuid)
+        self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
         
         return SummonerData(
-            puuid=summoner.puuid,
-            id=summoner.id,
-            name=summoner.name,
-            icon_id=summoner.icon_id,
-            summoner_level=summoner.summoner_level,
-            last_update=summoner.last_update,
+            puuid=self.summoner_instance.puuid,
+            id=self.summoner_instance.id,
+            name=self.summoner_instance.name,
+            icon_id=self.summoner_instance.icon_id,
+            summoner_level=self.summoner_instance.summoner_level,
+            last_update=self.summoner_instance.last_update,
         )
         
     def _fetch_ranked_stats_data_list(self) -> list[RankedStatsData]:
