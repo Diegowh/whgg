@@ -1,6 +1,8 @@
 from datetime import datetime
 import time
 
+from django.conf import settings
+
 from .db_manager import DbManager
 from .api_controller import ApiController
 
@@ -9,6 +11,7 @@ from summoner_profile.utils.utils import (
     calculate_kda,
     league_winrate,
 )
+
 from asgiref.sync import async_to_sync
 from summoner_profile.utils.dataclasses import (
     SummonerData,
@@ -23,9 +26,6 @@ from summoner_profile.utils.dataclasses import (
 
 
 class DataManager:
-    
-    HOURS_BEFORE_UPDATING_DATABASE = 1.5
-    SECONDS_BEFORE_UPDATING_DATABASE = int(hours_to_seconds(hours=HOURS_BEFORE_UPDATING_DATABASE))
     
     
     def __init__(self, request: RequestData) -> None:
@@ -44,6 +44,8 @@ class DataManager:
         
         self._matches_data = []
         self._participants_data = []
+        
+        self.seconds_before_updating_database = int(hours_to_seconds(hours=settings.HOURS_BEFORE_UPDATING_DATABASE))
     
     @property
     def request(self):
@@ -121,7 +123,7 @@ class DataManager:
         last_update = self.db_manager.last_update()
         print(f"Ha pasado: {now - last_update} segundos desde la ultima actualizacion")
         
-        return (now - last_update) > self.SECONDS_BEFORE_UPDATING_DATABASE
+        return (now - last_update) > self.seconds_before_updating_database
     
     
     # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
