@@ -27,7 +27,7 @@ git clone https://github.com/Diegowh/whgg.git
 pip install -r requirements.txt
 ```
 
-3. To run this project, you will need to add the following environment variables to your .env file
+3. To run this project, you will need to add the following environment variables to your `.env` file
 
 *Riot API:*
 `RIOT_API_KEY`
