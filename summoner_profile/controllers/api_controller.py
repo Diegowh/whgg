@@ -18,7 +18,8 @@ class ApiController:
 
     PLATFORMS = ["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1", "tr1", "ru", "sg2", "th2", "tw2",
                  "vn2"]
-    REGIONS = ["americas", "asia", "europe", "esports", "ap", "br", "eu", "kr", "latam", "na", "sea"]
+    REGIONS = ["americas", "asia", "europe", "esports",
+               "ap", "br", "eu", "kr", "latam", "na", "sea"]
     PLATFORMS_TO_REGIONS = {"br1": "americas", "eun1": "europe", "euw1": "europe", "jp1": "asia", "kr": "asia",
                             "la1": "americas", "la2": "americas", "na1": "americas", "oc1": "sea", "tr1": "europe",
                             "ru": "europe", "sg2": "sea", "th2": "sea", "tw2": "sea", "vn2": "sea"}
@@ -72,7 +73,8 @@ class ApiController:
             if method == "GET":
                 response = requests.get(url, headers=headers)
             else:
-                response = requests.request(method, url, headers=headers, data=json.dumps(data))
+                response = requests.request(
+                    method, url, headers=headers, data=json.dumps(data))
 
         # Por si hay un timeout
         except Exception as e:
@@ -85,7 +87,7 @@ class ApiController:
     def get_champion_masteries(self, summoner_id: str):
         """
         :param string summoner_id: summoner_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getAllChampionMasteries
         """
         return self.fetch(
@@ -100,13 +102,13 @@ class ApiController:
         Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getChampionMastery
         """
         return self.fetch((
-                                      self.BASE_URL_LOL + "champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}/by-champion/{champion_id}").format(
+            self.BASE_URL_LOL + "champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}/by-champion/{champion_id}").format(
             server=self._platform, summonerId=summoner_id, championId=champion_id))
 
     def get_champion_masteries_score(self, summoner_id):
         """
         :param string summoner_id: summoner_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#champion-mastery-v4/GET_getChampionMasteryScore
         """
         return self.fetch(
@@ -124,7 +126,7 @@ class ApiController:
     def get_league_by_summoner(self, summoner_id):
         """
         :param string summoner_id: id of the summoner
-        
+
         Returns the result of https://developer.riotgames.com/apis#league-v4/GET_getLeagueEntriesForSummoner
         """
         return self.fetch(
@@ -134,7 +136,7 @@ class ApiController:
     def get_league_by_id(self, league_id):
         """
         :param string league_id: id of the league
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getLeagueById
         """
         return self.fetch(
@@ -146,7 +148,7 @@ class ApiController:
         :param string tier: tier to get the page of
         :param string division: division to get the page of
         :param int page: page to get
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getLeagueEntriesForSummoner
         """
         return self.fetch((self.BASE_URL_LOL + "league/v4/entries/{queue}/{tier}/{division}?page={page}").format(
@@ -158,7 +160,7 @@ class ApiController:
             Values accepted : 
              * RANKED_SOLO_5x5 *(default)*
              * RANKED_FLEX_SR
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getChallengerLeague
         """
         return self.fetch(
@@ -171,7 +173,7 @@ class ApiController:
             Values accepted : 
              * RANKED_SOLO_5x5 *(default)*
              * RANKED_FLEX_SR
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getGrandmasterLeague
         """
         return self.fetch(
@@ -184,7 +186,7 @@ class ApiController:
             Values accepted : 
              * RANKED_SOLO_5x5 *(default)*
              * RANKED_FLEX_SR
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#league-v4/GET_getMasterLeague
         """
         return self.fetch(
@@ -201,7 +203,7 @@ class ApiController:
     def get_match(self, match_id):
         """
         :param int match_id: match_id of the match, also known as gameId
-        
+
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatch
         """
         return self.fetch(
@@ -210,7 +212,7 @@ class ApiController:
     def get_timeline(self, match_id):
         """
         :param int match_id: match_id of the match, also known as gameId
-        
+
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getTimeline
         """
         return self.fetch(
@@ -220,7 +222,7 @@ class ApiController:
         """
         :param string puuid: puuid of the player
         :param object params: all key:value params to add to the request
-        
+
         Returns the result of https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
         """
         return self.fetch(
@@ -233,7 +235,7 @@ class ApiController:
     def get_current_game(self, summoner_id):
         """
         :param string summoner_id: summoner_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#spectator-v4/GET_getCurrentGameInfoBySummoner
         """
         return self.fetch(
@@ -250,7 +252,7 @@ class ApiController:
     def get_summoner(self, summoner_id):
         """
         :param string summoner_id: summoner_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#summoner-v4/GET_getBySummonerId
         """
         return self.fetch((self.BASE_URL_LOL + "summoner/v4/summoners/{summoner_id}").format(server=self._platform,
@@ -259,7 +261,7 @@ class ApiController:
     def get_summoner_by_account_id(self, account_id):
         """
         :param string account_id: account_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#summoner-v4/GET_getByAccountId
         """
         return self.fetch(
@@ -269,7 +271,7 @@ class ApiController:
     def get_summoner_by_name(self, summoner_name):
         """
         :param string summoner_name: name of the player
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#summoner-v4/GET_getBySummonerName
         """
         return self.fetch(
@@ -279,7 +281,7 @@ class ApiController:
     def get_summoner_by_puuid(self, puuid):
         """
         :param string puuid: puuid of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#summoner-v4/GET_getByPUUID
         """
         return self.fetch(
@@ -289,7 +291,7 @@ class ApiController:
     def get_tft_league_by_id(self, league_id):
         """
         :param string league_id: id of the league
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getLeagueById
         """
         return self.fetch(
@@ -300,7 +302,7 @@ class ApiController:
         :param string tier: tier to get the page of
         :param string division: division to get the page of
         :param int page: page to get
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getLeagueEntries
         """
         return self.fetch(
@@ -311,7 +313,7 @@ class ApiController:
     def get_tft_league_position(self, summoner_id):
         """
         :param string summoner_id: summoner_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-league-v1/GET_getLeagueEntriesForSummoner
         """
         return self.fetch(
@@ -339,7 +341,7 @@ class ApiController:
     def get_tft_match(self, match_id):
         """
         :param string match_id: match_id of the match, also known as game_id
-        
+
         Returns the result of https://developer.riotgames.com/api-methods/#match-v4/GET_getMatch
         """
         return self.fetch(
@@ -349,7 +351,7 @@ class ApiController:
         """
         :param string puuid: puuid of the player
         :param object params: all key:value params to add to the request
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-match-v1/GET_getMatchIdsByPUUID
         """
         return self.fetch(
@@ -361,7 +363,7 @@ class ApiController:
     def get_tft_summoner(self, summoner_id):
         """
         :param string summoner_id: summoner_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getBySummonerId
         """
         return self.fetch((self.BASE_URL_TFT + "summoner/v1/summoners/{summoner_id}").format(server=self._platform,
@@ -370,7 +372,7 @@ class ApiController:
     def get_tft_summoner_by_account_id(self, account_id):
         """
         :param string account_id: account_id of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getByAccountId
         """
         return self.fetch(
@@ -380,7 +382,7 @@ class ApiController:
     def get_tft_summoner_by_puuid(self, puuid):
         """
         :param string puuid: puuid of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getByPUUID
         """
         return self.fetch(
@@ -389,7 +391,7 @@ class ApiController:
     def get_tft_summoner_by_name(self, summoner_name):
         """
         :param string summoner_name: name of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#tft-summoner-v1/GET_getBySummonerName
         """
         return self.fetch(
@@ -400,7 +402,7 @@ class ApiController:
     def get_account_by_puuid(self, puuid):
         """
         :param string puuid: puuid of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByPuuid
         """
         return self.fetch(
@@ -410,13 +412,13 @@ class ApiController:
         """
         :param string game_name: name of the player
         :param string tag_line: tag of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getByRiotId
         """
         print(f"El game name en ApiController es: {game_name}")
         url = (self.BASE_URL_RIOT + "account/v1/accounts/by-riot-id/{game_name}/{tag_line}").format(
             server=self._region, game_name=game_name, tag_line=tag_line)
-        
+
         print(f"La url es: {url}")
         return self.fetch(
             url=url)
@@ -425,7 +427,7 @@ class ApiController:
         """
         :param string puuid: puuid of the player
         :param string game: targeted game ("val" or "lor")
-        
+
         Returns the result of https://developer.riotgames.com/apis#account-v1/GET_getActiveShard
         """
         return self.fetch((self.BASE_URL_RIOT + "account/v1/active-shards/by-game/{game}/by-puuid/{puuid}").format(
@@ -435,7 +437,7 @@ class ApiController:
     def get_valorant_content(self, locale=None):
         """
         :param string locale: language return. Default to None
-        
+
         Returns the result of https://developer.riotgames.com/apis#val-content-v1/GET_getContent
         """
         return self.fetch((self.BASE_URL_VAL + "content/v1/contents{locale}").format(server=self._region,
@@ -444,7 +446,7 @@ class ApiController:
     def get_valorant_match(self, match_id):
         """
         :param string match_id: id of the match
-        
+
         Returns the result of https://developer.riotgames.com/apis#val-match-v1/GET_getMatch
         """
         return self.fetch(
@@ -453,7 +455,7 @@ class ApiController:
     def get_valorant_matchlist(self, puuid):
         """
         :param string puuid: puuid of the player
-        
+
         Returns the result of https://developer.riotgames.com/apis#val-match-v1/GET_getMatchlist
         """
         return self.fetch(
@@ -462,7 +464,7 @@ class ApiController:
     def get_valorant_recent_matches(self, queue):
         """
         :param string queue: queue of the matches
-        
+
         Returns the result of https://developer.riotgames.com/apis#val-match-v1/GET_getRecent
         """
         return self.fetch(
@@ -473,7 +475,7 @@ class ApiController:
         :param string act_id: id of the act for the leaderboards
         :param int size: size of the leaderboard list
         :param int start_index: index to start the leaderboard list
-        
+
         Returns the result of https://developer.riotgames.com/apis#val-ranked-v1/GET_getLeaderboard
         """
         return self.fetch(

@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-zdnc4k(_(nq##yugbq*%_$qawkg6bni5k8$)k*1dc$ca5gq5ux
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] #TODO Cambiar antes de subir a producción
+ALLOWED_HOSTS = ['*']  # TODO Cambiar antes de subir a producción
 
 # Application definition
 BASE_APPS = [
@@ -128,6 +128,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Project constants 
+# Project constants
 
 HOURS_BEFORE_UPDATING_DATABASE = 1.5
