@@ -17,30 +17,30 @@ This API allows users to get information about their League of Legends matches, 
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/Diegowh/whgg.git
-```
+    ```bash
+    git clone https://github.com/Diegowh/whgg.git
+    ```
 
 2. Install the required dependencies using `pip`:
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 3. To run this project, you will need to add the following environment variables to your `.env` file
 
-*Riot API:*
-`RIOT_API_KEY`
+    *Riot API:*
+    `RIOT_API_KEY`
 
-*Database config:*
-`DB_NAME`
-`DB_USER`
-`DB_PASSWORD`
-`DB_HOST`
-`DB_PORT`
+    *Database config:*
+    `DB_NAME`
+    `DB_USER`
+    `DB_PASSWORD`
+    `DB_HOST`
+    `DB_PORT`
 
-*Django secret key:*
-`SECRET_KEY`
+    *Django secret key:*
+    `SECRET_KEY`
 
 4.Run the application:
 
