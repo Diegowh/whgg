@@ -121,7 +121,7 @@ class DataManager:
         now = int(time.time())
         last_update = self.db_manager.last_update()
         print(
-            f"Ha pasado: {now - last_update} segundos desde la ultima actualizacion")
+            f"Han pasado: {now - last_update} segundos desde la ultima actualizacion")
 
         return (now - last_update) > self.seconds_before_updating_database
 
