@@ -5,6 +5,14 @@ League of legends Analysis Backend using Django Rest Framework.
 
 This API allows users to get information about their League of Legends matches, including statistics, match histories and real-time game insights.
 
+## Features
+
+* Summoner profile data
+* Match History
+* Match Details
+* Ranked Stats
+* Champion Stats
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
