@@ -21,13 +21,13 @@ This API allows users to get information about their League of Legends matches, 
 git clone https://github.com/Diegowh/whgg.git
 ```
 
-2.Install the required dependencies using `pip`:
+2. Install the required dependencies using `pip`:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3.To run this project, you will need to add the following environment variables to your .env file
+3. To run this project, you will need to add the following environment variables to your .env file
 
 *Riot API:*
 `RIOT_API_KEY`
