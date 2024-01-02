@@ -42,7 +42,7 @@ This API allows users to get information about their League of Legends matches, 
     *Django secret key:*
     `SECRET_KEY`
 
-4.Run the application:
+4. Run the application:
 
     ```bash
     python manage.py runserver
