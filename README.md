@@ -44,9 +44,9 @@ This API allows users to get information about their League of Legends matches, 
 
 4.Run the application:
 
-```bash
-python manage.py runserver
-```
+    ```bash
+    python manage.py runserver
+    ```
 
 ## API Reference
 
