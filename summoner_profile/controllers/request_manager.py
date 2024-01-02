@@ -5,6 +5,9 @@ from summoner_profile.utils.dataclasses import RequestData, ResponseData
 
 class RequestManager:
 
+    """
+    Clase encargada de gestionar las peticiones del front-end y devolver los datos necesarios para la vista.
+    """
     def __init__(
         
         self, 
@@ -43,4 +46,6 @@ class RequestManager:
         return self._request_data
     
     def get(self) -> ResponseData:
+        """Devuelve los datos requeridos.
+        """
         return self.data_manager.get_response_data()
