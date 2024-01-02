@@ -5,7 +5,15 @@ from summoner_profile.utils.dataclasses import RequestData, ResponseData
 
 class RequestManager:
 
-    def __init__(self, game_name: str, tagline: str, server: str) -> None:
+    def __init__(
+        
+        self, 
+        game_name: str, 
+        tagline: str, 
+        server: str
+        
+        ) -> None:
+        
         
         self._game_name = game_name
         self._tagline = tagline
