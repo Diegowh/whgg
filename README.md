@@ -13,14 +13,6 @@ This API allows users to get information about their League of Legends matches, 
 * Ranked Stats
 * Champion Stats
 
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY`
-
 ## Getting Started
 
 1. Clone the repository:
