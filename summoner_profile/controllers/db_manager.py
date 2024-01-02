@@ -44,7 +44,8 @@ class DbManager:
         return self._puuid
 
     def is_puuid_in_database(self) -> bool:
-
+        """Comprueba si el puuid del Summoner esta en la base de dato
+        """
         return Summoner.objects.filter(puuid=self.puuid).exists()
 
     def last_update(self) -> int:
@@ -55,8 +56,7 @@ class DbManager:
             return int(last_update)
 
         except ObjectDoesNotExist:
-            raise ValueError(
-                f"Could not retrieve Summoner object with puuid: {self.puuid}")
+            return False
 
     # Metodos Update
     def update_summoner(self, data: SummonerData):
