@@ -1,3 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from summoner_profile.models import (
     ChampionStats,
     Item,
@@ -47,11 +49,14 @@ class DbManager:
 
     def last_update(self) -> int:
 
-        last_update = Summoner.objects.get(puuid=self.puuid).last_update
+        try:
+            last_update = Summoner.objects.get(puuid=self.puuid).last_update
 
-        last_update = int(last_update)
+            return int(last_update)
 
-        return last_update
+        except ObjectDoesNotExist:
+            raise ValueError(
+                f"Could not retrieve Summoner object with puuid: {self.puuid}")
 
     # Metodos Update
     def update_summoner(self, data: SummonerData):
