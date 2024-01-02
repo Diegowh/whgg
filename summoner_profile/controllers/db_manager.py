@@ -46,9 +46,12 @@ class DbManager:
     def is_puuid_in_database(self) -> bool:
         """Comprueba si el puuid del Summoner esta en la base de dato
         """
+
         return Summoner.objects.filter(puuid=self.puuid).exists()
 
     def last_update(self) -> int:
+        """Devuelve el timestamp de la ultima actualizacion de los datos del Summoner.
+        """
 
         try:
             last_update = Summoner.objects.get(puuid=self.puuid).last_update
@@ -59,7 +62,9 @@ class DbManager:
             return False
 
     # Metodos Update
-    def update_summoner(self, data: SummonerData):
+    def update_summoner(self, data: SummonerData) -> None:
+        """Actualiza los datos del Summoner en la base de datos.
+        """
 
         defaults = {
             "id": data.id,
@@ -74,7 +79,9 @@ class DbManager:
         # Obtengo la instancia del summoner que acabo de actualizar para poder usarla en los siguientes metodos
         self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
 
-    def update_ranked_stats(self, data: list[RankedStatsData]):
+    def update_ranked_stats(self, data: list[RankedStatsData]) -> None:
+        """Actualiza los datos de RankedStats en la base de datos.
+        """
 
         for ranked_stats in data:
             defaults = {
@@ -90,7 +97,9 @@ class DbManager:
             RankedStats.objects.update_or_create(
                 queue_type=ranked_stats.queue_type, summoner=self.summoner_instance, defaults=defaults)
 
-    def update_match_data(self, data: list[MatchData]):
+    def update_match_data(self, data: list[MatchData]) -> None:
+        """Actualiza los datos de Match en la base de datos.
+        """
 
         for match_data in data:
 
@@ -130,7 +139,9 @@ class DbManager:
             #  Agrego los summoner spells al match
             match.summoner_spells.set(summoner_spells)
 
-    def update_participants_data(self, data: list[ParticipantData]):
+    def update_participants_data(self, data: list[ParticipantData]) -> None:
+        """Actualiza los datos de Participant en la base de datos.
+        """
 
         for participant_data in data:
 
@@ -146,7 +157,9 @@ class DbManager:
             Participant.objects.update_or_create(
                 puuid=participant_data.puuid, match=match_instance, defaults=defaults)
 
-    def update_champion_stats(self):
+    def update_champion_stats(self) -> None:
+        """Actualiza los datos de ChampionStats en la base de datos."""
+
         # Obtiene los matches del summoner
         matches = Match.objects.filter(summoner=self.summoner_instance)
 
@@ -179,9 +192,10 @@ class DbManager:
 
             champion_stats.save()
 
-    # Periodic Updates
-
-    def update_items(self, items: list):
+    # Periodic Update methods
+    def update_items(self, items: list) -> None:
+        """Actualiza los datos de Item en la base de datos.
+        """
 
         for item in items:
 
@@ -191,7 +205,9 @@ class DbManager:
 
             )
 
-    def update_summoner_spells(self, summoner_spells: list):
+    def update_summoner_spells(self, summoner_spells: list) -> None:
+        """Actualiza los datos de SummonerSpell en la base de datos.
+        """
 
         for spell in summoner_spells:
 
@@ -202,6 +218,7 @@ class DbManager:
 
     # Fetch Methods
     def _fetch_summoner_data(self) -> SummonerData:
+        """Devuelve un objeto SummonerData con los datos del Summoner."""
 
         self.summoner_instance = Summoner.objects.get(puuid=self.puuid)
 
@@ -215,6 +232,8 @@ class DbManager:
         )
 
     def _fetch_ranked_stats_data_list(self) -> list[RankedStatsData]:
+        """Devuelve una lista de objetos RankedStatsData con los datos de RankedStats del Summoner
+        """
 
         ranked_stats = RankedStats.objects.filter(
             summoner=self.summoner_instance)
@@ -238,6 +257,8 @@ class DbManager:
         return ranked_stats_data_list
 
     def _fetch_champion_stats_data_list(self, champion_amount: int = 7) -> list[ChampionStatsData]:
+        """Devuelve una lista de objetos ChampionStatsData con los datos de ChampionStats del Summoner
+        """
 
         # Obtiene los champion_stats ordenados descendientemente por games jugados y toma los primeros (champion_amount) campeones
         champion_stats = ChampionStats.objects.filter(
@@ -264,6 +285,8 @@ class DbManager:
         return champion_stats_data_list
 
     def _fetch_item_purchase(self, match: Match) -> list[ItemData]:
+        """Devuelve una lista de objetos ItemData con los datos de los items comprados en el match
+        """
 
         items = match.item_purchase.all()
         item_purchase: list[ItemData] = []
@@ -282,6 +305,8 @@ class DbManager:
         return item_purchase
 
     def _fetch_summoner_spells(self, match: Match) -> list[SummonerSpellData]:
+        """Devuelve una lista de objetos SummonerSpellData con los datos de los summoner spells usados por el Summoner en el match
+        """
 
         spells = match.summoner_spells.all()
         summoner_spells: list[SummonerSpellData] = []
@@ -300,6 +325,8 @@ class DbManager:
         return summoner_spells
 
     def _fetch_participants(self, match: Match) -> list[ParticipantData]:
+        """Devuelve una lista de objetos ParticipantData con los datos de los participantes del match
+        """
 
         participants_query = match.participants.all()
 
@@ -318,7 +345,9 @@ class DbManager:
         return participants
 
     def _fetch_match_data_list(self, match_amount: int = 10) -> list[MatchData]:
-        # Obtiene los matches ordenados descendientemente por game_start y toma los primeros (match_amount) matches
+        """Devuelve una lista de objetos MatchData con los datos de los matches del Summoner ordenados descendientemente por game_start tomando los primeros (match_amount) matches
+        """
+
         matches = Match.objects.filter(summoner=self.summoner_instance).order_by(
             "-game_start")[:match_amount]
 
@@ -361,6 +390,9 @@ class DbManager:
         return match_data_list
 
     def fetch_response_data(self) -> ResponseData:
+        """Devuelve un objeto ResponseData con los datos requeridos para la respuesta de la API
+        """
+
         return ResponseData(
             summoner_data=self._fetch_summoner_data(),
             ranked_stats_data_list=self._fetch_ranked_stats_data_list(),
