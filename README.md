@@ -1,7 +1,67 @@
+
 # WHGG
 
-Web application that focuses on providing a service for League of Legends, aiming to deliver in-depth statistics, match history, and real-time game analysis.
+League of legends Analysis Backend using Django Rest Framework.
 
-Currently in development, the platform is in its early stages, and the internal structure may undergo significant changes as it progresses towards an alpha or early deployment phase.
+This API allows users to get information about their League of Legends matches, including statistics, match histories and real-time game insights.
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`API_KEY`
+
+`ANOTHER_API_KEY`
+
+## Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Diegowh/whgg.git
+```
+
+2.Install the required dependencies using `pip`:
+
+```bash
+pip install -r requirements.txt
+```
+
+3.To run this project, you will need to add the following environment variables to your .env file
+
+*Riot API:*
+`RIOT_API_KEY`
+
+*Database config:*
+`DB_NAME`
+`DB_USER`
+`DB_PASSWORD`
+`DB_HOST`
+`DB_PORT`
+
+*Django secret key:*
+`SECRET_KEY`
+
+4.Run the application:
+
+```bash
+python manage.py runserver
+```
+
+## API Reference
+
+### Get Summoner
+
+```http
+  GET /api/${server}/${game_name}-${tagline}
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `server` | `string` | **Required**. Summoner Server |
+| `game_name` | `string` | **Required**. Riot account name |
+| `tagline` | `string` | **Required**. Riot account tagline |
+
+## Contributing
 
 All forms of collaboration are welcome! Feel free to submit a PR or message for any kind of assistance or support.
