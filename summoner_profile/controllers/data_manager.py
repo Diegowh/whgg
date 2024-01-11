@@ -117,8 +117,6 @@ class DataManager:
 
         return (now - last_update) > self.seconds_before_updating_database
 
-    # Se encarga de obtener los datos de la Api de Riot y crea un objeto SummonerData
-
     def _get_summoner_data_from_api(self, game_name: str, tagline: str) -> SummonerData:
         print("El Game name en el data manager es: " + game_name)
         riot_acc_response = self.api_controller.get_account_by_riot_id(
