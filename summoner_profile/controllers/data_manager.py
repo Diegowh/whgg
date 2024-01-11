@@ -82,31 +82,19 @@ class DataManager:
 
     def get_response_data(self) -> ResponseData:
 
-        # Si el puuid existía en la base de datos y no es el momento de actualizar, obtiene los datos de la base de datos directamente
+        # Comprueba si hace falta actualizar la base de datos antes de devolver los datos
         if self.db_manager.is_puuid_in_database() and not self.is_time_to_update():
             print("El puuid ya existia, y no hace falta actualizar")
             response_data = self.db_manager.fetch_response_data()
             return response_data
 
-        # Pide los datos de la API de Riot y los guarda en la base de datos
+        # Solicita los datos requeridos a la API de Riot y los actualiza en la base de datos
         self.db_manager.update_summoner(data=self.summoner_data)
-
-        # Pide los datos de ranked stats
         ranked_stats_data_list = self._get_ranked_stats_list_from_api()
-
-        # Los guarda en la base de datos
         self.db_manager.update_ranked_stats(data=ranked_stats_data_list)
-
-        # Pide los datos de las ultimas partidas
         self._get_match_and_participant_data_from_api()
-
-        # Guarda los respectivos al match
         self.db_manager.update_match_data(data=self.matches_data)
-
-        # Guarda los respectivos a los participantes
         self.db_manager.update_participants_data(data=self.participants_data)
-
-        # Actualiza los champion stats
         self.db_manager.update_champion_stats()
 
         # Construye el objeto ResponseData
