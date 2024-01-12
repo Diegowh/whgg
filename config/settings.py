@@ -29,7 +29,6 @@ BASE_APPS = [
 ]
 LOCAL_APPS = [
     'summoner_profile',
-    'updater',
 ]
 
 THIRD_APPS = [
