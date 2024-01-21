@@ -9,7 +9,6 @@ This API allows users to get information about their League of Legends matches, 
 
 * Summoner profile data
 * Match History
-* Match Details
 * Ranked Stats
 * Champion Stats
 
