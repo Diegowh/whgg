@@ -1,5 +1,6 @@
 from datetime import datetime
 import time
+from django import conf
 
 from django.conf import settings
 
@@ -182,8 +183,6 @@ class DataManager:
         self._participants_data = all_participant_data
 
     def _all_match_ids(self) -> list[str]:
-        MAX_MATCHES = 5000  # Por poner un limite a la cantidad de partidas que se pidan
-        REQUEST_CAP = 100  # La API solo permite pedir de 100 en 100
         # TODO: Obtener esta fecha de la base de datos
         season_start = int(datetime(2023, 1, 14).timestamp())
 
@@ -193,11 +192,12 @@ class DataManager:
             "type": "ranked",
         }
 
-        for start_index in range(0, MAX_MATCHES, REQUEST_CAP):
+        for start_index in range(0, settings.MAX_MATCH_IDS_REQUESTED, settings.RIOT_API_REQUEST_CAP):
 
             params["start"] = start_index
             # Para evitar pedir más partidas de las que se pueden
-            params["count"] = int(min(REQUEST_CAP, MAX_MATCHES - start_index))
+            params["count"] = int(
+                min(settings.RIOT_API_REQUEST_CAP, settings.MAX_MATCH_IDS_REQUESTED - start_index))
 
             matchlist_response: list = self.api_controller.get_matchlist(
                 puuid=self.puuid,
@@ -255,9 +255,10 @@ class DataManager:
         match_data.vision_score = participant["visionScore"]
         match_data.team_position = participant["teamPosition"]
         match_data.team_id = participant["teamId"]
-        match_data.item_purchase = [participant[f"item{i}"] for i in range(7)]
+        match_data.item_purchase = [
+            participant[f"item{i}"] for i in range(settings.ITEM_SLOTS)]
         match_data.summoner_spells = [
-            participant[f"summoner{i}Id"] for i in range(1, 3)]
+            participant[f"summoner{i}Id"] for i in range(1, settings.NUMBER_OF_SUMMONER_SPELLS + 1)]
 
     def filter_match_response(self, match_data_response) -> tuple[MatchData, list[ParticipantData]]:
         '''
